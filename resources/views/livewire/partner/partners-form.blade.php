@@ -1,0 +1,345 @@
+@section('title', 'Guardar socios')
+
+@push('styles')
+<link href="/src/assets/css/light/scrollspyNav.css" rel="stylesheet" type="text/css" />
+<link href="/src/assets/css/dark/scrollspyNav.css" rel="stylesheet" type="text/css" />
+
+<link href="/src/plugins/css/light/loaders/custom-loader.css" rel="stylesheet" type="text/css" />
+<link href="/src/plugins/css/dark/loaders/custom-loader.css" rel="stylesheet" type="text/css" />
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+@endpush
+<div class="middle-content container-xxl p-0">
+
+    <!-- BREADCRUMB -->
+    <div class="page-meta">
+        <nav class="breadcrumb-style-one" aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('partners.index') }}">Socios</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Guardar</li>
+            </ol>
+        </nav>
+    </div>
+    <!-- /BREADCRUMB -->
+
+    <!-- CONTENT AREA -->
+    <div class="row layout-top-spacing">
+
+        <div id="tableCustomBasic" class="col-lg-12 col-12 layout-spacing">
+            <div class="statbox widget box box-shadow">
+                <div class="widget-header">
+                    <div class="row">
+                        <div class="col-xl-12 col-md-12 col-sm-12 col-12">
+                            <h4>Guardar socio</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="widget-content widget-content-area">
+
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+
+                    <!-- Begin form -->
+                    <form class="row g-3" wire:submit.prevent="save" novalidate>
+                        <div class="col-md-4">
+                            <label for="partner.names" class="form-label">Nombre(s)</label>
+                            <input type="text" wire:model="partner.names" class="form-control @error('partner.names') is-invalid @enderror" id="partner.names" required>
+                            @error('partner.names')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                            @enderror
+
+                        </div>
+                        <div class="col-md-4">
+                            <label for="partner.surname_father" class="form-label">Apellido paterno</label>
+                            <input type="text" wire:model="partner.surname_father" class="form-control @error('partner.surname_father') is-invalid @enderror" id="partner.surname_father">
+                            @error('partner.surname_father')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                            @enderror
+                        </div>
+
+                        <div class="col-md-4">
+                            <label for="partner.surname_mother" class="form-label">Apellido materno</label>
+                            <input type="text" wire:model="partner.surname_mother" class="form-control @error('partner.surname_mother') is-invalid @enderror" id="partner.surname_mother">
+                            @error('partner.surname_mother')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                            @enderror
+                        </div>
+
+                        <div class="col-md-4">
+                            <label for="partner.gender" class="form-label">
+                                <i class="fa-light fa-user-helmet-safety"></i></i> Género
+                            </label>
+                            <select wire:model="partner.gender" class="form-select @error('partner.gender') is-invalid @enderror" id="partner.gender">
+                                <option selected>Selecciona un género</option>
+                                <option value="Masculino">Masculino</option>
+                                <option value="Femenino">Femenino</option>
+                                <option value="No binario">No binario</option>
+                            </select>
+                            @error('partner.gender')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                            @enderror
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="my-1 d-flex align-items-center" for="partner.phone">
+                                <i class="fa-regular fa-phone"></i> Teléfono</label>
+                            <input type="text" wire:model="partner.phone" class="form-control @error('partner.phone') is-invalid @enderror" id="partner.phone">
+                            @error('partner.phone')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                            @enderror
+                        </div>
+
+                        <div class="col-md-4">
+                            <label for="partner.job" class="form-label">
+                                <i class="fa-light fa-user-helmet-safety"></i></i> Ocupación
+                            </label>
+                            <select wire:model="partner.job" class="form-select @error('partner.job') is-invalid @enderror" id="partner.job">
+                                <option selected>Selecciona una ocupación</option>
+                                <option value="Actividades del hogar">Actividades del hogar</option>
+                                <option value="Albañil">Albañil</option>
+                                <option value="Campesino">Campesino</option>
+                                <option value="Comerciante">Comerciante</option>
+                                <option value="Estudiante">Estudiante</option>
+                            </select>
+                            @error('partner.job')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                            @enderror
+                        </div>
+
+                        <div class="col-md-8">
+                            <label class="my-1 d-flex align-items-center" for="partner.address">
+                                <i class="fa-regular fa-location-dot"></i> Dirección</label>
+                            <input type="text" wire:model="partner.address" class="form-control @error('partner.address') is-invalid @enderror" id="partner.address">
+                            <small id="sh-text1" class="form-text text-muted">Calle, número de casa</small>
+                            @error('partner.address')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                            @enderror
+                        </div>
+
+                        <div class="col-md-4">
+                            <label for="partner.suburb" class="form-label">
+                                <i class="fa-regular fa-map-location-dot"></i> Colonia
+                            </label>
+                            <select wire:model="partner.suburb" class="form-select @error('partner.suburb') is-invalid @enderror" id="partner.suburb">
+                                <option selected>Selecciona una colonia</option>
+                                <option value="Barrio Alto">Barrio Alto</option>
+                                <option value="Barrio Centro">Barrio Centro</option>
+                                <option value="Ranchería El Ocote">Ranchería El Ocote</option>
+                                <option value="Localidad Unión del Sur">Localidad Unión del Sur</option>
+                                <option value="Campo Nuevo Monte Albán">Campo Nuevo Monte Albán</option>
+                            </select>
+                            @error('partner.suburb')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                            @enderror
+                        </div>
+
+
+
+                        <div class="col-md-4">
+                            <label class="my-1 d-flex align-items-center" for="partner-birthday">
+                                <i class="fa-solid fa-calendar-days"></i> Fecha de nacimiento</label>
+                            <input type="text" wire:model="partner.birthday" class="form-control @error('partner.birthday') is-invalid @enderror" id="partner-birthday">
+                            @error('partner.birthday')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                            @enderror
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="my-1 d-flex align-items-center" for="partner.curp">
+                                <i class="fa-regular fa-id-card-clip"></i> CURP</label>
+                            <input type="text" wire:model="partner.curp" class="form-control @error('partner.curp') is-invalid @enderror" id="partner.curp">
+                            @error('partner.curp')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                            @enderror
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="my-1 d-flex align-items-center" for="partner.key_ine">
+                                <i class="fa-light fa-address-card"></i> Clave INE</label>
+                            <input type="text" wire:model="partner.key_ine" class="form-control @error('partner.key_ine') is-invalid @enderror" id="partner.key_ine">
+                            @error('partner.key_ine')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                            @enderror
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="my-1 d-flex align-items-center" for="partner.email">
+                                <i class="fa-regular fa-envelope"></i> Correo electrónico</label>
+                            <input type="email" wire:model="partner.email" class="form-control @error('partner.email') is-invalid @enderror" id="partner.email">
+                            @error('partner.email')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                            @enderror
+                        </div>
+
+
+                        <div class="col-md-6">
+                            @if ($image)
+                            <a wire:click="$set('image', null)" class="btn btn-warning">Quitar</a>
+                            <img src="{{ $image->temporaryUrl() }}" height="150px" alt="...">
+                            @elseif ($partner->image)
+                            <a class="btn btn-danger" wire:click="deleteImg">Quitar</a>
+                            <img src="{{ Storage::disk('public')->url($partner->image) }}" height="150px" alt="...">
+                            @endif
+
+                            <label for="image" class="form-label">Foto</label>
+                            <input type="file" wire:model="image" class="form-control-file @error('image') is-invalid @enderror" accept="image/*">
+                            <small id="sh-text1" class="form-text text-muted">Opcional</small>
+                            <div wire:loading wire:target="image">
+                                <div class="spinner-border spinner-border-reverse align-self-center text-secondary">
+                                    Subiendo...
+                                </div>
+                            </div>
+                            @error('image')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                            @enderror
+                        </div>
+
+                        <hr>
+
+                        <div class="row">
+                            <h3>Agregar documentos (opcional)</h3>
+                            <div class="col-md-2">
+                                <button class="btn text-white btn-info btn-sm" wire:click.prevent="add({{$i}})">Agregar</button>
+                            </div>
+                        </div>
+
+                        @foreach($inputs as $key => $value)
+                        <div class=" add-input">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label for="type.{{$value}}" class="form-label">Selecciona tipo de documento</label>
+                                    <div class="form-group">
+                                        <select class="form-select @error('type.' . $value) is-invalid @enderror" wire:model="type.{{ $value }}" aria-label="Tipo de documento" id="type.">
+                                            <option selected>Selecciona tipo de documento</option>
+                                            <option value="Acta de nacimiento">Acta de nacimiento</option>
+                                            <option value="Credencial INE">Credencial INE</option>
+                                            <option value="CURP">CURP</option>
+                                            <option value="Licencia conducir">Licencia conducir</option>
+                                            <option value="Recibo de luz">Recibo de luz</option>
+                                        </select>
+                                        @error('type.' . $value)
+                                        <div class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+
+                                    <label for="file.{{$value}}" class="form-label">Documento</label>
+                                    <input type="file" wire:model="file.{{$value}}" class="form-control-file @error('file.' . $value) is-invalid @enderror" id="file.{{$value}}" accept=".jpg,.jpeg,.bmp,.png,.pdf">
+
+                                    <div wire:loading wire:target="file.{{$value}}">
+                                        <div class="spinner-border spinner-border-reverse align-self-center text-secondary">
+                                            Subiendo...
+                                        </div>
+
+                                    </div>
+                                    @error('file.' . $value)
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                    @enderror
+                                </div>
+                                <div class="col-md-2">
+                                    <button class="btn btn-danger btn-sm" wire:click.prevent="remove({{$key}})">Quitar</button>
+                                </div>
+
+                            </div>
+                        </div>
+                        @endforeach
+
+                        <hr class="mt-3">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <table>
+                                    @forelse ($partner->documents as $document)
+                                    <tr>
+                                        <td>
+                                            {{ $document->type }}
+                                        </td>
+                                        <td>
+                                            @php
+                                            $ext = pathinfo(Storage::disk('public')->url($document->url), PATHINFO_EXTENSION)
+                                            @endphp
+                                            @if ($ext == 'jpg' || $ext == 'png' || $ext == 'png')
+                                            <img src="{{ Storage::disk('public')->url($document->url) }}" height="40px" alt="...">
+                                            @elseif ($ext == 'pdf')
+                                            <img src="/img/pdf.png" alt="PDF" height="40px">
+                                            @else
+                                            <img src="/img/pdf.png" height="40px" alt="No hay previsualización">
+                                            @endif
+
+                                        </td>
+                                        <td>
+                                            <a wire:click.prevent="deleteDocument({{ $document }})" class="btn btn-danger">Eliminar</a>
+                                        </td>
+                                    </tr>
+                                    @empty
+
+                                    @endforelse
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-primary btn-lg">Guardar</button>
+                        </div>
+                    </form>
+                    <!-- End form -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- CONTENT AREA -->
+</div>
+
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script>
+    flatpickr("#partner-birthday", {
+        locale: {
+            firstDayOfWeek: 1,
+            weekdays: {
+                shorthand: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
+                longhand: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+            },
+            months: {
+                shorthand: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Оct', 'Nov', 'Dic'],
+                longhand: ['Enero', 'Febreo', 'Мarzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+            },
+        },
+    });
+</script>
+@endpush
