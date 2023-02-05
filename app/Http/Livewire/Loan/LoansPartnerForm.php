@@ -20,6 +20,8 @@ class LoansPartnerForm extends Component
 
     public $endorsements;
 
+    public $noMeses;
+
     public $aval;
     public $inputs = [];
     public $i = -1;
@@ -86,9 +88,21 @@ class LoansPartnerForm extends Component
     {
         $this->endorsements = Endorsement::orderBy('names')->get();
         $this->loan = $loan;
-        $this->loan->interest = 3;
+        $this->loan->interest = 2;
         $this->loan->date_made = date("Y-m-d");
         $this->endorsement = $endorsement;
+        $this->noMeses = 1;
+    }
+
+    public function updateDate()
+    {
+        $this->loan->date_payment = $this->loan->date_made->addMonths($this->noMeses);
+    }
+
+    public function updateNoMonth()
+    {
+        $noPeriodos = $this->loan->date_made->floatDiffInMonths($this->loan->date_payment);
+        $this->noMeses = round($noPeriodos, 0);
     }
 
     public function toggleModal()

@@ -24,9 +24,21 @@ class PartnersForm extends Component
     protected function rules()
     {
         $rules = [
+            'partner.number' => [
+                'required',
+                Rule::unique('partners', 'number')->ignore($this->partner),
+            ],
             'partner.names' => ['required', 'min:3', 'max:100'],
             'partner.surname_father' => ['required', 'min:3', 'max:100'],
             'partner.surname_mother' => ['nullable', 'min:3', 'max:100'],
+            'partner.address_number' => ['nullable'],
+            'partner.barrio' => ['nullable'],
+            'partner.cp' => ['nullable'],
+            'partner.municipio' => ['nullable'],
+            'partner.estado' => ['nullable'],
+            'partner.dwelling' => ['nullable'],
+            'partner.dependents' => ['nullable'],
+            'partner.civil_status' => ['nullable'],
             'partner.phone' => ['nullable', 'max:20'],
             'partner.gender' => ['required'],
             'partner.address' => ['required', 'max:200'],

@@ -49,6 +49,9 @@
                                     <a href="{{ route('loans.payment.plan', $loan) }}" class="btn btn-primary ms-1 bs-tooltip" data-toggle="tooltip" data-placement="top" title="Generar plan de pago">
                                         <i class="fa-light fa-calendar-check"></i>
                                     </a>
+                                    <a href="{{ route('loans.amortizacion', $loan) }}" class="btn btn-black ms-1 bs-tooltip" data-toggle="tooltip" data-placement="top" title="Tabla de amortización">
+                                        <i class="fa-light fa-calendar-check"></i>
+                                    </a>
                                     <a href="{{ route('payments.create', $loan) }}" class="btn btn-payment ms-1 bs-tooltip" data-toggle="tooltip" data-placement="top" title="Registrar pago">
                                         <i class="fa-light fa-envelope-open-dollar"></i>
                                     </a>

@@ -5,6 +5,7 @@ use App\Http\Controllers\Helpers\AutocompleteController;
 use App\Http\Controllers\Helpers\ExportController;
 use App\Http\Controllers\Helpers\SearchController;
 use App\Http\Livewire\Dashboard;
+use App\Http\Livewire\Loan\LoanAmortizacion;
 use App\Http\Livewire\Loan\LoanPaymentPlan;
 use App\Http\Livewire\Loan\LoansContract;
 use App\Http\Livewire\Loan\LoansDetail;
@@ -70,6 +71,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('loans/detail/{loan}', LoansDetail::class)->name('loans.detail');
     Route::get('loans/contract/{loan}', LoansContract::class)->name('loans.contract');
     Route::get('loans/plan/{loan}', LoanPaymentPlan::class)->name('loans.payment.plan');
+    Route::get('loans/amortizacion/{loan}', LoanAmortizacion::class)->name('loans.amortizacion');
 
     Route::get('payments', PaymentList::class)->name('payments.index');
     Route::get('payments/edit/{loan}', PaymentForm::class)->name('payments.edit');
@@ -82,7 +84,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('endorsements/autocomplete', [AutocompleteController::class, 'endorsements'])
         ->name('endorsements.autocomplete');
     Route::get('search', SearchController::class)->name('search');
+
     Route::get('loans/export/excel', [ExportController::class, 'loansExportExcel'])->name('loans.export.excel');
+    Route::get('loans/amortizacion/excel/{amortizacion}', [ExportController::class, 'amortizacionExportExcel'])
+        ->name('loans.amortizacion.excel');
 
     Route::get('reporte/simple', ReportSimple::class)->name('report.simple');
 

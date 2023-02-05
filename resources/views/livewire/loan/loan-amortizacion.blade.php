@@ -1,4 +1,4 @@
-@section('title', 'Generar plan de pago: ' . $loan->id)
+@section('title', 'Generar tabla amortización: ' . $loan->number)
 
 @push('styles')
 <link href="/src/assets/css/light/scrollspyNav.css" rel="stylesheet" type="text/css" />
@@ -15,7 +15,8 @@
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
                 <li class="breadcrumb-item"><a href="{{ route('loans.index') }}">Prestamos</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Plan de pago</li>
+                <li class="breadcrumb-item"><a href="{{ route('loans.show', $loan) }}">{{ $loan->number }}</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Tabla amortización</li>
             </ol>
         </nav>
     </div>
@@ -31,7 +32,7 @@
                         <div class="col-xl-12 col-md-12 col-sm-12 col-12">
                             <div class="d-flex justify-content-between">
                                 <div>
-                                    <h4>Generar plan de pago para {{ $loan->partner->full_name }}</h4>
+                                    <h4>Generar tabla de amortización para {{ $loan->partner->full_name }}</h4>
                                 </div>
                             </div>
 
@@ -41,18 +42,20 @@
                 <div class="widget-content widget-content-area">
                     <div class="row">
                         <div class="col">
-                            <p>El total del capital es de {{ $loan->amount }}, fecha de prestamo: {{ $loan->date_made }}</p>
+                            <p>El total del capital es de {{ $loan->amount }}</p>
+                            <h6>Fecha otorgada: {{ $loan->date_made->format('Y-m-d') }}</h6>
+                            <h6>Fecha otorgada: {{ $loan->date_payment->format('Y-m-d') }}</h6>
                             <a href="{{ route('loans.show', $loan) }}" class="btn btn-info">Más datos del préstamo</a>
                             <hr>
-                            <p>Para realizar el plan, solamente tiene que ingresar la cantidad del capital que el socio se compromete a pagar cada mes</p>
+                            <p>Para realizar el calculo, ingrese el número de periodos si es que el calculado es diferente</p>
                         </div>
                     </div>
                     <div class="row">
                         <div class="form-group row mb-4">
-                            <label for="cantidadCapitalMes" class="col-sm-4 col-form-label">Cantidad capital a pagar por mes</label>
+                            <label for="periodos" class="col-sm-4 col-form-label">Número de periodos</label>
                             <div class="col-sm-4">
-                                <input type="number" wire:model.defer="cantidadCapitalMes" class="form-control @error('cantidadCapitalMes') is-invalid @enderror" id="cantidadCapitalMes">
-                                @error('cantidadCapitalMes')
+                                <input type="number" wire:model.defer="periodos" class="form-control @error('periodos') is-invalid @enderror" id="periodos">
+                                @error('periodos')
                                 <div class="invalid-feedback">
                                     {{ $message }}
                                 </div>
@@ -62,13 +65,13 @@
 
                         <div class="form-group row mb-4">
                             <div class="col-sm-3">
-                                <button type="button" wire:click.prevent="generar" class="btn btn-secondary">Generar</button>
+                                <button type="button" wire:click="generar" class="btn btn-secondary">Generar</button>
                             </div>
                         </div>
 
                         <div class="row">
                             <div class="col-lx-12">
-                                <table class="table">
+                                <table class="table table-bordered table-striped">
                                     <thead>
                                         <th>Periodos</th>
                                         <th>Fecha programada</th>
@@ -86,25 +89,38 @@
                                             <td></td>
                                             <td></td>
                                             <td></td>
-                                            <td>{{ $loan->amount }}</td>
+                                            <td>${{ number_format($loan->amount, 2) }}</td>
                                         </tr>
-                                        @foreach ($plan as $p)
+                                        @foreach ($amortizacion as $amor)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $p->mes->addMonth()->format('d/m/Y') }}</td>
-                                            <td>${{ number_format($p->capital, 2) }}</td>
-                                            <td>${{ number_format($p->interes, 2) }}</td>
-                                            <td>${{ number_format($p->pagoCapital + $p->interes, 2) }}</td>
-                                            <td>${{ number_format($p->pagoCapital, 2) }}</td>
-                                            <td>${{ number_format($p->capital - $p->pagoCapital, 2) }}</td>
+                                            <td>{{ $amor->fecha->addMonth()->format('d/m/Y') }}</td>
+                                            <td>${{ number_format($amor->saldoInicial, 2) }}</td>
+                                            <td>${{ number_format($amor->interes, 2) }}</td>
+                                            <td>${{ number_format($amor->amortizacion, 2) }}</td>
+                                            <td>${{ number_format($amor->saldoPagar, 2) }}</td>
+                                            <td>${{ number_format($amor->saldoFinal, 2) }}</td>
                                         </tr>
                                         @endforeach
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td>Sumas</td>
+                                            <td>${{ number_format($sumInteres, 2) }}</td>
+                                            <td>${{ number_format($sumAmortizacion, 2) }}</td>
+                                            <td>${{ number_format($sumInteres + $sumAmortizacion, 2) }}</td>
+                                            <td></td>
+                                        </tr>
                                     </tbody>
                                 </table>
-                                @if(!empty($plan))
-                                <button class="btn btn-danger" wire:click.prevent="createPDF">
+                                @if(!empty($amortizacion))
+                                <button class="btn btn-danger" wire:click="exportPDF">
                                     <i class="fa-light fa-file-pdf"></i>
                                 </button>
+
+                                <a class="btn btn-success" wire:click="exportExcel">
+                                    <i class="fa-light fa-file-pdf"></i>
+                                </a>
                                 @endif
                             </div>
 

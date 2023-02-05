@@ -86,9 +86,21 @@
                         </div>
 
                         <div class="form-group row mb-4">
+                            <label for="noMeses" class="col-sm-3 col-form-label">Número de meses</label>
+                            <div class="col-sm-6">
+                                <input type="number" wire:model="noMeses" wire:change="updateDate" class="form-control @error('noMeses') is-invalid @enderror" id="noMeses">
+                                @error('noMeses')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="form-group row mb-4">
                             <label for="loan.date_payment" class="col-sm-3 col-form-label">Fecha programada de pago</label>
                             <div class="col-sm-6">
-                                <input type="text" wire:model="loan.date_payment" class="form-control @error('loan.date_payment') is-invalid @enderror" id="loan-date_payment">
+                                <input type="text" wire:model="loan.date_payment" wire:change="$emit('changeNoMonth')" class="form-control @error('loan.date_payment') is-invalid @enderror" id="loan-date_payment">
                                 @error('loan.date_payment')
                                 <div class="invalid-feedback">
                                     {{ $message }}

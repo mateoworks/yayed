@@ -45,6 +45,8 @@
 
                     <!-- Begin form -->
                     <form class="row g-3" wire:submit.prevent="save" novalidate>
+
+
                         <div class="col-md-4">
                             <label for="partner.names" class="form-label">Nombre(s)</label>
                             <input type="text" wire:model="partner.names" class="form-control @error('partner.names') is-invalid @enderror" id="partner.names" required>
@@ -55,7 +57,7 @@
                             @enderror
 
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <label for="partner.surname_father" class="form-label">Apellido paterno</label>
                             <input type="text" wire:model="partner.surname_father" class="form-control @error('partner.surname_father') is-invalid @enderror" id="partner.surname_father">
                             @error('partner.surname_father')
@@ -65,10 +67,170 @@
                             @enderror
                         </div>
 
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <label for="partner.surname_mother" class="form-label">Apellido materno</label>
                             <input type="text" wire:model="partner.surname_mother" class="form-control @error('partner.surname_mother') is-invalid @enderror" id="partner.surname_mother">
                             @error('partner.surname_mother')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                            @enderror
+                        </div>
+
+                        <div class="col-md-2">
+                            <label for="partner.number" class="form-label">
+                                <i class="fa-light fa-input-numeric"></i>Número del socio
+                            </label>
+                            <input type="number" wire:model="partner.number" class="form-control @error('partner.number') is-invalid @enderror" id="partner.number" required>
+                            @error('partner.number')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                            @enderror
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="my-1 d-flex align-items-center" for="partner.address">
+                                <i class="fa-regular fa-location-dot"></i> Calle</label>
+                            <input type="text" wire:model="partner.address" class="form-control @error('partner.address') is-invalid @enderror" id="partner.address">
+                            <small id="sh-text1" class="form-text text-muted">Calle</small>
+                            @error('partner.address')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                            @enderror
+                        </div>
+
+                        <div class="col-md-2">
+                            <label for="partner.address_number" class="form-label">
+                                <i class="fa-light fa-hashtag"></i>Número
+                            </label>
+                            <input type="text" wire:model="partner.address_number" class="form-control @error('partner.address_number') is-invalid @enderror" id="partner.address_number" required>
+                            @error('partner.address_number')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                            @enderror
+                        </div>
+
+                        <div class="col-md-3">
+                            <label for="partner.barrio" class="form-label">
+                                <i class="fa-light fa-location-dot"></i>Barrio
+                            </label>
+                            <input type="text" wire:model="partner.barrio" class="form-control @error('partner.barrio') is-invalid @enderror" id="partner.barrio" required>
+                            @error('partner.barrio')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                            @enderror
+                        </div>
+
+                        <div class="col-md-3">
+                            <label for="partner.cp" class="form-label">
+                                <i class="fa-light fa-map-location-dot"></i>Código postal
+                            </label>
+                            <input type="number" wire:model="partner.cp" class="form-control @error('partner.cp') is-invalid @enderror" id="partner.cp" required>
+                            @error('partner.cp')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                            @enderror
+                        </div>
+
+                        <div class="col-md-4">
+                            <label for="partner.suburb" class="form-label">
+                                <i class="fa-regular fa-map-location-dot"></i> Colonia
+                            </label>
+                            <select wire:model="partner.suburb" class="form-select @error('partner.suburb') is-invalid @enderror" id="partner.suburb">
+                                <option selected>Selecciona una colonia</option>
+                                <option value="Barrio Alto">Barrio Alto</option>
+                                <option value="Barrio Centro">Barrio Centro</option>
+                                <option value="Ranchería El Ocote">Ranchería El Ocote</option>
+                                <option value="Localidad Unión del Sur">Localidad Unión del Sur</option>
+                                <option value="Campo Nuevo Monte Albán">Campo Nuevo Monte Albán</option>
+                            </select>
+                            @error('partner.suburb')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                            @enderror
+                        </div>
+
+                        <div class="col-md-4">
+                            <label for="partner.municipio" class="form-label">
+                                <i class="fa-regular fa-building"></i>Municipio
+                            </label>
+                            <input type="text" wire:model="partner.municipio" class="form-control @error('partner.municipio') is-invalid @enderror" id="partner.municipio" required>
+                            @error('partner.municipio')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                            @enderror
+                        </div>
+
+                        <div class="col-md-4">
+                            <label for="partner.estado" class="form-label">
+                                <i class="fa-light fa-building-columns"></i>Estado
+                            </label>
+                            <input type="text" wire:model="partner.estado" class="form-control @error('partner.estado') is-invalid @enderror" id="partner.estado" required>
+                            @error('partner.estado')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                            @enderror
+                        </div>
+
+                        <div class="col-md-3">
+                            <label for="partner.dwelling" class="form-label">
+                                <i class="fa-light fa-house-heart"></i>Vivienda
+                            </label>
+                            <select wire:model="partner.dwelling" class="form-select @error('partner.dwelling') is-invalid @enderror" id="partner.dwelling" required>
+                                <option>Seleccione una opción</option>
+                                <option value="Rentada">Rentada</option>
+                                <option value="Prestada">Prestada</option>
+                                <option value="Propia">Propia</option>
+                            </select>
+                            @error('partner.dwelling')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                            @enderror
+                        </div>
+
+                        <div class="col-md-3">
+                            <label class="my-1 d-flex align-items-center" for="partner-birthday">
+                                <i class="fa-solid fa-calendar-days"></i> Fecha de nacimiento</label>
+                            <input type="text" wire:model="partner.birthday" class="form-control @error('partner.birthday') is-invalid @enderror" id="partner-birthday">
+                            @error('partner.birthday')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                            @enderror
+                        </div>
+
+                        <div class="col-md-3">
+                            <label for="partner.dependents" class="form-label">
+                                <i class="fa-thin fa-people-roof"></i>Dependientes
+                            </label>
+                            <input type="number" wire:model="partner.dependents" class="form-control @error('partner.dependents') is-invalid @enderror" id="partner.dependents" required>
+                            @error('partner.dependents')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                            @enderror
+                        </div>
+
+                        <div class="col-md-3">
+                            <label for="partner.civil_status" class="form-label">Estado civil</label>
+                            <select wire:model="partner.civil_status" class="form-select @error('partner.civil_status') is-invalid @enderror" id="partner.civil_status" required>
+                                <option>Seleccione una opción</option>
+                                <option value="Casado(a)">Casado(a)</option>
+                                <option value="Divorciado(a)">Divorciado(a)</option>
+                                <option value="Soltero(a)">Soltero(a)</option>
+                                <option value="Unión libre">Unión libre</option>
+                                <option value="Viudo(a)">Viudo(a)</option>
+                            </select>
+                            @error('partner.civil_status')
                             <div class="invalid-feedback">
                                 {{ $message }}
                             </div>
@@ -122,49 +284,13 @@
                             @enderror
                         </div>
 
-                        <div class="col-md-8">
-                            <label class="my-1 d-flex align-items-center" for="partner.address">
-                                <i class="fa-regular fa-location-dot"></i> Dirección</label>
-                            <input type="text" wire:model="partner.address" class="form-control @error('partner.address') is-invalid @enderror" id="partner.address">
-                            <small id="sh-text1" class="form-text text-muted">Calle, número de casa</small>
-                            @error('partner.address')
-                            <div class="invalid-feedback">
-                                {{ $message }}
-                            </div>
-                            @enderror
-                        </div>
-
-                        <div class="col-md-4">
-                            <label for="partner.suburb" class="form-label">
-                                <i class="fa-regular fa-map-location-dot"></i> Colonia
-                            </label>
-                            <select wire:model="partner.suburb" class="form-select @error('partner.suburb') is-invalid @enderror" id="partner.suburb">
-                                <option selected>Selecciona una colonia</option>
-                                <option value="Barrio Alto">Barrio Alto</option>
-                                <option value="Barrio Centro">Barrio Centro</option>
-                                <option value="Ranchería El Ocote">Ranchería El Ocote</option>
-                                <option value="Localidad Unión del Sur">Localidad Unión del Sur</option>
-                                <option value="Campo Nuevo Monte Albán">Campo Nuevo Monte Albán</option>
-                            </select>
-                            @error('partner.suburb')
-                            <div class="invalid-feedback">
-                                {{ $message }}
-                            </div>
-                            @enderror
-                        </div>
 
 
 
-                        <div class="col-md-4">
-                            <label class="my-1 d-flex align-items-center" for="partner-birthday">
-                                <i class="fa-solid fa-calendar-days"></i> Fecha de nacimiento</label>
-                            <input type="text" wire:model="partner.birthday" class="form-control @error('partner.birthday') is-invalid @enderror" id="partner-birthday">
-                            @error('partner.birthday')
-                            <div class="invalid-feedback">
-                                {{ $message }}
-                            </div>
-                            @enderror
-                        </div>
+
+
+
+
 
                         <div class="col-md-4">
                             <label class="my-1 d-flex align-items-center" for="partner.curp">

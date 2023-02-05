@@ -19,6 +19,8 @@ class LoansEdit extends Component
     public Loan $loan;
     public Endorsement $endorsement;
 
+    public $noMeses;
+
     public $endorsements;
 
     public $aval;
@@ -69,6 +71,19 @@ class LoansEdit extends Component
     {
         $this->endorsements = Endorsement::orderBy('names')->get();
         $this->endorsement = $endorsement;
+        $noPeriodos = $this->loan->date_made->floatDiffInMonths($this->loan->date_payment);
+        $this->noMeses = round($noPeriodos, 0);
+    }
+
+    public function updateDate()
+    {
+        $this->loan->date_payment = $this->loan->date_made->addMonths($this->noMeses);
+    }
+
+    public function updateNoMonth()
+    {
+        $noPeriodos = $this->loan->date_made->floatDiffInMonths($this->loan->date_payment);
+        $this->noMeses = round($noPeriodos, 0);
     }
 
     public function save()
@@ -99,6 +114,7 @@ class LoansEdit extends Component
         'showModal' => 'showModal',
         'display-modal' => 'toggleModal',
         'hide-form' => 'hideModal',
+        'changeNoMonth' => 'updateNoMonth',
     ];
 
     public function add($i)
