@@ -55,8 +55,8 @@
                                 {{ $message }}
                             </div>
                             @enderror
-
                         </div>
+
                         <div class="col-md-3">
                             <label for="partner.surname_father" class="form-label">Apellido paterno</label>
                             <input type="text" wire:model="partner.surname_father" class="form-control @error('partner.surname_father') is-invalid @enderror" id="partner.surname_father">

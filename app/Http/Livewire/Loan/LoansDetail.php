@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Loan;
 
 use App\Models\Loan;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
 use Livewire\Component;
 
 class LoansDetail extends Component
@@ -24,6 +25,6 @@ class LoansDetail extends Component
 
         return response()->streamDownload(function () use ($pdf) {
             echo  $pdf->stream();
-        }, 'detalle_' . $this->loan->number . '.pdf');
+        }, Carbon::now()->format('Y_m_d') . '-detalle_' . $this->loan->number . '.pdf');
     }
 }

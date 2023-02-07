@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Loan;
 use App\Exports\AmortizacionExport;
 use App\Models\Loan;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
 use Livewire\Component;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -69,7 +70,7 @@ class LoanAmortizacion extends Component
         $this->generar();
         return Excel::download(
             new AmortizacionExport($this->amortizacion),
-            'mmortizacion_' . $this->loan->number . '.xlsx'
+            Carbon::now()->format('Y_m_d') . '-amortizacion_' . $this->loan->number . '.xlsx'
         );
     }
 
@@ -87,7 +88,7 @@ class LoanAmortizacion extends Component
 
         return response()->streamDownload(function () use ($pdf) {
             echo  $pdf->stream();
-        }, 'amortizacion_' . $this->loan->number . '.pdf');
+        }, Carbon::now()->format('Y_m_d') . '-amortizacion_' . $this->loan->number . '.pdf');
     }
 }
 class Pago

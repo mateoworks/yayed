@@ -58,7 +58,7 @@ class LoanPaymentPlan extends Component
 
         return response()->streamDownload(function () use ($pdf) {
             echo  $pdf->stream();
-        }, 'contrato_' . $this->loan->number . '.pdf');
+        }, Carbon::now()->format('Y_m_d') . '-plan_' . $this->loan->number . '.pdf');
     }
 }
 class Plan

@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Payments;
 
 use App\Models\Payment;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
 use Livewire\Component;
 
 class PaymentShow extends Component
@@ -26,6 +27,6 @@ class PaymentShow extends Component
 
         return response()->streamDownload(function () use ($pdf) {
             echo  $pdf->stream();
-        }, 'comprobante_' . $this->payment->numero . '.pdf');
+        }, Carbon::now()->format('Y_m_d') . '-comprobante_' . $this->payment->numero . '.pdf');
     }
 }

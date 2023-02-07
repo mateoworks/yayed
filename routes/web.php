@@ -21,6 +21,8 @@ use App\Http\Livewire\Payments\PaymentForm;
 use App\Http\Livewire\Payments\PaymentList;
 use App\Http\Livewire\Payments\PaymentShow;
 use App\Http\Livewire\Report\ReportSimple;
+use App\Http\Livewire\Solicitud\SolicitudForm;
+use App\Http\Livewire\Solicitud\SolicitudShow;
 use App\Http\Livewire\User\Profile;
 use App\Http\Livewire\User\ProfileEdit;
 use App\Http\Livewire\User\UsersForm;
@@ -60,6 +62,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('partners/create/', PartnersForm::class)->name('partners.create');
     Route::get('partners/edit/{partner}', PartnersForm::class)->name('partners.edit');
     Route::get('partners/show/{partner}', PartnersShow::class)->name('partners.show');
+    Route::get('partners/solicitud/create/{partner}', SolicitudForm::class)->name('partners.solicitud.create');
+    Route::get('partners/solicitud/show/{solicitud}', SolicitudShow::class)->name('partners.solicitud.show');
 
     Route::get('documents/download/{document}', [DocumentController::class, 'download'])->name('documents.download');
 
@@ -77,6 +81,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('payments/edit/{loan}', PaymentForm::class)->name('payments.edit');
     Route::get('payments/show/{payment}', PaymentShow::class)->name('payments.show');
     Route::get('payments/create/{loan}', PaymentForm::class)->name('payments.create');
+
+
 
     Route::get('warranties/download/{warranty}', [DocumentController::class, 'downloadWarranty'])
         ->name('warranties.download');

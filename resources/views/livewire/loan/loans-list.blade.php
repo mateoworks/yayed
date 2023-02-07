@@ -70,19 +70,21 @@
                                 @foreach ($loans as $loan)
                                 <tr>
                                     <td>
-                                        <div class="media">
-                                            <div class="avatar me-2">
-                                                @if ($loan->partner->image)
-                                                <img alt="avatar" src="{{ Storage::disk('public')->url($partner->image) }}" class="rounded-circle" />
-                                                @else
-                                                <span class="avatar-title rounded-circle bg-primary">{{ $loan->partner->names[0] ?? '' }}{{ $loan->partner->surname_father[0] }}</span>
-                                                @endif
+                                        <a href="{{ route('partners.show', $loan->partner) }}">
+                                            <div class="media">
+                                                <div class="avatar me-2">
+                                                    @if ($loan->partner->image)
+                                                    <img alt="avatar" src="{{ Storage::disk('public')->url($partner->image) }}" class="rounded-circle" />
+                                                    @else
+                                                    <span class="avatar-title rounded-circle bg-primary">{{ $loan->partner->names[0] ?? '' }}{{ $loan->partner->surname_father[0] }}</span>
+                                                    @endif
+                                                </div>
+                                                <div class="media-body align-self-center">
+                                                    <h6 class="mb-0">{{ $loan->partner->full_name }}</h6>
+                                                    <span><i class="fa-regular fa-phone"></i> {{ $loan->partner->phone }}</span>
+                                                </div>
                                             </div>
-                                            <div class="media-body align-self-center">
-                                                <h6 class="mb-0">{{ $loan->partner->full_name }}</h6>
-                                                <span><i class="fa-regular fa-phone"></i> {{ $loan->partner->phone }}</span>
-                                            </div>
-                                        </div>
+                                        </a>
                                     </td>
                                     <td>
                                         <p>$ {{ number_format($loan->amount, 2) }}</p>

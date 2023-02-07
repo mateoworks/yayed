@@ -13,7 +13,6 @@
     <script src="/layouts/vertical-dark-menu/loader.js"></script>
     <!-- /ENABLE LOADERS -->
     <!-- BEGIN GLOBAL MANDATORY STYLES -->
-    <link href="https://fonts.googleapis.com/css?family=Nunito:400,600,700" rel="stylesheet">
     <link href="/src/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <link href="/layouts/vertical-dark-menu/css/light/plugins.css" rel="stylesheet" type="text/css" />
     <link href="/layouts/vertical-dark-menu/css/dark/plugins.css" rel="stylesheet" type="text/css" />

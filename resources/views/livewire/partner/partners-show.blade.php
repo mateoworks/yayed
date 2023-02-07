@@ -3,6 +3,17 @@
 @push('styles')
 <link href="/src/assets/css/light/scrollspyNav.css" rel="stylesheet" type="text/css" />
 <link href="/src/assets/css/dark/scrollspyNav.css" rel="stylesheet" type="text/css" />
+
+<link href="/src/assets/css/light/components/tabs.css" rel="stylesheet" type="text/css" />
+<link href="/src/assets/css/dark/components/tabs.css" rel="stylesheet" type="text/css" />
+<link href="/src/assets/css/light/components/timeline.css" rel="stylesheet" type="text/css" />
+<link href="/src/assets/css/dark/components/timeline.css" rel="stylesheet" type="text/css" />
+<style>
+    ol .time-line {
+        max-width: 100% !important;
+        width: 100% !important;
+    }
+</style>
 @endpush
 <div class="middle-content container-xxl p-0">
 
@@ -25,18 +36,34 @@
             <div class="statbox widget box box-shadow">
                 <div class="widget-header">
                     <div class="row">
-                        <div class="col-xl-8 col-md-6 col-sm-12 col-8">
-                            <h4>Datos de {{ $partner->names }} {{ $partner->surname_father }} {{ $partner->surname_mother }}</h4>
-                        </div>
-                        <div class="col-4 mt-2">
-                            <a href="{{ route('partners.edit', $partner) }}" class="btn btn-info">Editar</a>
+                        <div class="col-xl-12 col-md-12 col-sm-12 col-12">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h4>Detalles del préstamo</h4>
+                                </div>
+                                <div class="mt-3 me-3">
+
+                                    <a href="{{ route('partners.edit', $partner) }}" class="btn btn-secondary ms-2 bs-tooltip" data-toggle="tooltip" data-placement="top" title="Editar">
+                                        <i class="fa-light fa-pen-to-square"></i>
+                                    </a>
+                                    <a href="{{ route('partners.solicitud.create', $partner) }}" class="btn btn-success btn-sm ms-1">
+                                        <i class="fa-regular fa-file"></i>
+                                        Realizar solicitud
+                                    </a>
+                                    <a href="{{ route('loans.partner', $partner) }}" class="btn btn-info btn-sm ms-1">
+                                        <i class="fa-regular fa-file"></i>
+                                        Realizar préstamo
+                                    </a>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </div>
                 <div class="widget-content widget-content-area">
 
                     <div class="row">
-                        <div class="col-sm-12 col-lg-5">
+                        <div class="col-sm-12 col-lg-4">
                             @if ($partner->image)
                             <img src="{{ Storage::disk('public')->url($partner->image) }}" class="img-thumbnail" alt="">
                             @else
@@ -44,82 +71,207 @@
 
                             @endif
                         </div>
-                        <div class="col-sm-12 col-lg-7">
-                            <h2> {{ $partner->fullName }}</h2>
-                            <div class="table-responsive">
-                                <table class="table table-hover table-striped table-bordered">
-                                    <tbody>
+                        <div class="col-sm-12 col-lg-8">
+                            <h4> {{ $partner->fullName }}</h4>
 
-                                        <tr>
-                                            <td>Teléfono:</td>
-                                            <td>
-                                                <h5>{{ $partner->phone }}</h5>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Dirección:</td>
-                                            <td>
-                                                <h5>{{ $partner->address }}</h5>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Colonia:</td>
-                                            <td>
-                                                <h5>{{ $partner->suburb }}</h5>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Ocupación:</td>
-                                            <td>
-                                                <h5>{{ $partner->job }}</h5>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Fecha de nacimiento:</td>
-                                            <td>
-                                                <h5>{{ $partner->birthday->format('Y-m-d') }} ({{ $partner->age }} años)</h5>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Curp:</td>
-                                            <td>
-                                                <h5>{{ $partner->curp }}</h5>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Clave INE:</td>
-                                            <td>
-                                                <h5>{{ $partner->key_ine }} </h5>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Correo electrónico:</td>
-                                            <td>
-                                                <h5>{{ $partner->email }} </h5>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Fecha de registro:</td>
-                                            <td>
-                                                <h5>{{ $partner->created_at }} </h5>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>ültima actualización:</td>
-                                            <td>
-                                                <h5>{{ $partner->updated_at }} </h5>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>ID en el sistema:</td>
-                                            <td>
-                                                {{ $partner->id }}
-                                            </td>
-                                        </tr>
 
-                                    </tbody>
-                                </table>
+                            <div class="widget-content widget-content-area animated-underline-content">
+
+                                <ul class="nav nav-tabs  mb-3" id="animateLine" role="tablist">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" id="datos-personales-tab" data-bs-toggle="tab" href="#datos-personales" role="tab" aria-controls="datos-personales" aria-selected="true">
+                                            <i class="fa-light fa-address-card"></i> Datos personales</a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="contacto-tab" data-bs-toggle="tab" href="#contacto" role="tab" aria-controls="contacto" aria-selected="false"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-phone">
+                                                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                                            </svg> Contacto</a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="socioeconomico-tab" data-bs-toggle="tab" href="#socioeconomico" role="tab" aria-controls="socioeconomico" aria-selected="false">
+                                            <i class="fa-light fa-house-user"></i>Socioeconomico</a>
+                                    </li>
+                                </ul>
+
+                                <div class="tab-content" id="animateLineContent-4">
+                                    <div class="tab-pane fade active show" id="datos-personales" role="tabpanel" aria-labelledby="datos-personales-tab">
+                                        <table>
+                                            <tr>
+                                                <td>
+                                                    <p>Nombre(s): </p>
+                                                </td>
+                                                <td>
+                                                    <p><strong>{{ $partner->names }}</strong></p>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <p>Primer apellido: </p>
+                                                </td>
+                                                <td>
+                                                    <p><strong>{{ $partner->surname_father }}</strong></p>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <p>Segundo apellido: </p>
+                                                </td>
+                                                <td>
+                                                    <p><strong>{{ $partner->surname_mother }}</strong></p>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <p>Fecha de nacimiento: </p>
+                                                </td>
+                                                <td>
+                                                    <p><strong>{{ $partner->birthday->format('Y-m-d') }} ({{ $partner->age }} años)</strong></p>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <p>Género: </p>
+                                                </td>
+                                                <td>
+                                                    <p><strong>{{ $partner->gender }}</strong></p>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <p>Estado civil: </p>
+                                                </td>
+                                                <td>
+                                                    <p><strong>{{ $partner->civil_status }}</strong></p>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <p>CURP: </p>
+                                                </td>
+                                                <td>
+                                                    <p><strong>{{ $partner->curp }}</strong></p>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <p>Clave INE: </p>
+                                                </td>
+                                                <td>
+                                                    <p><strong>{{ $partner->key_ine }}</strong></p>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="tab-pane fade" id="contacto" role="tabpanel" aria-labelledby="contacto-tab">
+                                        <table>
+                                            <tr>
+                                                <td>
+                                                    <p>Teléfono: </p>
+                                                </td>
+                                                <td>
+                                                    <p><strong>{{ $partner->phone }}</strong></p>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <p>Correo electrónico: </p>
+                                                </td>
+                                                <td>
+                                                    <p><strong>{{ $partner->email }}</strong></p>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <p>Calle: </p>
+                                                </td>
+                                                <td>
+                                                    <p><strong>{{ $partner->address }}</strong></p>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <p>Número: </p>
+                                                </td>
+                                                <td>
+                                                    <p><strong>{{ $partner->address_number }}</strong></p>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <p>Barrio: </p>
+                                                </td>
+                                                <td>
+                                                    <p><strong>{{ $partner->barrio }}</strong></p>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <p>Código postal: </p>
+                                                </td>
+                                                <td>
+                                                    <p><strong>{{ $partner->cp }}</strong></p>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <p>Colonia: </p>
+                                                </td>
+                                                <td>
+                                                    <p><strong>{{ $partner->suburb }}</strong></p>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <p>Municipio: </p>
+                                                </td>
+                                                <td>
+                                                    <p><strong>{{ $partner->municipio }}</strong></p>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <p>Estado: </p>
+                                                </td>
+                                                <td>
+                                                    <p><strong>{{ $partner->estado }}</strong></p>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="tab-pane fade" id="socioeconomico" role="tabpanel" aria-labelledby="socioeconomico-tab">
+                                        <table>
+                                            <tr>
+                                                <td>
+                                                    <p>Ocupacion: </p>
+                                                </td>
+                                                <td>
+                                                    <p><strong>{{ $partner->job }}</strong></p>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <p>Vivienda: </p>
+                                                </td>
+                                                <td>
+                                                    <p><strong>{{ $partner->dwelling }}</strong></p>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <p>Dependientes: </p>
+                                                </td>
+                                                <td>
+                                                    <p><strong>{{ $partner->dependents }}</strong></p>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+
                             </div>
+
 
                         </div>
                     </div>
@@ -160,8 +312,106 @@
                             </div>
                         </div>
                         @empty
-                        <h5>No hay documentos agregados</h5>
+                        <h6>No hay documentos agregados</h6>
                         @endforelse
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="tableCustomBasic" class="col-lg-12 col-12 layout-spacing">
+            <div class="statbox widget box box-shadow">
+                <div class="widget-header">
+                    <div class="row">
+                        <div class="col-xl-12 col-md-12 col-sm-12 col-12">
+                            <h4>Préstamos realizados</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="widget-content widget-content-area">
+                    <div class="row">
+
+                        <ol class="timeline">
+
+                            @foreach ($partner->loans as $loan)
+                            <li class="timeline-item extra-space">
+                                <span class="timeline-item-icon filled-icon">
+                                    <i class="d-inline fa-regular fa-hand-holding-dollar"></i>
+                                </span>
+                                <div class="timeline-item-wrapper">
+                                    <div class="timeline-item-description">
+                                        <span class="align-self-center">
+                                            <a href="{{ route('loans.show', $loan) }}">{{ $loan->number }}</a>
+                                            realizado el
+                                            <span>{{ $loan->date_made->locale('es')->isoFormat('D \d\e MMMM \d\e\l Y') }}</span>
+                                            <strong class="fw-3">- capital: ${{ number_format($loan->amount, 2) }}</strong>
+                                        </span>
+                                        @if ($loan->status == 'activo')
+                                        <span class="badge badge-primary mb-2 me-4">Activo</span>
+                                        @elseif ($loan->status == 'suspendido')
+                                        <span class="badge badge-danger mb-2 me-4">Suspendido</span>
+                                        @elseif ($loan->status == 'liquidado')
+                                        <span class="badge badge-success mb-2 me-4">Liquidado</span>
+                                        @endif
+                                    </div>
+                                    <div class="comment">
+                                        <h6 class="text-center">Pagos realizados</h6>
+                                        <table class="table table-striped table-border">
+                                            <thead>
+                                                <th>NP</th>
+                                                <th>Fecha realizada</th>
+                                                <th>Fecha programada</th>
+                                                <th>Cantidad capital</th>
+                                                <th>Cantidad interés</th>
+                                                <th>Importe</th>
+                                                <th></th>
+                                            </thead>
+                                            <tbody>
+                                                @foreach ($loan->payments as $payment)
+                                                <tr>
+                                                    <td>{{ $loop->iteration }}</td>
+                                                    <td>{{ $payment->scheduled_date->format('d/m/Y') }}</td>
+                                                    <td>{{ $payment->made_date->format('d/m/Y') }}</td>
+                                                    <td class="text-end">${{ number_format($payment->principal_amount, 2) }}</td>
+                                                    <td class="text-end">${{ number_format($payment->interest_amount, 2) }}</td>
+                                                    <td class="text-end">${{ number_format($payment->principal_amount + $payment->interest_amount, 2) }}</td>
+                                                    <td>
+                                                        <div class="btn-group" role="group" aria-label="Basic example">
+                                                            <a href="{{ route('payments.show', $payment) }}" class="btn btn-primary">
+                                                                <i class="fa-light fa-eye"></i>
+                                                            </a>
+
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                </div>
+                            </li>
+                            @endforeach
+
+                        </ol>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="tableCustomBasic" class="col-lg-12 col-12 layout-spacing">
+            <div class="statbox widget box box-shadow">
+                <div class="widget-header">
+                    <div class="row">
+                        <div class="col-xl-12 col-md-12 col-sm-12 col-12">
+                            <h4>Solicitudes realizadas</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="widget-content widget-content-area">
+                    <div class="row">
+
                     </div>
                 </div>
             </div>

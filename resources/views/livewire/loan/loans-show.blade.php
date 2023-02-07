@@ -33,7 +33,6 @@
                             <div class="d-flex justify-content-between">
                                 <div>
                                     <h4>Detalles del préstamo</h4>
-
                                 </div>
                                 <div class="mt-3 me-3">
                                     @if ($loan->status == 'activo')

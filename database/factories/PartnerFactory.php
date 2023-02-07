@@ -18,15 +18,26 @@ class PartnerFactory extends Factory
     {
         return [
             'id' => $this->faker->uuid,
+            'number' => $this->faker->randomDigitNotNull,
             'names' => fake()->firstName(),
             'surname_father' => fake()->lastName(),
             'surname_mother' => fake()->lastName(),
             'phone' => $this->faker->phoneNumber,
-            'address' => $this->faker->address,
+            'gender' => $this->faker->randomElement(['Masculino', 'Femenino']),
+            'address' => $this->faker->streetName,
+            'address_number' => $this->faker->randomDigit,
+            'barrio' => $this->faker->city,
+            'cp' => $this->faker->countryCode,
             'suburb' => $this->faker->city,
+            'municipio' => 'San Baltazar Loxicha',
+            'estado' => 'Oaxaca',
+            'dwelling' => $this->faker->randomElement(['Alquilada', 'Invadida']),
+            'dependents' => $this->faker->numberBetween(0, 10),
+            'civil_status' => $this->faker->randomElement(['Casado', 'Soltero', 'Divorciado']),
             'curp' => $this->faker->iban,
             'key_ine' => $this->faker->iban,
             'birthday' => $this->faker->date(),
+            'job' => $this->faker->jobTitle,
         ];
     }
 }
