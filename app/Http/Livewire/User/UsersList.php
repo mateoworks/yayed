@@ -18,7 +18,14 @@ class UsersList extends Component
     public function destroy($id)
     {
         $user = User::findOrFail($id);
-        $user->delete();
-        session()->flash('message', 'Se eliminó el usuario correctamente');
+        try {
+            $user->delete();
+            $message = 'Se eliminó el usuario correctamente';
+            $backgroundColor = '00ab55';
+        } catch (\Exception $e) {
+            $message = 'Error código: ' . $e->getCode() . ', tiene algún dato relacionado con pagos.';
+            $backgroundColor = 'ff3333';
+        }
+        $this->dispatchBrowserEvent('message', ['message' => $message, 'backgroundColor' => $backgroundColor]);
     }
 }

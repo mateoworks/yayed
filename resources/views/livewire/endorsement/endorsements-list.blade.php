@@ -1,4 +1,4 @@
-@section('title', 'Usuarios')
+@section('title', 'Lista de avales')
 @push('styles')
 <link href="/src/assets/css/light/scrollspyNav.css" rel="stylesheet" type="text/css" />
 <link href="/src/assets/css/dark/scrollspyNav.css" rel="stylesheet" type="text/css" />
@@ -11,7 +11,7 @@
         <nav class="breadcrumb-style-one" aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Usuarios</li>
+                <li class="breadcrumb-item active" aria-current="page">Avales</li>
             </ol>
         </nav>
     </div>
@@ -25,17 +25,17 @@
                 <div class="widget-header">
                     <div class="row">
                         <div class="col">
-                            <div class="col-xl-12 col-md-12 col-sm-12 col-12">
-                                <h4>Lista de usuarios</h4>
+                            <div class="col-xl-12">
+                                <h4>Lista de avales</h4>
                             </div>
                         </div>
                         <div class="col d-flex justify-content-end">
-                            <a class="btn btn-success mt-2 me-4" href="{{ route('users.create') }}">
-                                <i class="fa-regular fa-user-plus"></i>
-                                <span class="btn-text-inner">Agregar usuarios</span>
+                            <a class="btn btn-success mt-2 me-4" href="">
+                                <i class="fa-light fa-file-excel"></i>
                             </a>
                         </div>
                     </div>
+
                 </div>
                 <div class="widget-content widget-content-area">
 
@@ -43,56 +43,48 @@
                         <table class="table table-hover table-striped table-bordered">
                             <thead>
                                 <tr>
-                                    <th scope="col">Nombre</th>
-                                    <th scope="col">Cargo</th>
-
+                                    <th scope="col">Aval</th>
+                                    <th scope="col">Dirección</th>
+                                    <th scope="col">Préstamos avalados</th>
                                     <th class="text-center" scope="col"></th>
                                 </tr>
                                 <tr aria-hidden="true" class="mt-3 d-block table-row-hidden"></tr>
                             </thead>
                             <tbody>
 
-                                @foreach ($users as $user)
+                                @foreach ($endorsements as $endorsement)
                                 <tr>
                                     <td>
+
                                         <div class="media">
-                                            <div class="avatar">
-                                                @if ($user->image)
-                                                <img alt="avatar" src="{{ Storage::disk('public')->url($user->image) }}" class="rounded-circle" />
-                                                @else
-                                                <span class="avatar-title rounded-circle">{{ $user->name[0] ?? '' }}{{ $user->surname[0] }}</span>
-                                                @endif
-                                            </div>
-                                            <div class="media-body align-self-center ms-3">
-                                                <h6 class="mb-0">{{ $user->name }} {{ $user->surname }}</h6>
-                                                <span>{{ $user->email }}</span>
+                                            <div class="media-body align-self-center">
+                                                <h6 class="mb-0">{{ $endorsement->full_name }}</h6>
+                                                <span><i class="fa-regular fa-phone"></i> {{ $endorsement->phone }}</span>
                                             </div>
                                         </div>
+
                                     </td>
                                     <td>
-                                        <p class="mb-0">{{ $user->job }}</p>
+                                        <p>{{ $endorsement->address }}</p>
                                     </td>
-                                    <td class="text-center">
+                                    <td>
+                                        <p>{{ $endorsement->solicituds->count() }}</p>
+                                    </td>
 
+                                    <td class="text-center">
                                         <div class="btn-group" role="group" aria-label="Basic example">
 
-                                            <a href="{{ route('users.show', $user) }}" class="bs-tooltip btn btn-primary" data-toggle="tooltip" data-placement="top" title="Ver">
+                                            <a href="{{ route('endorsements.show', $endorsement) }}" class="bs-tooltip btn btn-primary" data-toggle="tooltip" data-placement="top" title="Ver">
                                                 <i class="fa-light fa-eye"></i>
                                             </a>
-                                            <a href="{{ route('users.edit', $user) }}" class="bs-tooltip btn btn-info" data-toggle="tooltip" data-placement="top" title="Editar">
+                                            <a href="" class="bs-tooltip btn btn-info" data-toggle="tooltip" data-placement="top" title="Editar">
                                                 <i class="fa-light fa-pen-to-square"></i>
                                             </a>
-                                            @if (auth()->user()->id == $user->id)
-                                            <button wire:click="$emit('triggerDelete', '{{ $user->id }}')" class="bs-tooltip btn btn-danger" data-toggle="tooltip" data-placement="top" title="Eliminar" disabled>
+                                            <a wire:click="$emit('deleteEndorsment', {{ $endorsement }})" class="bs-tooltip btn btn-danger" data-toggle="tooltip" data-placement="top" title="Eliminar">
                                                 <i class="fa-regular fa-trash-can"></i>
-                                            </button>
-                                            @else
-                                            <button wire:click="$emit('triggerDelete', '{{ $user->id }}')" class="bs-tooltip btn btn-danger" data-toggle="tooltip" data-placement="top" title="Eliminar">
-                                                <i class="fa-regular fa-trash-can"></i>
-                                            </button>
-                                            @endif
-
+                                            </a>
                                         </div>
+
                                     </td>
                                 </tr>
                                 @endforeach
@@ -100,6 +92,8 @@
                             </tbody>
                         </table>
                     </div>
+
+                    {{ $endorsements->links() }}
 
                 </div>
             </div>
@@ -112,15 +106,15 @@
 <script type="text/javascript">
     document.addEventListener('DOMContentLoaded', function() {
 
-        @this.on('triggerDelete', id => {
+        @this.on('deleteEndorsment', endorsement => {
             Swal.fire({
-                title: '¿Estas seguro de eliminar este usuario?',
-                html: "Se intetará eliminar, si tiene algún dato relacionado como pagos, no se eliminará.",
+                title: '¿Estas seguro de eliminar?',
+                html: "Se eliminará este aval y se le quitará a los préstamos que ha avalado",
                 icon: 'warning',
                 showCancelButton: true,
             }).then((result) => {
                 if (result.value) {
-                    @this.call('destroy', id)
+                    @this.call('destroyEndorsement', endorsement)
                 }
             });
         });
@@ -132,13 +126,11 @@
             text: event.detail.message,
             pos: 'top-center',
             actionTextColor: '#fff',
-            backgroundColor: '#' + event.detail.backgroundColor,
+            backgroundColor: '#00ab55',
 
         });
     });
 </script>
-
-
 
 @if(session()->has('message'))
 <script>

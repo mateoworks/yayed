@@ -119,7 +119,7 @@
                                 </button>
 
                                 <a class="btn btn-success" wire:click="exportExcel">
-                                    <i class="fa-light fa-file-pdf"></i>
+                                    <i class="fa-light fa-file-excel"></i>
                                 </a>
                                 @endif
                             </div>

@@ -33,6 +33,11 @@ class Partner extends Model
         return $this->hasMany(Document::class);
     }
 
+    public function solicituds()
+    {
+        return $this->hasMany(Solicitud::class);
+    }
+
     public function loans()
     {
         return $this->hasMany(Loan::class);
@@ -43,6 +48,16 @@ class Partner extends Model
         foreach ($this->loans as $loan) {
             if ($loan->status == 'activo') {
                 $activo = $loan;
+            }
+        }
+        return $activo;
+    }
+    public function getSolicitudAutorizadoAttribute()
+    {
+        $activo = false;
+        foreach ($this->solicituds as $solicitud) {
+            if ($solicitud->condition == 'autorizado') {
+                $activo = $solicitud;
             }
         }
         return $activo;

@@ -75,20 +75,23 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <h4>Socio</h4>
-                                    <div class="media">
-                                        <div class="avatar me-2">
-                                            @if ($loan->partner->image)
-                                            <img alt="avatar" src="{{ Storage::disk('public')->url($partner->image) }}" class="rounded-circle" />
-                                            @else
-                                            <span class="avatar-title rounded-circle bg-primary">{{ $loan->partner->names[0] ?? '' }}{{ $loan->partner->surname_father[0] }}</span>
-                                            @endif
+                                    <a href="{{ route('partners.show', $loan->partner) }}">
+                                        <div class="media">
+                                            <div class="avatar me-2">
+                                                @if ($loan->partner->image)
+                                                <img alt="avatar" src="{{ Storage::disk('public')->url($partner->image) }}" class="rounded-circle" />
+                                                @else
+                                                <span class="avatar-title rounded-circle bg-primary">{{ $loan->partner->names[0] ?? '' }}{{ $loan->partner->surname_father[0] }}</span>
+                                                @endif
+                                            </div>
+                                            <div class="media-body align-self-center">
+                                                <h6 class="mb-0">{{ $loan->partner->full_name }}</h6>
+                                                <span><i class="fa-regular fa-phone"></i> {{ $loan->partner->phone }}</span>
+                                                <p>{{ $loan->partner->address }}</p>
+                                            </div>
                                         </div>
-                                        <div class="media-body align-self-center">
-                                            <h6 class="mb-0">{{ $loan->partner->full_name }}</h6>
-                                            <span><i class="fa-regular fa-phone"></i> {{ $loan->partner->phone }}</span>
-                                            <p>{{ $loan->partner->address }}</p>
-                                        </div>
-                                    </div>
+                                    </a>
+                                    <a href="{{ route('partners.solicitud.show', $loan->solicitud) }}">Ver solicitud</a>
                                 </div>
                                 <div class="col-md-6">
                                     <h4>Préstamo</h4>
@@ -127,7 +130,7 @@
                             <h3>Avales</h3>
                             <table class="table">
                                 <tbody>
-                                    @forelse ($loan->endorsements as $endorsement)
+                                    @forelse ($loan->solicitud->endorsements as $endorsement)
                                     <tr>
                                         <td>{{ $endorsement->names }}</td>
                                         <td>{{ $endorsement->surnames }}</td>
@@ -150,7 +153,7 @@
                             <h3>Garantías</h3>
                             <table class="table">
                                 <tbody>
-                                    @forelse ($loan->warranties as $warranty)
+                                    @forelse ($loan->solicitud->warranties as $warranty)
                                     <tr>
                                         <td>{{ $warranty->type }}</td>
                                         <td>

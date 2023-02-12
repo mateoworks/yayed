@@ -13,15 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('endorsement_loan', function (Blueprint $table) {
+        Schema::create('endorsement_solicitud', function (Blueprint $table) {
             $table->id();
             $table->foreignUuid('endorsement_id')
                 ->references('id')
                 ->on('endorsements')
                 ->onDelete('cascade');
-            $table->foreignUuid('loan_id')
+            $table->foreignUuid('solicitud_id')
                 ->references('id')
-                ->on('loans')
+                ->on('solicituds')
                 ->onDelete('cascade');
             $table->timestamps();
         });

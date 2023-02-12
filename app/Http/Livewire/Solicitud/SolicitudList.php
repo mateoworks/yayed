@@ -1,37 +1,31 @@
 <?php
 
-namespace App\Http\Livewire\Loan;
+namespace App\Http\Livewire\Solicitud;
 
-use App\Models\Loan;
+use App\Models\Solicitud;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-class LoansList extends Component
+class SolicitudList extends Component
 {
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
 
     public $search = '';
     public $status = '';
+
     public function render()
     {
         $searched = $this->search;
-        return view('livewire.loan.loans-list', [
-            'loans' => Loan::where('status', 'like', "%$this->status%")
+        return view('livewire.solicitud.solicitud-list', [
+            'solicitudes' => Solicitud::where('condition', 'like', "%$this->status%")
                 ->with('partner')
                 ->whereHas('partner', function ($q) use ($searched) {
                     $q->where(DB::raw("CONCAT(names, ' ', surname_father, ' ', surname_mother)"), 'like', "%$searched%");
                 })
-                ->latest('date_made')
+                ->latest('date_solicitud')
                 ->paginate(),
         ]);
-    }
-
-    public function destroyLoan(Loan $loan)
-    {
-        $loan->delete();
-        $this->dispatchBrowserEvent('message', ['message' => 'Se eliminó el préstamo']);
     }
 }

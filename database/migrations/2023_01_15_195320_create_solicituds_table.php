@@ -18,10 +18,11 @@ return new class extends Migration
             $table->integer('folio');
             $table->date('date_solicitud');
             $table->date('date_payment');
+            $table->date('date_aproved')->nullable();
             $table->double('period');
             $table->double('mount');
             $table->mediumText('concept')->nullable();
-            $table->string('condition')->default('solicitado');
+            $table->string('condition')->default('en proceso');
             $table->foreignUuid('partner_id')
                 ->references('id')
                 ->on('partners')

@@ -5,6 +5,8 @@ use App\Http\Controllers\Helpers\AutocompleteController;
 use App\Http\Controllers\Helpers\ExportController;
 use App\Http\Controllers\Helpers\SearchController;
 use App\Http\Livewire\Dashboard;
+use App\Http\Livewire\Endorsement\EndorsementsList;
+use App\Http\Livewire\Endorsement\EndorsementsShow;
 use App\Http\Livewire\Loan\LoanAmortizacion;
 use App\Http\Livewire\Loan\LoanPaymentPlan;
 use App\Http\Livewire\Loan\LoansContract;
@@ -21,7 +23,9 @@ use App\Http\Livewire\Payments\PaymentForm;
 use App\Http\Livewire\Payments\PaymentList;
 use App\Http\Livewire\Payments\PaymentShow;
 use App\Http\Livewire\Report\ReportSimple;
+use App\Http\Livewire\Solicitud\SolicitudEdit;
 use App\Http\Livewire\Solicitud\SolicitudForm;
+use App\Http\Livewire\Solicitud\SolicitudList;
 use App\Http\Livewire\Solicitud\SolicitudShow;
 use App\Http\Livewire\User\Profile;
 use App\Http\Livewire\User\ProfileEdit;
@@ -62,15 +66,18 @@ Route::middleware(['auth'])->group(function () {
     Route::get('partners/create/', PartnersForm::class)->name('partners.create');
     Route::get('partners/edit/{partner}', PartnersForm::class)->name('partners.edit');
     Route::get('partners/show/{partner}', PartnersShow::class)->name('partners.show');
-    Route::get('partners/solicitud/create/{partner}', SolicitudForm::class)->name('partners.solicitud.create');
-    Route::get('partners/solicitud/show/{solicitud}', SolicitudShow::class)->name('partners.solicitud.show');
+
+    Route::get('solicitud/create/{partner}', SolicitudForm::class)->name('partners.solicitud.create');
+    Route::get('solicitud/show/{solicitud}', SolicitudShow::class)->name('partners.solicitud.show');
+    Route::get('solicitud', SolicitudList::class)->name('solicitud.index');
+    Route::get('solicitud/edit/{solicitud}', SolicitudEdit::class)->name('solicitud.edit');
 
     Route::get('documents/download/{document}', [DocumentController::class, 'download'])->name('documents.download');
 
     Route::get('loans', LoansList::class)->name('loans.index');
     Route::get('loans/create', LoansForm::class)->name('loans.create');
     Route::get('loans/edit/{loan}', LoansEdit::class)->name('loans.edit');
-    Route::get('loans/partner/{partner}', LoansPartnerForm::class)->name('loans.partner');
+    Route::get('loans/partner/{solicitud}', LoansPartnerForm::class)->name('loans.solicitud');
     Route::get('loans/show/{loan}', LoansShow::class)->name('loans.show');
     Route::get('loans/detail/{loan}', LoansDetail::class)->name('loans.detail');
     Route::get('loans/contract/{loan}', LoansContract::class)->name('loans.contract');
@@ -82,7 +89,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('payments/show/{payment}', PaymentShow::class)->name('payments.show');
     Route::get('payments/create/{loan}', PaymentForm::class)->name('payments.create');
 
-
+    Route::get('endorsements', EndorsementsList::class)->name('endorsements.index');
+    Route::get('endorsements/show/{endorsement}', EndorsementsShow::class)->name('endorsements.show');
 
     Route::get('warranties/download/{warranty}', [DocumentController::class, 'downloadWarranty'])
         ->name('warranties.download');

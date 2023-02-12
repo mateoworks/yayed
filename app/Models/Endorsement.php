@@ -14,9 +14,9 @@ class Endorsement extends Model
     protected $keyType = 'string';
     public $incrementing = false;
 
-    public function loans()
+    public function solicituds()
     {
-        return $this->belongsToMany(Loan::class);
+        return $this->belongsToMany(Solicitud::class);
     }
     public function getFullNameAttribute()
     {

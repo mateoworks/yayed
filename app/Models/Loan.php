@@ -23,14 +23,9 @@ class Loan extends Model
         return $this->belongsTo(Partner::class);
     }
 
-    public function endorsements()
+    public function solicitud()
     {
-        return $this->belongsToMany(Endorsement::class);
-    }
-
-    public function warranties()
-    {
-        return $this->hasMany(Warranty::class);
+        return $this->belongsTo(Solicitud::class);
     }
 
     public function payments()

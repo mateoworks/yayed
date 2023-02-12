@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('names');
             $table->string('surnames');
             $table->string('phone')->nullable();
-            $table->string('url_dni')->nullable();
+            $table->string('address')->nullable();
             $table->timestamps();
         });
     }

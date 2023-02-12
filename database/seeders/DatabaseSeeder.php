@@ -9,6 +9,7 @@ use App\Models\Endorsement;
 use App\Models\Loan;
 use App\Models\Partner;
 use App\Models\Payment;
+use App\Models\Solicitud;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -25,9 +26,10 @@ class DatabaseSeeder extends Seeder
         Partner::factory(20)->create();
         Document::factory(30)->create();
         Endorsement::factory(10)->create();
-        Loan::factory(30)->create()->each(function ($loan) {
-            $loan->endorsements()->sync(Endorsement::all()->random(2));
+        Solicitud::factory(30)->create()->each(function ($solicitud) {
+            $solicitud->endorsements()->sync(Endorsement::all()->random(2));
         });
+        Loan::factory(30)->create();
         Payment::factory(150)->create();
         // \App\Models\User::factory()->create([
         //     'name' => 'Test User',

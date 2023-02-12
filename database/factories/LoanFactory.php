@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Partner;
+use App\Models\Solicitud;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,15 +18,17 @@ class LoanFactory extends Factory
      */
     public function definition()
     {
+        $solicitud = Solicitud::all()->random();
         return [
             'id' => $this->faker->uuid,
             'number' => uniqid(),
             'amount' => $this->faker->numberBetween(1000, 50000),
             'amount_letter' => 'Mil pesos',
             'date_made' => $this->faker->dateTimeBetween('-1 year', 'now'),
-            'date_payment' => $this->faker->date('Y-m-d'),
+            'date_payment' => $this->faker->dateTimeBetween('-1 year', 'now'),
             'status' => $this->faker->randomElement(['activo', 'suspendido', 'liquidado']),
-            'partner_id' => Partner::all()->random(),
+            'partner_id' => $solicitud->partner,
+            'solicitud_id' => $solicitud,
         ];
     }
 }

@@ -6,6 +6,7 @@
 
 <link href="/src/plugins/css/light/loaders/custom-loader.css" rel="stylesheet" type="text/css" />
 <link href="/src/plugins/css/dark/loaders/custom-loader.css" rel="stylesheet" type="text/css" />
+
 @endpush
 <div class="middle-content container-xxl p-0">
 
@@ -93,10 +94,12 @@
                             @endif
 
                             <label for="image" class="form-label">Foto</label>
-                            <input type="file" wire:model="image" class="form-control-file @error('image') is-invalid @enderror" id="image">
+                            <input type="file" wire:model="image" class="form-control-file @error('image') is-invalid @enderror" id="image" accept="image/png,image/jpeg">
                             <small id="sh-text1" class="form-text text-muted">Opcional</small>
-                            <div wire:loading wire:target="image" class="spinner-border spinner-border-reverse align-self-center text-secondary">
-                                Subiendo...
+                            <div wire:loading wire:target="image">
+                                <div class="spinner-border spinner-border-reverse align-self-center text-secondary">
+                                    Subiendo...
+                                </div>
                             </div>
                             @error('image')
                             <div class="invalid-feedback">

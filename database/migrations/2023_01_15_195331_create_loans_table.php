@@ -26,6 +26,10 @@ return new class extends Migration
                 ->references('id')
                 ->on('partners')
                 ->onDelete('cascade');
+            $table->foreignUuid('solicitud_id')
+                ->references('id')
+                ->on('solicituds')
+                ->onDelete('cascade');
             $table->timestamps();
         });
     }

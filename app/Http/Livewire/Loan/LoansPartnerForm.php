@@ -5,7 +5,9 @@ namespace App\Http\Livewire\Loan;
 use App\Models\Endorsement;
 use App\Models\Loan;
 use App\Models\Partner;
+use App\Models\Solicitud;
 use App\Models\Warranty;
+use Carbon\Carbon;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -14,6 +16,8 @@ use Luecano\NumeroALetras\NumeroALetras;
 class LoansPartnerForm extends Component
 {
     use WithFileUploads;
+    public Solicitud $solicitud;
+
     public Partner $partner;
     public Loan $loan;
     public Endorsement $endorsement;
@@ -47,6 +51,9 @@ class LoansPartnerForm extends Component
                 Rule::requiredIf($this->saveNewAval)
             ],
             'endorsement.phone' => [
+                Rule::requiredIf($this->saveNewAval)
+            ],
+            'endorsement.address' => [
                 Rule::requiredIf($this->saveNewAval)
             ],
         ];
@@ -86,12 +93,18 @@ class LoansPartnerForm extends Component
 
     public function mount(Loan $loan, Endorsement $endorsement)
     {
+        $this->partner = $this->solicitud->partner;
+
+
+
         $this->endorsements = Endorsement::orderBy('names')->get();
         $this->loan = $loan;
         $this->loan->interest = 2;
+        $this->loan->amount = $this->solicitud->mount;
         $this->loan->date_made = date("Y-m-d");
+        $this->noMeses = $this->solicitud->period;
+        $this->loan->date_payment = Carbon::now()->addMonth($this->noMeses);
         $this->endorsement = $endorsement;
-        $this->noMeses = 1;
     }
 
     public function updateDate()
@@ -129,15 +142,16 @@ class LoansPartnerForm extends Component
         $this->validate();
         $this->loan->number = uniqid();
         $this->loan->partner_id = $this->partner->id;
+        $this->loan->solicitud_id = $this->solicitud->id;
         $this->loan->amount_letter = $formatter->toWords($this->loan->amount);
         $this->loan->save();
         //Agregar aval
-        $this->loan->endorsements()->sync($this->aval);
+        $this->solicitud->endorsements()->attach($this->aval);
         //Agregar garantías
         if (!empty($this->warranties)) {
             foreach ($this->warranties as $warranty) {
                 $newWarranty = new Warranty();
-                $newWarranty->loan_id = $this->loan->id;
+                $newWarranty->solicitud_id = $this->solicitud->id;
                 if (!empty($warranty['url_document'])) {
                     $newWarranty->url_document = $warranty['url_document']->store('/warranties', 'public');
                 }

@@ -29,4 +29,19 @@ class Solicitud extends Model
     {
         return $this->belongsTo(Partner::class);
     }
+
+    public function loan()
+    {
+        return $this->hasOne(Loan::class);
+    }
+
+    public function endorsements()
+    {
+        return $this->belongsToMany(Endorsement::class);
+    }
+
+    public function warranties()
+    {
+        return $this->hasMany(Warranty::class);
+    }
 }

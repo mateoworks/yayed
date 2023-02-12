@@ -158,7 +158,7 @@
                         @endforeach
                         <h6>Avales ya registrados</h6>
                         <table class="table">
-                            @forelse ($loan->endorsements as $endorsement)
+                            @forelse ($solicitud->endorsements as $endorsement)
                             <tr>
                                 <td>{{ $endorsement->full_name }}</td>
                                 <td>{{ $endorsement->phone }}</td>
@@ -228,7 +228,7 @@
 
                         <h6>Garantías agregadas</h6>
                         <table class="table">
-                            @forelse ($loan->warranties as $warranty)
+                            @forelse ($solicitud->warranties as $warranty)
                             <tr>
                                 <td>{{ $warranty->type }}</td>
                                 <td>

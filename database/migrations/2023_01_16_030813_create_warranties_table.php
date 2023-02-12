@@ -18,9 +18,9 @@ return new class extends Migration
             $table->string('type');
             $table->string('description')->nullable();
             $table->string('url_document')->nullable();
-            $table->foreignUuid('loan_id')
+            $table->foreignUuid('solicitud_id')
                 ->references('id')
-                ->on('loans')
+                ->on('solicituds')
                 ->onDelete('cascade');
             $table->timestamps();
         });

@@ -36,7 +36,12 @@
                 <div class="widget-header">
                     <div class="row">
                         <div class="col-xl-12 col-md-12 col-sm-12 col-12">
-                            <h4>Realizar préstamo</h4>
+                            <div class="d-flex justify-content-between">
+                                <h4>Realizar préstamo</h4>
+                                <div>
+                                    <a href="{{ route('partners.solicitud.show', $solicitud) }}" class="btn btn-info">Ver solicitud</a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -141,6 +146,26 @@
                         </div>
                         @endforeach
 
+                        <table class="table">
+                            <tbody>
+                                @forelse ($solicitud->endorsements as $endorsement)
+                                <tr>
+                                    <td>{{ $endorsement->names }}</td>
+                                    <td>{{ $endorsement->surnames }}</td>
+                                    <td>{{ $endorsement->phone }}</td>
+                                    <td><a wire:click="$emit('endorsementQuit', {{ $endorsement }})" class="btn btn-danger btn-sm">Quitar</a></td>
+                                </tr>
+
+                                @empty
+                                <tr>
+                                    <td>
+                                        No hay avales asignados a este préstamo.
+                                    </td>
+                                </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+
                         <hr>
                         <div class="form-group row mb-4">
                             <h4>Agregar garantías (opcional)</h4>
@@ -188,6 +213,42 @@
                         </div>
                         <hr>
                         @endforeach
+
+                        <table class="table">
+                            <tbody>
+                                @forelse ($solicitud->warranties as $warranty)
+                                <tr>
+                                    <td>{{ $warranty->type }}</td>
+                                    <td>
+                                        @if ($warranty->url_document)
+                                        @php
+                                        $ext = pathinfo(Storage::disk('public')->url($warranty->url_document), PATHINFO_EXTENSION)
+                                        @endphp
+
+                                        @if ($ext == 'jpg' || $ext == 'png' || $ext == 'bmp')
+                                        <img src="{{ Storage::disk('public')->url($warranty->url_document) }}" height="70" alt="...">
+                                        <a href="{{ route('warranties.download', $warranty) }}">Descargar</a>
+                                        @elseif($ext == 'pdf')
+                                        <img src="/img/pdf.png" height="70" alt="...">
+                                        <a href="{{ route('warranties.download', $warranty) }}">Descargar</a>
+                                        @else
+                                        <img src="/img/no_preview.png" height="70" alt="...">
+                                        @endif
+
+                                        @endif
+                                    </td>
+                                    <td>{{ $warranty->description }}</td>
+                                    <td><a wire:click="$emit('warrantyDelete', {{ $warranty }})" class="btn btn-danger btn-sm">Eliminar</a></td>
+                                </tr>
+                                @empty
+                                <tr>
+                                    <td>
+                                        No hay garantías asignados a este préstamo.
+                                    </td>
+                                </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
 
                         <div>
                             <button class="btn btn-primary">Realizar préstamo</button>
@@ -248,10 +309,22 @@
                                 @enderror
                             </div>
                         </div>
+
+                        <div class="form-group row mb-1">
+                            <label for="endorsement.address" class="col-sm-3 col-form-label">Dirección:</label>
+                            <div class="col-sm-7">
+                                <input type="text" wire:model="endorsement.address" class="form-control @error('endorsement.address') is-invalid @enderror" id="endorsement.address">
+                                @error('endorsement.address')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                                @enderror
+                            </div>
+                        </div>
                     </div>
 
                     <div class="modal-footer">
-                        <button class="btn" wire:click="hideModal"><i class="flaticon-cancel-12"></i> Discard</button>
+                        <button class="btn" wire:click="hideModal"><i class="flaticon-cancel-12"></i> Cancelar</button>
                         <button class="btn btn-primary" wire:submit="saveEndorsement" type="submit">Guardar</button>
                     </div>
                 </form>

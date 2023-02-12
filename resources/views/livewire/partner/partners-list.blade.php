@@ -3,6 +3,9 @@
 <link href="/src/assets/css/light/scrollspyNav.css" rel="stylesheet" type="text/css" />
 <link href="/src/assets/css/dark/scrollspyNav.css" rel="stylesheet" type="text/css" />
 <link rel="stylesheet" href="/src/plugins/src/sweetalerts2/sweetalerts2.css">
+
+<link href="/src/plugins/css/light/loaders/custom-loader.css" rel="stylesheet" type="text/css" />
+<link href="/src/plugins/css/dark/loaders/custom-loader.css" rel="stylesheet" type="text/css" />
 @endpush
 <div class="middle-content container-xxl p-0">
 
@@ -29,8 +32,15 @@
                                 <h4>Lista de socios</h4>
                             </div>
                         </div>
-                        <div class="col d-flex justify-content-end">
-                            <a class="btn btn-success mt-2 me-4" href="{{ route('partners.create') }}">
+                        <div class="col d-flex justify-content-end mt-4 me-4">
+                            <button type="button" wire:click="exportExcel" class="btn btn-success">
+                                <div wire:loading wire:target="exportExcel">
+                                    <div class="spinner-border text-white me-2 align-self-center loader-sm "></div>
+                                </div>
+                                <i class="fa-light fa-file-excel"></i>
+                            </button>
+
+                            <a class="btn btn-primary" href="{{ route('partners.create') }}">
                                 <i class="fa-regular fa-square-plus"></i>
                                 <span class="btn-text-inner">Agregar socio</span>
                             </a>
@@ -80,33 +90,30 @@
                                         <p class="mb-0">{{ $partner->phone }}</p>
                                     </td>
                                     <td class="text-center">
-                                        @if (!$partner->active)
-                                        <a href="{{ route('loans.partner', $partner) }}" class="btn btn-info btn-sm">
-                                            Relizar prestamo
-                                        </a>
-                                        @endif
+                                        <div class="btn-group" role="group" aria-label="Basic example">
+                                            @if (!$partner->active && $partner->solicitud_autorizado)
+                                            <a href="{{ route('loans.solicitud', $partner->solicitud_autorizado) }}" class="bs-tooltip btn btn-secondary" data-toggle="tooltip" data-placement="top" title="Realizar préstamo">
+                                                <i class="fa-regular fa-hand-holding-dollar"></i>
+                                            </a>
+                                            @elseif (!$partner->solicitud_autorizado)
+                                            <a href="{{ route('partners.solicitud.create', $partner) }}" class="bs-tooltip btn btn-warning" data-toggle="tooltip" data-placement="top" title="Realizar solicitud">
+                                                <i class="fa-light fa-file-export"></i>
+                                            </a>
+                                            @elseif ($partner->active)
+                                            <a href="{{ route('payments.create', $partner->active) }}" class="bs-tooltip btn btn-success" data-toggle="tooltip" data-placement="top" title="Realizar pago">
+                                                <i class="fa-light fa-envelope-open-dollar"></i>
+                                            </a>
+                                            @endif
+                                            <a href="{{ route('partners.show', $partner) }}" class="bs-tooltip btn btn-primary" data-toggle="tooltip" data-placement="top" title="Ver">
+                                                <i class="fa-light fa-eye"></i>
+                                            </a>
+                                            <a href="{{ route('partners.edit', $partner) }}" class="bs-tooltip btn btn-info" data-toggle="tooltip" data-placement="top" title="Editar">
+                                                <i class="fa-light fa-pen-to-square"></i>
+                                            </a>
+                                            <a wire:click="$emit('triggerDelete', '{{ $partner->id }}')" class="bs-tooltip btn btn-danger" data-toggle="tooltip" data-placement="top" title="Eliminar">
+                                                <i class="fa-regular fa-trash-can"></i>
+                                            </a>
 
-                                        <div class="action-btns">
-
-                                            <a href="{{ route('partners.show', $partner) }}" class="action-btn btn-view bs-tooltip me-2" data-toggle="tooltip" data-placement="top" title="Ver">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye">
-                                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                                                    <circle cx="12" cy="12" r="3"></circle>
-                                                </svg>
-                                            </a>
-                                            <a href="{{ route('partners.edit', $partner) }}" class="action-btn btn-edit bs-tooltip me-2" data-toggle="tooltip" data-placement="top" title="Editar">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2">
-                                                    <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
-                                                </svg>
-                                            </a>
-                                            <a wire:click="$emit('triggerDelete', '{{ $partner->id }}')" class="action-btn btn-delete bs-tooltip delete" data-toggle="tooltip" data-placement="top" title="Eliminar">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2">
-                                                    <polyline points="3 6 5 6 21 6"></polyline>
-                                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                                                    <line x1="10" y1="11" x2="10" y2="17"></line>
-                                                    <line x1="14" y1="11" x2="14" y2="17"></line>
-                                                </svg>
-                                            </a>
                                         </div>
                                     </td>
                                 </tr>

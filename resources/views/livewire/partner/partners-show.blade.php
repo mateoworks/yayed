@@ -43,17 +43,29 @@
                                 </div>
                                 <div class="mt-3 me-3">
 
-                                    <a href="{{ route('partners.edit', $partner) }}" class="btn btn-secondary ms-2 bs-tooltip" data-toggle="tooltip" data-placement="top" title="Editar">
+                                    <a href="{{ route('partners.edit', $partner) }}" class="btn btn-info ms-2 bs-tooltip" data-toggle="tooltip" data-placement="top" title="Editar">
                                         <i class="fa-light fa-pen-to-square"></i>
                                     </a>
-                                    <a href="{{ route('partners.solicitud.create', $partner) }}" class="btn btn-success btn-sm ms-1">
-                                        <i class="fa-regular fa-file"></i>
-                                        Realizar solicitud
+                                    @if (!$partner->active && $partner->solicitud_autorizado)
+                                    <a href="{{ route('loans.solicitud', $partner->solicitud_autorizado) }}" class="bs-tooltip btn btn-secondary" data-toggle="tooltip" data-placement="top" title="Realizar préstamo">
+                                        <i class="fa-regular fa-hand-holding-dollar"></i>
                                     </a>
-                                    <a href="{{ route('loans.partner', $partner) }}" class="btn btn-info btn-sm ms-1">
-                                        <i class="fa-regular fa-file"></i>
-                                        Realizar préstamo
+                                    @elseif (!$partner->solicitud_autorizado)
+                                    <a href="{{ route('partners.solicitud.create', $partner) }}" class="bs-tooltip btn btn-warning" data-toggle="tooltip" data-placement="top" title="Realizar solicitud">
+                                        <i class="fa-light fa-file-export"></i>
                                     </a>
+                                    @elseif ($partner->active)
+                                    <a href="{{ route('payments.create', $partner->active) }}" class="bs-tooltip btn btn-success" data-toggle="tooltip" data-placement="top" title="Realizar pago">
+                                        <i class="fa-light fa-envelope-open-dollar"></i>
+                                    </a>
+                                    @endif
+                                    <a class="btn btn-danger ms-2 bs-tooltip" wire:click="exportPDF" data-toggle="tooltip" data-placement="top" title="Generar reporte">
+                                        <div wire:loading wire:target="exportPDF">
+                                            <div class="spinner-border text-white me-2 align-self-center loader-sm"></div>
+                                        </div>
+                                        <i class="fa-light fa-file-pdf"></i>
+                                    </a>
+
                                 </div>
                             </div>
 
@@ -127,7 +139,10 @@
                                                     <p>Fecha de nacimiento: </p>
                                                 </td>
                                                 <td>
-                                                    <p><strong>{{ $partner->birthday->format('Y-m-d') }} ({{ $partner->age }} años)</strong></p>
+                                                    @if ($partner->birthday)
+                                                    <p><strong>{{ $partner->birthday->format('d/m/Y') ?? '' }} ({{ $partner->age }} años)</strong></p>
+                                                    @endif
+
                                                 </td>
                                             </tr>
                                             <tr>
@@ -353,7 +368,13 @@
                                         @elseif ($loan->status == 'liquidado')
                                         <span class="badge badge-success mb-2 me-4">Liquidado</span>
                                         @endif
+
                                     </div>
+                                    <p>Solicitud realizada el {{ $loan->solicitud->date_solicitud->format('d/m/Y') }}, folio:
+                                        <span>
+                                            <a href="{{ route('partners.solicitud.show', $loan->solicitud) }}" class="btn btn-danger">{{ $loan->solicitud->folio }}</a>
+                                        </span>
+                                    </p>
                                     <div class="comment">
                                         <h6 class="text-center">Pagos realizados</h6>
                                         <table class="table table-striped table-border">
@@ -411,7 +432,36 @@
                 </div>
                 <div class="widget-content widget-content-area">
                     <div class="row">
-
+                        <table class="table table-striped table-border">
+                            <thead>
+                                <th>Folio</th>
+                                <th>Fecha realizada</th>
+                                <th>Periodo</th>
+                                <th>Monto solicitado</th>
+                                <th>Status</th>
+                                <th></th>
+                            </thead>
+                            <tbody>
+                                @forelse ($partner->solicituds as $solicitud)
+                                <tr>
+                                    <td>{{ $solicitud->folio }}</td>
+                                    <td>{{ $solicitud->date_solicitud->format('d/m/Y') }}</td>
+                                    <td>{{ $solicitud->period }}</td>
+                                    <td class="text-end">${{ number_format($solicitud->mount, 2) }}</td>
+                                    <td>{{ $solicitud->condition }}</td>
+                                    <td>
+                                        <a class="btn btn-info" href="{{ route('partners.solicitud.show', $solicitud) }}">
+                                            <i class="fa-light fa-eye"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                @empty
+                                <tr>
+                                    <td>No hay solicitudes realizadas</td>
+                                </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>

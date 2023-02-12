@@ -1,4 +1,4 @@
-@section('title', 'Solicitud de préstamo')
+@section('title', 'Editar solicitud ' . $solicitud->folio)
 
 @push('styles')
 <link href="/src/assets/css/light/scrollspyNav.css" rel="stylesheet" type="text/css" />
@@ -23,7 +23,7 @@
                 <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
                 <li class="breadcrumb-item"><a href="{{ route('partners.index') }}">Socios</a></li>
                 <li class="breadcrumb-item"><a href="{{ route('partners.show', $partner) }}">{{ $partner->full_name }}</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Realizar solicitud de préstamo</li>
+                <li class="breadcrumb-item active" aria-current="page">Editar solicitud de préstamo</li>
             </ol>
         </nav>
     </div>
@@ -37,11 +37,7 @@
                 <div class="widget-header">
                     <div class="row">
                         <div class="col-xl-12 col-md-12 col-sm-12 col-12">
-                            <h4>Solicitud de préstamo de
-                                <a href="{{ route('partners.show', $partner) }}">
-                                    <u>{{ $partner->full_name }}</u>
-                                </a>
-                            </h4>
+                            <h4>Solicitud de préstamo</h4>
                         </div>
                     </div>
                 </div>
@@ -55,10 +51,28 @@
 
                     <!-- Begin form -->
                     <form wire:submit.prevent="save" class="row g-3" novalidate>
+                        <div class="row">
+
+                            <div class="col-md-4">
+                                <label for="solicitud.condition" class="form-label">Estado de la solicitud</label>
+                                <select wire:model="solicitud.condition" class="form-select @error('solicitud.condition') is-invalid @enderror date" id="solicitud.condition">
+                                    <option>Elige un estado</option>
+                                    <option value="denegado">Denegado</option>
+                                    <option value="autorizado">Autorizado</option>
+                                    <option value="en proceso">En proceso</option>
+                                </select>
+                                @error('solicitud.condition')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                                @enderror
+                            </div>
+
+                        </div>
 
                         <div class="col-md-4">
                             <label for="solicitud.date_solicitud" class="form-label">Fecha de la solicitud</label>
-                            <input type="date" wire:model="solicitud.date_solicitud" class="form-control @error('solicitud.date_solicitud') is-invalid @enderror date" id="solicitud.date_solicitud" required>
+                            <input type="date" wire:model="solicitud.date_solicitud" class="form-control @error('solicitud.date_solicitud') is-invalid @enderror date" id="solicitud.date_solicitud">
                             @error('solicitud.date_solicitud')
                             <div class="invalid-feedback">
                                 {{ $message }}
@@ -68,7 +82,7 @@
 
                         <div class="col-md-4">
                             <label for="solicitud.period" class="form-label">Periodo (número de meses)</label>
-                            <input type="number" wire:model="solicitud.period" wire:change="updateDate" class="form-control @error('solicitud.period') is-invalid @enderror" id="solicitud.period" required>
+                            <input type="number" wire:model="solicitud.period" wire:change="updateDate" class="form-control @error('solicitud.period') is-invalid @enderror" id="solicitud.period">
                             @error('solicitud.period')
                             <div class="invalid-feedback">
                                 {{ $message }}
@@ -78,7 +92,7 @@
 
                         <div class="col-md-4">
                             <label for="solicitud.date_payment" class="form-label">Fecha de pago</label>
-                            <input type="date" wire:model="solicitud.date_payment" class="form-control @error('solicitud.date_payment') is-invalid @enderror date" id="solicitud.date_payment" required>
+                            <input type="date" wire:model="solicitud.date_payment" class="form-control @error('solicitud.date_payment') is-invalid @enderror date" id="solicitud.date_payment">
                             @error('solicitud.date_payment')
                             <div class="invalid-feedback">
                                 {{ $message }}
@@ -88,7 +102,7 @@
 
                         <div class="col-md-4">
                             <label for="solicitud.mount" class="form-label">Monto solicitado</label>
-                            <input type="number" wire:model="solicitud.mount" class="form-control @error('solicitud.mount') is-invalid @enderror" id="solicitud.mount" required>
+                            <input type="number" wire:model="solicitud.mount" class="form-control @error('solicitud.mount') is-invalid @enderror" id="solicitud.mount">
                             @error('solicitud.mount')
                             <div class="invalid-feedback">
                                 {{ $message }}
@@ -98,7 +112,7 @@
 
                         <div class="col-md-8">
                             <label for="solicitud.concept" class="form-label">Concepto</label>
-                            <input type="text" wire:model="solicitud.concept" class="form-control @error('solicitud.concept') is-invalid @enderror" id="solicitud.concept" required>
+                            <input type="text" wire:model="solicitud.concept" class="form-control @error('solicitud.concept') is-invalid @enderror" id="solicitud.concept">
                             @error('solicitud.concept')
                             <div class="invalid-feedback">
                                 {{ $message }}
@@ -136,6 +150,26 @@
                             <button class="col-sm-2 btn btn-danger" wire:click.prevent="remove({{$key}})">Quitar</button>
                         </div>
                         @endforeach
+
+                        <table class="table">
+                            <tbody>
+                                @forelse ($solicitud->endorsements as $endorsement)
+                                <tr>
+                                    <td>{{ $endorsement->names }}</td>
+                                    <td>{{ $endorsement->surnames }}</td>
+                                    <td>{{ $endorsement->phone }}</td>
+                                    <td><a wire:click="$emit('endorsementQuit', {{ $endorsement }})" class="btn btn-danger btn-sm">Quitar</a></td>
+                                </tr>
+
+                                @empty
+                                <tr>
+                                    <td>
+                                        No hay avales asignados a esta solicitud.
+                                    </td>
+                                </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
 
                         <hr>
                         <div class="form-group row mb-4">
@@ -185,8 +219,44 @@
                         <hr>
                         @endforeach
 
+                        <table class="table">
+                            <tbody>
+                                @forelse ($solicitud->warranties as $warranty)
+                                <tr>
+                                    <td>{{ $warranty->type }}</td>
+                                    <td>
+                                        @if ($warranty->url_document)
+                                        @php
+                                        $ext = pathinfo(Storage::disk('public')->url($warranty->url_document), PATHINFO_EXTENSION)
+                                        @endphp
+
+                                        @if ($ext == 'jpg' || $ext == 'png' || $ext == 'bmp')
+                                        <img src="{{ Storage::disk('public')->url($warranty->url_document) }}" height="70" alt="...">
+                                        <a href="{{ route('warranties.download', $warranty) }}">Descargar</a>
+                                        @elseif($ext == 'pdf')
+                                        <img src="/img/pdf.png" height="70" alt="...">
+                                        <a href="{{ route('warranties.download', $warranty) }}">Descargar</a>
+                                        @else
+                                        <img src="/img/no_preview.png" height="70" alt="...">
+                                        @endif
+
+                                        @endif
+                                    </td>
+                                    <td>{{ $warranty->description }}</td>
+                                    <td><a wire:click="$emit('warrantyDelete', {{ $warranty }})" class="btn btn-danger btn-sm">Eliminar</a></td>
+                                </tr>
+                                @empty
+                                <tr>
+                                    <td>
+                                        No hay garantías asignados a esta solicitud.
+                                    </td>
+                                </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+
                         <div class="col-md-3">
-                            <button class="btn btn-primary">Realizar solicitud</button>
+                            <button class="btn btn-primary">Actualizar solicitud</button>
                         </div>
                 </div>
 
@@ -303,6 +373,46 @@
 
     window.addEventListener('save-endorsement', event => {
         $('#modal').modal('hide');
+        Snackbar.show({
+            showAction: false,
+            text: event.detail.message,
+            pos: 'top-center',
+            actionTextColor: '#fff',
+            backgroundColor: '#00ab55',
+
+        });
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+
+        @this.on('warrantyDelete', warranty => {
+            Swal.fire({
+                title: '¿Estas seguro de eliminar?',
+                html: "Se eliminará esta garantía con el archivo adjunto",
+                icon: 'warning',
+                showCancelButton: true,
+            }).then((result) => {
+                if (result.value) {
+                    @this.call('destroyWarranty', warranty)
+                }
+            });
+        });
+
+        @this.on('endorsementQuit', endorsement => {
+            Swal.fire({
+                title: '¿Estas seguro de quitar?',
+                html: "El aval se desvinvulará de este socio en este préstamo",
+                icon: 'warning',
+                showCancelButton: true,
+            }).then((result) => {
+                if (result.value) {
+                    @this.call('quitEndorsement', endorsement)
+                }
+            });
+        });
+    });
+
+    window.addEventListener('message', event => {
         Snackbar.show({
             showAction: false,
             text: event.detail.message,
