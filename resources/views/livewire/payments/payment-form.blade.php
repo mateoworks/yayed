@@ -14,6 +14,10 @@
 
 <link rel="stylesheet" type="text/css" href="/src/assets/css/light/forms/switches.css">
 <link rel="stylesheet" type="text/css" href="/src/assets/css/dark/forms/switches.css">
+
+<!--  BEGIN CUSTOM STYLE FILE  -->
+<link rel="stylesheet" type="text/css" href="/src/assets/css/light/elements/alert.css">
+<link rel="stylesheet" type="text/css" href="/src/assets/css/dark/elements/alert.css">
 @endpush
 <div class="middle-content container-xxl p-0">
 
@@ -46,6 +50,12 @@
                 </div>
                 <div class="widget-content widget-content-area">
 
+                    @if ($diasPendientes > 90)
+                    <div class="alert alert-warning alert-dismissible fade show mb-4" role="alert">
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"><svg> ... </svg></button>
+                        <strong>Advertencia!</strong> Este préstamo tiene más de 90 días sin realizar algún pago, el interés se calcula en 3%.
+                    </div>
+                    @endif
                     <ul>
                         @foreach ($errors->all() as $error)
                         <li>{{ $error }}</li>
@@ -99,7 +109,7 @@
                             </div>
 
                             <div class="form-group row mb-4">
-                                <label for="payment.social_contribution" class="col-sm-5 col-form-label">Aportación social</label>
+                                <label for="payment.social_contribution" class="col-sm-5 col-form-label">Aportación social retiro</label>
                                 <div class="col-sm-7">
                                     <input type="number" wire:model="payment.social_contribution" class="form-control @error('payment.social_contribution') is-invalid @enderror" id="payment.social_contribution">
                                     @error('payment.social_contribution')
@@ -151,7 +161,7 @@
                             <div class="form-group row mb-4">
                                 <label for="payment.principal_amount" class="col-sm-5 col-form-label">Pago de capital</label>
                                 <div class="col-sm-7">
-                                    <input type="number" wire:model="payment.principal_amount" class="form-control @error('payment.principal_amount') is-invalid @enderror" id="payment.principal_amount">
+                                    <input type="number" wire:model="payment.principal_amount" wire:change="activar" class="form-control @error('payment.principal_amount') is-invalid @enderror" id="payment.principal_amount">
                                     @error('payment.principal_amount')
                                     <div class="invalid-feedback">
                                         {{ $message }}
@@ -198,13 +208,6 @@
                                     @enderror
                                 </div>
                             </div>
-
-                            @if ($payment->principal_amount >= $pendienteCapital)
-                            @php
-                            $status = true;
-                            @endphp
-                            @endif
-                            {{ $status }}
                             <div class="form-group row mb-4">
                                 <div class="switch form-switch-custom switch-inline form-switch-success">
                                     <input class="switch-input" wire:model="status" type="checkbox" role="switch" id="form-custom-switch-success">
@@ -283,11 +286,12 @@
                                     <strong class="fw-bolder">${{ number_format($loan->payments->sum('interest_amount'), 2) }}</strong>
 
                                     <h5>{{ $numMonth }} mes{{ $numMonth > 1 ? 'es' : '' }} pendientes por pagar</h5>
-
+                                    <p>Interés: {{ $loan->interest }}%</p>
                                     <h5>
-                                        Interés mensual: ${{ number_format($interesMensual, 2) }}; por {{ $numMonth }} mes{{ $numMonth > 1 ? 'es' : '' }}
+                                        Pago de interés cada mes: ${{ number_format($interesMensual, 2) }}; por {{ $numMonth }} mes{{ $numMonth > 1 ? 'es' : '' }}
                                         pendientes: ${{ number_format($pendienteInteres, 2) }}
                                     </h5>
+                                    <p>Aportación social: <strong>{{ $loan->partner->social_contribution }}</strong></p>
                                 </div>
                             </div>
                         </div>

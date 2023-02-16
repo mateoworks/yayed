@@ -20,18 +20,24 @@
             border: 1px solid #ddd;
         }
 
+        .striped th {
+            background-color: #14549C;
+            color: white;
+        }
+
+        .foot-payment td {
+            background-color: #14549C;
+            color: white;
+        }
+
         .striped th,
         .striped td {
             text-align: left;
-            padding: 16px;
-        }
-
-        .striped tr {
-            background-color: lightgray;
+            padding: 7px;
         }
 
         .striped tr:nth-child(even) {
-            background-color: white;
+            background-color: lightgray;
         }
 
         .suspendido {
@@ -281,6 +287,7 @@
             </td>
         </tr>
     </table>
+
     <hr>
     <h5>Préstamos realizados</h5>
     @forelse ($partner->loans as $loan)
@@ -296,8 +303,22 @@
         <span class="liquidado">Liquidado</span>
         @endif
     </p>
-    <h6>Pagos realizados</h6>
+    <p class="m-0"><strong>Avales de este préstamo</strong></p>
     <table style="width: 100%;">
+        @forelse ($loan->solicitud->endorsements as $endorsement)
+        <tr>
+            <td>{{ $endorsement->full_name }}</td>
+            <td>{{ $endorsement->phone }}</td>
+            <td>{{ $endorsement->address }}</td>
+        </tr>
+        @empty
+        <tr>
+            <td>No hay avales asignados</td>
+        </tr>
+        @endforelse
+    </table>
+    <h6 class="text-center">Pagos realizados</h6>
+    <table style="width: 100%;" class="striped">
         <thead>
             <th>N°</th>
             <th>Fecha programada</th>
@@ -306,6 +327,10 @@
             <th>Pago interés</th>
             <th>Importe</th>
         </thead>
+        @php
+        $capital = 0;
+        $interes = 0;
+        @endphp
         @forelse ($loan->payments as $payment)
 
         <tbody>
@@ -313,20 +338,75 @@
                 <td>{{ $loop->iteration }}</td>
                 <td>{{ $payment->scheduled_date->format('d/m/Y') }}</td>
                 <td>{{ $payment->made_date->format('d/m/Y') }}</td>
-                <td>${{ number_format($payment->principal_amount, 2) }}</td>
-                <td>${{ number_format($payment->interest_amount, 2) }}</td>
-                <td>${{ number_format($payment->interest_amount + $payment->principal_amount, 2) }}</td>
+                <td class="text-end">${{ number_format($payment->principal_amount, 2) }}</td>
+                <td class="text-end">${{ number_format($payment->interest_amount, 2) }}</td>
+                <td class="text-end">${{ number_format($payment->interest_amount + $payment->principal_amount, 2) }}</td>
+                @php
+                $capital += $payment->principal_amount;
+                $interes += $payment->interest_amount;
+                @endphp
             </tr>
         </tbody>
         @empty
-        <p>No hay pagos realizados</p>
+        <tr>
+            <td colspan="4">
+                <p class="text-center">No hay pagos realizados</p>
+            </td>
+        </tr>
         @endforelse
-
+        <tr class="foot-payment">
+            <td colspan="3">Totales</td>
+            <td class="text-end">${{ number_format($capital, 2) }}</td>
+            <td class="text-end">${{ number_format($interes, 2) }}</td>
+            <td class="text-end">${{ number_format($capital + $interes, 2) }}</td>
+        </tr>
     </table>
     <hr>
     @empty
     <p>No hay préstamos realizados</p>
     @endforelse
+
+    <hr>
+    <h5>Solicitudes presentadas</h5>
+    <table style="width: 100%;">
+        <thead>
+            <th>N°</th>
+            <th>Fecha de solicitud</th>
+            <th>Periodo</th>
+            <th>Cantidad solicitada</th>
+            <th>Situación</th>
+        </thead>
+        @forelse ($partner->solicituds as $solicitud)
+        <tr>
+            <td>{{ $loop->iteration }}</td>
+            <td>{{ $solicitud->date_solicitud->format('d/m/Y') }}</td>
+            <td>{{ $solicitud->period }}</td>
+            <td class="text-end">${{ number_format($solicitud->mount, 2) }}</td>
+            <td>{{ $solicitud->condition }}</td>
+        </tr>
+        @empty
+        <tr>
+            <td colspan="4">No hay solicitudes presentadas</td>
+        </tr>
+        @endforelse
+    </table>
+
+    <hr>
+    <h5>Documentos en formato de imagén</h5>
+    @forelse ($partner->documents as $documento)
+    @php
+    $path = Storage::disk('public')->url($documento->url);
+    $ext = pathinfo($path, PATHINFO_EXTENSION);
+    @endphp
+    @if ($ext == 'jpg' || $ext == 'png' || $ext == 'jpeg')
+    <div class="m-3">
+        <img src="{{ Storage::disk('public')->url($documento->url) }}" width="250px" alt="">
+    </div>
+    @endif
+    @empty
+    <p>No hay documentos en formato imagen o no tiene documentos agregados</p>
+    @endforelse
+
 </body>
 
 </html>

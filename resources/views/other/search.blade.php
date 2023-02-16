@@ -70,14 +70,14 @@
                                                         <i class="fa-regular fa-user-cowboy"></i>
                                                     </a>
                                                     @if ($partner->active)
-                                                    <a class="dropdown-item" href="javascript:void(0);"><span>Registrar pago</span>
+                                                    <a class="dropdown-item" href="{{ route('payments.create', $partner->active) }}"><span>Registrar pago</span>
                                                         <i class="fa-regular fa-square-dollar feather"></i>
                                                     </a>
                                                     <a class="dropdown-item" href="{{ route('loans.show', $partner->active) }}"><span>Ver prestamo</span>
                                                         <i class="fa-regular fa-file-invoice-dollar feather"></i>
                                                     </a>
                                                     @else
-                                                    <a class="dropdown-item" href="{{ route('loans.partner', $partner) }}"><span>Realizar préstamo</span>
+                                                    <a class="dropdown-item" href="{{ route('partners.solicitud.create', $partner) }}"><span>Realizar solicitud</span>
                                                         <i class="fa-light fa-hand-holding-dollar"></i>
                                                     </a>
                                                     @endif

@@ -163,6 +163,11 @@
                             <div class="col-md-3">
                                 <label for="warranties.{{$value}}.url_document" class="form-label">Archivo</label>
                                 <input type="file" class="form-control @error('warranties.' . $value . '.url_document') is-invalid @enderror" wire:model="warranties.{{$value}}.url_document" id="warranties.{{$value}}.url_document" accept="image/*,.pdf">
+                                <div wire:loading wire:target="warranties.{{$value}}.url_document">
+                                    <div class="spinner-border spinner-border-reverse align-self-center text-secondary">
+                                        Subiendo...
+                                    </div>
+                                </div>
                                 @error('warranties.' . $value . '.url_document')
                                 <div class="invalid-feedback">
                                     {{ $message }}

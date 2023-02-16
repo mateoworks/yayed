@@ -20,10 +20,15 @@
             border: 1px solid #ddd;
         }
 
+        .striped th {
+            background-color: #14549C;
+            color: white;
+        }
+
         .striped th,
         .striped td {
             text-align: left;
-            padding: 16px;
+            padding: 8px;
         }
 
         .striped tr {
@@ -92,9 +97,10 @@
             <td class="text-end">
                 <strong>Detalles del préstamo</strong>
                 <p class="m-0">$ {{ number_format($loan->amount, 2) }}</p>
-                <p class="m-0">Otorgado: {{ $loan->date_made->format('Y-m-d') }}</p>
+                <p class="m-0">{{ $loan->amount_letter }} PESOS MX</p>
+                <p class="m-0">Otorgado: {{ $loan->date_made->format('d/m/Y') }}</p>
                 <p class="m-0">Interés: {{ $loan->interest }}%</p>
-                <p class="m-0">Programado pago: {{ $loan->date_payment->format('Y-m-d') }}</p>
+                <p class="m-0">Programado pago: {{ $loan->date_payment->format('d/m/Y') }}</p>
                 @if ($loan->status == 'activo')
                 <span class="activo">Activo</span>
                 @elseif ($loan->status == 'suspendido')
@@ -107,6 +113,7 @@
     </table>
     <hr>
     @if ($loan->payments->count() > 0)
+    <p class="text-center"><strong>Pagos realizados</strong></p>
     <table class="striped">
         <thead>
             <tr>
@@ -120,19 +127,32 @@
         <tbody>
             @php
             $capital_pagado = 0;
+            $capital = 0;
+            $interes = 0;
             @endphp
             @foreach ($loan->payments as $payment)
             <tr>
                 <td>{{ $loop->iteration }}</td>
-                <td>{{ $payment->scheduled_date->format('Y-m-d') }}</td>
+                <td>{{ $payment->scheduled_date->format('d/m/Y') }}</td>
                 <td class="text-end">{{ $payment->made_date->format('Y-m-d') }}</td>
                 <td class="text-end">$ {{ number_format($payment->principal_amount, 2) }}</td>
                 <td class="text-end">$ {{ number_format($payment->interest_amount, 2) }}</td>
             </tr>
             @php
             $capital_pagado += $payment->principal_amount;
+            $capital += $payment->principal_amount;
+            $interes += $payment->interest_amount;
             @endphp
             @endforeach
+            <tr>
+                <td colspan="3">
+                    <p class="text-center">
+                        <strong>Totales</strong>
+                    </p>
+                </td>
+                <td class="text-end">${{ number_format($capital, 2) }}</td>
+                <td class="text-end">${{ number_format($interes, 2) }}</td>
+            </tr>
         </tbody>
     </table>
 
@@ -159,6 +179,46 @@
     <h6>No hay pagos realizados</h6>
     @endif
 
+    <p class="text-center mt-3"><strong>Avales asignados</strong></p>
+    @if ($solicitud->endorsements->isNotEmpty())
+    <table style="width: 100%;">
+        @foreach ($solicitud->endorsements as $endorsement)
+        <tr>
+            <td>{{ $endorsement->full_name }}</td>
+            <td>{{ $endorsement->address }}</td>
+            <td>{{ $endorsement->phone }}</td>
+        </tr>
+        @endforeach
+    </table>
+    @else
+    <p>No hay avales</p>
+    @endif
+
+    <p class="text-center mt-3"><strong>Garantías</strong></p>
+    @if ($solicitud->warranties->isNotEmpty())
+    <table>
+        @foreach ($solicitud->warranties as $warranty)
+        <tr>
+            <td>{{ $warranty->type }}</td>
+            <td>{{ $warranty->description }}</td>
+            <td>
+                @php
+                $path = Storage::disk('public')->url($warranty->url_document);
+                $ext = pathinfo($path, PATHINFO_EXTENSION);
+                @endphp
+                @if ($ext == 'jpg' || $ext == 'png' || $ext == 'jpeg')
+
+                <img src="{{ Storage::disk('public')->url($warranty->url_document) }}" width="250px" alt="">
+
+                @endif
+
+            </td>
+        </tr>
+        @endforeach
+    </table>
+    @else
+    <p>No hay garantías</p>
+    @endif
 </body>
 
 </html>

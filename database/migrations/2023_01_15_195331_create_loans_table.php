@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('number', 50)->unique();
             $table->double('amount');
             $table->string('amount_letter');
-            $table->double('interest')->default(3);
+            $table->double('interest')->default(2);
             $table->date('date_made');
             $table->date('date_payment');
             $table->string('status', 50)->default('activo');

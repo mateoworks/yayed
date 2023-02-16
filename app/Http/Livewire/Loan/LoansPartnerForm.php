@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Loan;
 
+use App\Models\Contribution;
 use App\Models\Endorsement;
 use App\Models\Loan;
 use App\Models\Partner;
@@ -37,9 +38,12 @@ class LoansPartnerForm extends Component
     public $inputsWarranty = [];
     public $j = -1;
 
+    public $socialContribution = 0;
+
     public function rules()
     {
         $rules = [
+            'socialContribution' => ['nullable', 'numeric'],
             'loan.amount' => ['required', 'numeric'],
             'loan.interest' => ['required', 'numeric'],
             'loan.date_made' => ['required', 'date'],
@@ -145,6 +149,17 @@ class LoansPartnerForm extends Component
         $this->loan->solicitud_id = $this->solicitud->id;
         $this->loan->amount_letter = $formatter->toWords($this->loan->amount);
         $this->loan->save();
+        //Registrar contribución social si es que hay
+        if ($this->socialContribution > 0) {
+            $this->partner->social_contribution += $this->socialContribution;
+            $this->partner->save();
+            Contribution::create([
+                'date_made' => $this->loan->date_made,
+                'amount' => $this->socialContribution,
+                'partner_id' => $this->partner->id,
+                'loan_id' => $this->loan->id,
+            ]);
+        }
         //Agregar aval
         $this->solicitud->endorsements()->attach($this->aval);
         //Agregar garantías

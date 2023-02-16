@@ -4,6 +4,8 @@ namespace App\Http\Livewire\Loan;
 
 use App\Models\Endorsement;
 use App\Models\Loan;
+use App\Models\Payment;
+use App\Models\Solicitud;
 use App\Models\Warranty;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
@@ -11,6 +13,7 @@ use Livewire\Component;
 class LoansShow extends Component
 {
     public Loan $loan;
+    public Solicitud $solicitud;
     public function render()
     {
         return view('livewire.loan.loans-show', [
@@ -18,10 +21,15 @@ class LoansShow extends Component
         ]);
     }
 
+    public function mount()
+    {
+        $this->solicitud = $this->loan->solicitud;
+    }
+
     /* Quit endorsement, but not delete */
     public function quitEndorsement(Endorsement $endorsement)
     {
-        $this->loan->endorsements()->detach($endorsement);
+        $this->solicitud->endorsements()->detach($endorsement);
         $this->loan->refresh();
         $this->dispatchBrowserEvent('message', ['message' => 'Se ha desvinculado con el aval']);
     }
@@ -36,5 +44,12 @@ class LoansShow extends Component
         $warranty->delete();
         $this->loan->refresh();
         $this->dispatchBrowserEvent('message', ['message' => 'Se eliminó la garantía']);
+    }
+
+    public function destroyPayment(Payment $payment)
+    {
+        $payment->delete();
+        $this->loan->refresh();
+        $this->dispatchBrowserEvent('message', ['message' => 'Se eliminaron los datos del pago']);
     }
 }

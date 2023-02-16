@@ -36,14 +36,17 @@
 
                                 </div>
                                 <div class="mt-3 me-3">
+                                    <a href="" class="btn btn-info bs-tooltip" data-toggle="tooltip" data-placement="top" title="Editar pago">
+                                        <i class="fa-light fa-pen-to-square"></i>
+                                    </a>
                                     <a href="{{ route('loans.show', $payment->loan) }}" class="btn btn-primary bs-tooltip" data-toggle="tooltip" data-placement="top" title="Ver préstamo">
                                         <i class="d-inline fa-regular fa-hand-holding-dollar"></i>
                                     </a>
                                     <a wire:click="exportPDF" class="btn btn-danger bs-tooltip" data-toggle="tooltip" data-placement="top" title="Generar comprobante">
+                                        <div wire:loading wire:target="exportPDF">
+                                            <div class="spinner-border text-white me-2 align-self-center loader-sm "></div>
+                                        </div>
                                         <i class="fa-light fa-file-pdf"></i>
-                                    </a>
-                                    <a href="" class="btn btn-secondary bs-tooltip" data-toggle="tooltip" data-placement="top" title="Editar pago">
-                                        <i class="fa-light fa-pen-to-square"></i>
                                     </a>
                                 </div>
                             </div>
@@ -64,10 +67,13 @@
                                 </div>
                                 <div class="col">
                                     <h6>Datos del préstamo</h6>
+                                    <p class="m-0">Folio: {{ $payment->loan->number }}</p>
                                     <p class="m-0">Capital: ${{number_format($payment->loan->amount, 2) }}</p>
-                                    <p class="m-0">Fecha de préstamo: {{ $payment->loan->date_made->format('Y-m-d') }}</p>
+                                    <p class="m-0">Fecha de préstamo: {{ $payment->loan->date_made->format('d/m/Y') }}</p>
                                     <p class="m-0">Total capital pagado: ${{ number_format($payment->loan->payments->sum('principal_amount'), 2) }}</p>
-                                    <p class="m-0"></p>
+                                    @if($payment->loan->ultimo_pago)
+                                    <p class="m-0">Fecha de último pago: {{ $payment->loan->ultimo_pago->made_date->format('d/m/Y') }}</p>
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -77,11 +83,11 @@
                     <table>
                         <tr>
                             <td>Fecha programada:</td>
-                            <td>{{ $payment->scheduled_date->format('Y-m-d') }}</td>
+                            <td>{{ $payment->scheduled_date->format('d/m/Y') }}</td>
                         </tr>
                         <tr>
                             <td>Fecha realizada:</td>
-                            <td>{{ $payment->made_date->format('Y-m-d') }}</td>
+                            <td>{{ $payment->made_date->format('d/m/Y') }}</td>
                         </tr>
                         <tr>
                             <td>Contribución social:</td>

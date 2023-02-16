@@ -37,6 +37,7 @@ return new class extends Migration
             $table->date('birthday')->nullable();
             $table->string('job')->nullable();
             $table->string('email')->nullable();
+            $table->double('social_contribution')->default(0)->nullable();
             $table->timestamps();
         });
     }

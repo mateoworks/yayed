@@ -42,26 +42,38 @@
                                     @elseif ($loan->status == 'liquidado')
                                     <span class="fs-3 badge badge-light-success">Liquidado</span>
                                     @endif
-                                    <a href="{{ route('loans.edit', $loan) }}" class="btn btn-secondary ms-2 bs-tooltip" data-toggle="tooltip" data-placement="top" title="Editar">
+                                    <a href="{{ route('loans.edit', $loan) }}" class="btn btn-info ms-2 bs-tooltip" data-toggle="tooltip" data-placement="top" title="Editar">
                                         <i class="fa-light fa-pen-to-square"></i>
                                     </a>
-                                    <a href="{{ route('loans.payment.plan', $loan) }}" class="btn btn-primary ms-1 bs-tooltip" data-toggle="tooltip" data-placement="top" title="Generar plan de pago">
-                                        <i class="fa-light fa-calendar-check"></i>
-                                    </a>
-                                    <a href="{{ route('loans.amortizacion', $loan) }}" class="btn btn-black ms-1 bs-tooltip" data-toggle="tooltip" data-placement="top" title="Tabla de amortización">
-                                        <i class="fa-light fa-calendar-check"></i>
-                                    </a>
-                                    <a href="{{ route('payments.create', $loan) }}" class="btn btn-payment ms-1 bs-tooltip" data-toggle="tooltip" data-placement="top" title="Registrar pago">
+                                    @if ($loan->status == 'activo' || $loan->status == 'suspendido')
+                                    <a href="{{ route('payments.create', $loan) }}" class="btn btn-success ms-1 bs-tooltip" data-toggle="tooltip" data-placement="top" title="Registrar pago">
                                         <i class="fa-light fa-envelope-open-dollar"></i>
                                     </a>
-                                    <a href="{{ route('loans.contract', $loan) }}" class="btn btn-success btn-sm ms-1">
-                                        <i class="fa-regular fa-file"></i>
-                                        Contrato prestamo
+                                    @endif
+                                    <a href="{{ route('loans.amortizacion', $loan) }}" class="btn btn-warning ms-1 bs-tooltip" data-toggle="tooltip" data-placement="top" title="Tabla de amortización">
+                                        <i class="fa-light fa-calendar-check"></i>
                                     </a>
-                                    <a href="{{ route('loans.detail', $loan) }}" class="btn btn-info btn-sm ms-1">
-                                        <i class="fa-regular fa-file"></i>
-                                        Reporte
-                                    </a>
+
+
+                                    <div class="btn-group  mb-2 me-4" role="group">
+                                        <button id="btndefault" type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Generar <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down">
+                                                <polyline points="6 9 12 15 18 9"></polyline>
+                                            </svg></button>
+                                        <div class="dropdown-menu" aria-labelledby="btndefault">
+                                            <a href="{{ route('loans.contract', $loan) }}" class="dropdown-item">
+                                                <i class="flaticon-home-fill-1 mr-1"></i>
+                                                Contrato de préstamo
+                                            </a>
+                                            <a href="{{ route('loans.detail', $loan) }}" class="dropdown-item">
+                                                <i class="flaticon-home-fill-1 mr-1"></i>
+                                                Reporte de préstamo
+                                            </a>
+                                            <a href="{{ route('loans.payment.plan', $loan) }}" class="dropdown-item">
+                                                <i class="flaticon-home-fill-1 mr-1"></i>
+                                                Plan de pago capital fijo
+                                            </a>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
@@ -73,7 +85,7 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <h4>Socio</h4>
                                     <a href="{{ route('partners.show', $loan->partner) }}">
                                         <div class="media">
@@ -88,17 +100,20 @@
                                                 <h6 class="mb-0">{{ $loan->partner->full_name }}</h6>
                                                 <span><i class="fa-regular fa-phone"></i> {{ $loan->partner->phone }}</span>
                                                 <p>{{ $loan->partner->address }}</p>
+                                                <p>Contribución social: <strong>${{ $loan->partner->social_contribution }}</strong></p>
                                             </div>
                                         </div>
                                     </a>
-                                    <a href="{{ route('partners.solicitud.show', $loan->solicitud) }}">Ver solicitud</a>
+                                    <a href="{{ route('partners.solicitud.show', $loan->solicitud) }}" class="btn btn-primary">
+                                        Ver solicitud
+                                    </a>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-8">
                                     <h4>Préstamo</h4>
-                                    <table class="table table-hover table-striped table-bordered">
+                                    <table class="">
                                         <tr>
-                                            <td>ID:</td>
-                                            <td><span class=" badge badge-danger">{{ $loan->id }}</span></td>
+                                            <td>Folio:</td>
+                                            <td><span class=" badge badge-danger">{{ $loan->number }}</span></td>
                                         </tr>
                                         <tr>
                                             <td>Cantidad capital:</td>
@@ -116,11 +131,11 @@
                                         </tr>
                                         <tr>
                                             <td>Fecha realizada:</td>
-                                            <td>{{ $loan->date_made->format('Y-m-d') }}</td>
+                                            <td>{{ $loan->date_made->format('d/m/Y') }}</td>
                                         </tr>
                                         <tr>
                                             <td>Fecha de pago:</td>
-                                            <td>{{ $loan->date_payment->format('Y-m-d') }}</td>
+                                            <td>{{ $loan->date_payment->format('d/m/Y') }}</td>
                                         </tr>
 
                                     </table>
@@ -198,6 +213,7 @@
                             <h3>Pagos realizados</h3>
                             <table class="table table-striped">
                                 <thead>
+                                    <th>N°</th>
                                     <th>Fecha programada</th>
                                     <th>Fecha realizada</th>
                                     <th>Pago de capital</th>
@@ -205,21 +221,40 @@
                                     <th></th>
                                 </thead>
                                 <tbody>
+                                    @php
+                                    $capital = 0;
+                                    $interes = 0;
+                                    @endphp
                                     @forelse ($loan->payments as $payment)
                                     <tr>
-                                        <td>{{ $payment->scheduled_date->format('Y-m-d') }}</td>
-                                        <td>{{ $payment->made_date->format('Y-m-d') }}</td>
-                                        <td>$ {{ number_format($payment->principal_amount, 2) }}</td>
-                                        <td>$ {{ number_format($payment->interest_amount, 2) }}</td>
+                                        <td>{{ $loop->iteration }}</td>
+                                        <td>{{ $payment->scheduled_date->format('d/m/Y') }}</td>
+                                        <td>{{ $payment->made_date->format('d/m/Y') }}</td>
+                                        <td class="text-end">$ {{ number_format($payment->principal_amount, 2) }}</td>
+                                        <td class="text-end">$ {{ number_format($payment->interest_amount, 2) }}</td>
                                         <td>
                                             <a href="{{ route('payments.show', $payment) }}" class="btn btn-primary">
                                                 <i class="fa-light fa-eye"></i>
                                             </a>
+                                            <a class="btn btn-danger" wire:click="$emit('deletePayment', {{ $payment }})">
+                                                <i class="fa-regular fa-trash-can"></i>
+                                            </a>
                                         </td>
+                                        @php
+                                        $capital += $payment->principal_amount;
+                                        $interes += $payment->interest_amount;
+                                        @endphp
                                     </tr>
                                     @empty
-
+                                    <tr>
+                                        <td colspan="5">No hay pagos registrados</td>
+                                    </tr>
                                     @endforelse
+                                    <tr>
+                                        <td colspan="3" class="text-center"><strong>Totales</strong></td>
+                                        <td class="text-end"><strong>${{ number_format($capital, 2) }}</strong></td>
+                                        <td class="text-end"><strong>${{ number_format($interes, 2) }}</strong></td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -258,6 +293,19 @@
             }).then((result) => {
                 if (result.value) {
                     @this.call('quitEndorsement', endorsement)
+                }
+            });
+        });
+
+        @this.on('deletePayment', payment => {
+            Swal.fire({
+                title: '¿Estas seguro de eliminar el pago?',
+                html: "Se eliminará este pago perteneciente a este préstamo",
+                icon: 'warning',
+                showCancelButton: true,
+            }).then((result) => {
+                if (result.value) {
+                    @this.call('destroyPayment', payment)
                 }
             });
         });

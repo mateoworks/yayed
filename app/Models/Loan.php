@@ -28,8 +28,22 @@ class Loan extends Model
         return $this->belongsTo(Solicitud::class);
     }
 
+    public function contribution()
+    {
+        return $this->belongsTo(Contribution::class);
+    }
+
     public function payments()
     {
         return $this->hasMany(Payment::class)->orderBy('scheduled_date', 'desc');
+    }
+
+    public function getUltimoPagoAttribute()
+    {
+        $ultimo = false;
+        if ($this->payments->isNotEmpty()) {
+            $ultimo = $this->payments->first();
+        }
+        return $ultimo;
     }
 }

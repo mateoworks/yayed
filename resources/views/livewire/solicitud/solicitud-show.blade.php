@@ -48,7 +48,13 @@
                                     <a href="{{ route('solicitud.edit', $solicitud) }}" class="btn btn-info bs-tooltip" data-toggle="tooltip" data-placement="top" title="Editar">
                                         <i class="fa-light fa-pen-to-square"></i>
                                     </a>
-                                    <button type="button" wire:click="exportPDF" class="btn btn-danger">Generar PDF</button>
+                                    <button type="button" wire:click="exportPDF" class="btn btn-danger">
+                                        <div wire:loading wire:target="exportPDF">
+                                            <div class="spinner-border text-white me-2 align-self-center loader-sm "></div>
+                                        </div>
+                                        <i class="fa-light fa-file-pdf"></i>
+                                        Generar solicitud
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -166,7 +172,7 @@
                             <tr>
                                 <td>
                                     No hay avales asignados a esta solicitud,
-                                    <a href="" class="btn btn-info btn-sm">Agregar</a>
+                                    <a href="{{ route('solicitud.edit', $solicitud) }}" class="btn btn-info btn-sm">Agregar</a>
                                 </td>
                             </tr>
                             @endforelse
@@ -194,6 +200,7 @@
                                     <a href="{{ route('warranties.download', $warranty) }}">Descargar</a>
                                     @else
                                     <img src="/img/no_preview.png" height="70" alt="...">
+                                    <a href="{{ route('warranties.download', $warranty) }}">Descargar</a>
                                     @endif
 
                                     @endif
@@ -205,7 +212,7 @@
                             <tr>
                                 <td>
                                     No hay garantías asignados a esta solicitud,
-                                    <a href="" class="btn btn-info btn-sm">Agregar</a>
+                                    <a href="{{ route('solicitud.edit', $solicitud) }}" class="btn btn-info btn-sm">Agregar</a>
                                 </td>
                             </tr>
                             @endforelse

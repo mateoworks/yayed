@@ -10,12 +10,17 @@ use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
+use Maatwebsite\Excel\Concerns\WithTitle;
 
-class PartnersExport implements FromCollection, WithMapping, WithHeadings, ShouldAutoSize, WithColumnFormatting
+class PartnersExport implements FromCollection, WithMapping, WithHeadings, ShouldAutoSize, WithColumnFormatting, WithTitle
 {
-    /**
-     * @return \Illuminate\Support\Collection
-     */
+    public $inicio;
+    public $fin;
+    public function __construct($inicio = null, $fin = null)
+    {
+        $this->inicio = $inicio;
+        $this->fin = $fin;
+    }
     public function collection()
     {
         return Partner::all();
@@ -84,5 +89,10 @@ class PartnersExport implements FromCollection, WithMapping, WithHeadings, Shoul
             'Dependientes',
             'Id en el sistema',
         ];
+    }
+
+    public function title(): string
+    {
+        return 'Socios';
     }
 }

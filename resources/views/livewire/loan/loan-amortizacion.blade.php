@@ -115,10 +115,16 @@
                                 </table>
                                 @if(!empty($amortizacion))
                                 <button class="btn btn-danger" wire:click="exportPDF">
+                                    <div wire:loading wire:target="exportPDF">
+                                        <div class="spinner-border text-white me-2 align-self-center loader-sm"></div>
+                                    </div>
                                     <i class="fa-light fa-file-pdf"></i>
                                 </button>
 
                                 <a class="btn btn-success" wire:click="exportExcel">
+                                    <div wire:loading wire:target="exportExcel">
+                                        <div class="spinner-border text-white me-2 align-self-center loader-sm"></div>
+                                    </div>
                                     <i class="fa-light fa-file-excel"></i>
                                 </a>
                                 @endif

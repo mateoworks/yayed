@@ -3,6 +3,7 @@
 namespace App\Http\Livewire;
 
 use App\Models\Loan;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
@@ -14,17 +15,17 @@ class Dashboard extends Component
     public $tiempo = 'year';
     public array $data;
     public $dataJson;
+    public $months = [1 => 'ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+
+    public $totalInteres;
+
+    public $periodoInteres;
+
     public function mount()
     {
-        $this->cantidad = DB::select("
-        SELECT MONTH(date_made) AS mes, YEAR(date_made) AS anio, sum(amount) AS monto FROM loans 
-        WHERE date_made >= '2021-03-03' 
-        GROUP BY mes, anio
-        ORDER BY anio, mes");
-        foreach ($this->cantidad as $item) {
-            $this->data['value'][] = $item->monto;
-            $this->data['lavel'][] = $item->mes . ' ' . $item->anio;
-        }
+        $this->periodoInteres = $this->periodoInteres = Carbon::now()->subYear()->format('Y-m-d');
+        $this->generarDatosInteres();
+
         $status = DB::select("
         SELECT status AS estado, sum(amount) AS monto from loans GROUP BY estado
         ");
@@ -35,6 +36,51 @@ class Dashboard extends Component
         }
         $this->statusPrestamos = $estado;
         $this->dataJson = json_encode($this->data);
+    }
+
+    public function generarDatosInteres()
+    {
+        $this->cantidad = DB::select("
+        SELECT MONTH(made_date) AS mes, YEAR(made_date) AS anio, sum(interest_amount) AS monto FROM payments 
+        WHERE made_date >= '{$this->periodoInteres}'
+        GROUP BY mes, anio
+        ORDER BY anio, mes");
+
+        $sumatorio = 0;
+
+        foreach ($this->cantidad as $item) {
+            $sumatorio += $item->monto;
+            $this->data['value'][] = $sumatorio;
+            $this->data['lavel'][] = ucfirst($this->months[$item->mes])  . ' ' . $item->anio;
+            $this->data['porMes'][] = $item->monto;
+        }
+        $this->totalInteres = $sumatorio;
+    }
+    public function porPeriodo($periodo)
+    {
+        if ($periodo == 'anual') {
+            $this->periodoInteres = Carbon::now()->subYear()->format('Y-m-d');
+        } else if ($periodo == 'semestral') {
+            $this->periodoInteres = Carbon::now()->subMonth(6)->format('Y-m-d');
+        } else if ($periodo == 'trimestral') {
+            $this->periodoInteres = Carbon::now()->subMonth(3)->format('Y-m-d');
+        }
+
+        $this->cantidad = DB::select("
+        SELECT MONTH(made_date) AS mes, YEAR(made_date) AS anio, sum(interest_amount) AS monto FROM payments 
+        WHERE made_date >= '$this->periodoInteres'
+        GROUP BY mes, anio
+        ORDER BY anio, mes");
+
+        $sumatorio = 0;
+
+        foreach ($this->cantidad as $item) {
+            $sumatorio += $item->monto;
+            $this->data['value'][] = $sumatorio;
+            $this->data['lavel'][] = ucfirst($this->months[$item->mes])  . ' ' . $item->anio;
+            $this->data['porMes'][] = $item->monto;
+        }
+        $this->totalInteres = $sumatorio;
     }
     public function render()
     {

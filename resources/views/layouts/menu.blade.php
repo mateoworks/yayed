@@ -55,12 +55,25 @@
     </li>
 
     <li class="menu {{ (request()->is('reporte*')) ? 'active' : '' }}">
-        <a href="{{ route('report.simple') }}" aria-expanded="false" class="dropdown-toggle">
+        <a href="#menuLevel1" data-bs-toggle="collapse" aria-expanded="{{ (request()->is('reporte*')) ? 'true' : '' }}" class="dropdown-toggle">
             <div class="">
                 <i class="d-inline fa-light fa-calendar-days"></i>
                 <span class="d-inline">Reportes</span>
             </div>
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+            </div>
         </a>
+        <ul class="collapse submenu list-unstyled {{ (request()->is('reporte*')) ? 'show' : '' }} menu" id="menuLevel1" data-bs-parent="#accordionExample">
+            <li class="{{ (request()->is('reporte/mensual')) ? 'active' : '' }}">
+                <a href="{{ route('report.simple') }}"> Mensuales</a>
+            </li>
+            <li class="{{ (request()->is('reporte/exportar')) ? 'active' : '' }}">
+                <a href="{{ route('report.export') }}"> Exportar</a>
+            </li>
+        </ul>
     </li>
 
     <li class="menu {{ (request()->is('endorsements*')) ? 'active' : '' }}">

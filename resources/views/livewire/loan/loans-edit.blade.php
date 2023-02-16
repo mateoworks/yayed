@@ -34,7 +34,10 @@
                 <div class="widget-header">
                     <div class="row">
                         <div class="col-xl-12 col-md-12 col-sm-12 col-12">
-                            <h4>Editar préstamo otorgado a {{ $loan->partner->full_name }}</h4>
+                            <div class="d-flex justify-content-between">
+                                <h4>Editar préstamo otorgado a {{ $loan->partner->full_name }}</h4>
+                                <a href="{{ route('loans.show', $loan) }}" class="btn btn-info m-3">Ver préstamo</a>
+                            </div>
                         </div>
                     </div>
                 </div>

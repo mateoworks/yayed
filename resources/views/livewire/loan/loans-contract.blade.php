@@ -126,7 +126,7 @@
                                                 </table>
                                                 <p>Avales</p>
                                                 <div class="card-group">
-                                                    @foreach ($loan->endorsements as $endorsement)
+                                                    @foreach ($loan->solicitud->endorsements as $endorsement)
                                                     <div class="card">
 
                                                         <p>{{ $endorsement->full_name }}</p>
@@ -166,6 +166,9 @@
                                     </div>
                                     <div class="col-xl-12 col-md-3 col-sm-6">
                                         <a wire:click="exportPDF" class="btn btn-danger btn-print action-print">
+                                            <div wire:loading wire:target="exportPDF">
+                                                <div class="spinner-border text-white me-2 align-self-center loader-sm "></div>
+                                            </div>
                                             <i class="fa-light fa-file-pdf"></i>
                                             PDF
                                         </a>

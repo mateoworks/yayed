@@ -12,6 +12,7 @@
 <link rel="stylesheet" href="/src/plugins/src/select2/css/select2.min.css">
 
 <link href="/src/assets/css/light/components/modal.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="/src/plugins/src/sweetalerts2/sweetalerts2.css">
 
 @endpush
 <div class="middle-content container-xxl p-0">
@@ -23,7 +24,8 @@
                 <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
                 <li class="breadcrumb-item"><a href="{{ route('partners.index') }}">Socios</a></li>
                 <li class="breadcrumb-item"><a href="{{ route('partners.show', $partner) }}">{{ $partner->full_name }}</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Editar solicitud de préstamo</li>
+                <li class="breadcrumb-item"><a href="{{ route('partners.solicitud.show', $solicitud) }}">{{ $solicitud->folio }}</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Editar</li>
             </ol>
         </nav>
     </div>
@@ -37,7 +39,12 @@
                 <div class="widget-header">
                     <div class="row">
                         <div class="col-xl-12 col-md-12 col-sm-12 col-12">
-                            <h4>Solicitud de préstamo</h4>
+                            <div class="d-flex justify-content-between">
+                                <h4>Solicitud de préstamo</h4>
+                                <a href="{{ route('partners.solicitud.show', $solicitud) }}" class="btn btn-info m-3">
+                                    Ver solicitud
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -197,6 +204,11 @@
                             <div class="col-md-3">
                                 <label for="warranties.{{$value}}.url_document" class="form-label">Archivo</label>
                                 <input type="file" class="form-control @error('warranties.' . $value . '.url_document') is-invalid @enderror" wire:model="warranties.{{$value}}.url_document" id="warranties.{{$value}}.url_document" accept="image/*,.pdf">
+                                <div wire:loading wire:target="warranties.{{$value}}.url_document">
+                                    <div class="spinner-border spinner-border-reverse align-self-center text-secondary">
+                                        Subiendo...
+                                    </div>
+                                </div>
                                 @error('warranties.' . $value . '.url_document')
                                 <div class="invalid-feedback">
                                     {{ $message }}
@@ -329,7 +341,7 @@
                     </div>
 
                     <div class="modal-footer">
-                        <button class="btn" wire:click="hideModal"><i class="flaticon-cancel-12"></i> Discard</button>
+                        <button class="btn" wire:click="hideModal"><i class="flaticon-cancel-12"></i> Cancelar</button>
                         <button class="btn btn-primary" wire:submit="saveEndorsement" type="submit">Guardar</button>
                     </div>
                 </form>
@@ -348,6 +360,9 @@
 @push('scripts')
 <script src="/js/jquery-3.6.0.min.js"></script>
 <script src="/src/plugins/src/flatpickr/flatpickr.js"></script>
+<script src="/src/plugins/src/sweetalerts2/sweetalerts2.min.js"></script>
+
+
 <script>
     flatpickr(".date", {
         locale: {

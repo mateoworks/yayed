@@ -20,6 +20,7 @@ class LoansDetail extends Component
     {
         $data = [
             'loan' => $this->loan,
+            'solicitud' => $this->loan->solicitud,
         ];
         $pdf = Pdf::loadView('pdf-template.detalle-prestamo', $data)->setPaper('letter');
 

@@ -38,7 +38,7 @@
                         <div class="col-xl-12 col-md-12 col-sm-12 col-12">
                             <div class="d-flex justify-content-between">
                                 <h4>Realizar préstamo</h4>
-                                <div>
+                                <div class="m-3">
                                     <a href="{{ route('partners.solicitud.show', $solicitud) }}" class="btn btn-info">Ver solicitud</a>
                                 </div>
                             </div>
@@ -55,6 +55,18 @@
 
                     <!-- Begin form -->
                     <form wire:submit.prevent="save" class="row g-3" novalidate>
+
+                        <div class="form-group row mb-4">
+                            <label for="socialContribution" class="col-sm-3 col-form-label">Contribución social</label>
+                            <div class="col-sm-6">
+                                <input type="number" wire:model="socialContribution" class="form-control @error('socialContribution') is-invalid @enderror" id="socialContribution">
+                                @error('socialContribution')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                                @enderror
+                            </div>
+                        </div>
 
                         <div class="form-group row mb-4">
                             <label for="loan.amount" class="col-sm-3 col-form-label">Cantidad prestada</label>

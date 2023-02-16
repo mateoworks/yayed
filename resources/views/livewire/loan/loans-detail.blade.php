@@ -191,6 +191,9 @@
                                     </div>
                                     <div class="col-xl-12 col-md-3 col-sm-6">
                                         <a wire:click="exportPDF" class="btn btn-danger btn-print action-print">
+                                            <div wire:loading wire:target="exportPDF">
+                                                <div class="spinner-border text-white me-2 align-self-center loader-sm "></div>
+                                            </div>
                                             <i class="fa-light fa-file-pdf"></i>
                                             PDF
                                         </a>

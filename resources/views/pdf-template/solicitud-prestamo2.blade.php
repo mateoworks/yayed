@@ -56,10 +56,6 @@
         .border-all {
             border: black 1px solid;
         }
-
-        .espacio {
-            margin: 140px 140px;
-        }
     </style>
 </head>
 
@@ -95,7 +91,7 @@
             </td>
         </tr>
     </table>
-    <p><strong>Datos generales</strong></p>
+    <h4 class="m-3">DATOS GENERALES</h4>
     <table style="width:100%">
         <tr class="text-center border-table">
             <td><strong>{{ $partner->names }}</strong></td>
@@ -157,7 +153,7 @@
         </tr>
     </table>
 
-    <strong class="mt-1 mb-0">Monto y finalidad</strong>
+    <strong class="mt-1 mb-0">MONTO Y FINALIDAD</strong>
     <hr class="mt-0">
     <p style="text-align: justify;">
         Por la presente solicito un préstamo por la cantidad de
@@ -166,7 +162,7 @@
         a una tasa ordinaria de 2.00% y una tasa moratoria del 3.00% a partir de la fecha de pago.
         La finalidad del prestamo sera para: <strong>{{ $solicitud->concept }}</strong>
     </p>
-    <strong>Actividad del socio</strong>
+    <h4 class="m-3">ACTIVIDAD DEL SOCIO</h4>
     <table style="width:100%">
         <tr class="text-center border-table">
             <td><strong>{{ $partner->job }}</strong></td>
@@ -178,55 +174,118 @@
         </tr>
     </table>
 
-    <p class="text-center mt-4 mb-0">_____________________________</p>
-    <p class="text-center mt-0 mb-3"><strong>{{ $partner->full_name }}</strong></p>
+    <table style="width:100%">
+        <tr>
+            <td><small>Ingresos mensuales</small></td>
+            <td><small><strong>$</strong></small></td>
+            <td></td>
+            <td>Ingresos extraordinarios</td>
+        </tr>
+        <tr>
+            <td><small>Total de gastos mensuales</small></td>
+            <td>$</td>
+            <td></td>
+            <td rowspan="6" class="border-all">
+                <p class="ms-2">Hago constar bajo protesta decir verdad, que mis ingresos y egresos son
+                    los reales y en caso de incrementar notificare por este mismo medio
+                    asi mismo que toda la informacion que aquí manifiesto es veridica.</p>
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><small>Luz</small></td>
+            <td class="pe-2"><small>200</small></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><small>Agua</small></td>
+            <td class="pe-2"><small>100</small></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><small>Teléfono</small></td>
+            <td><small></small></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><small>Gas</small></td>
+            <td><small></small></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><small>Alimentación</small></td>
+            <td><small></small></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><small>Colegiatura</small></td>
+            <td><small></small></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><small>Médico</small></td>
+            <td><small></small></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><small>Empleado</small></td>
+            <td><small></small></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><small>Otros</small></td>
+            <td><small></small></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Disponible</td>
+            <td><strong>$</strong></td>
+            <td><small></small></td>
+            <td></td>
+        </tr>
+    </table>
+
+    <p class="text-center mt-5 mb-0">_____________________________</p>
+    <p class="text-center mt-0 mb-3">{{ $partner->full_name }}</p>
 
     <table style="width:100%">
         <tr>
-            <td class="border-all">
+            <td rowspan="3" class="border-all" style="width: 70%;">
                 <p class="m-1" style="text-align: justify;">
                     Por medio del presente manifestamos estar conciente de la
                     responsabilidad que adquirimos al fungir como aval, por lo
                     tanto me doy por enterado del contenido del Art. 109 de la Ley de operaciones y títulos de crédito que señala y define al
-                    AVAL como: La persona que garantiza todo o en parte el cumplimiento del
+                </p>
+                <p class="m-1" style="text-align: justify;"> AVAL como: La persona que garantiza todo o en parte el cumplimiento del
                     compromiso y obligación señalado en el pagare.</p>
             </td>
-
+            <td class="ps-1"></td>
+            <td style="background-color: lightgray;" class="text-end">Solicitud de crédito</td>
         </tr>
-
+        <tr>
+            <td class="pe-1"></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td class="border-all text-end">{{ $solicitud->folio }}</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
     </table>
     <strong class="mt-3 mb-0">Avales</strong>
-    <hr class="m-0">
-    <table style="width: 100%;" class="mb-1 mt-0">
-        <tr>
-            <th>Nombre</th>
-            <th>Domicilio</th>
-            <th>
-            </th>
-        </tr>
-        @foreach ($solicitud->endorsements as $endorsement)
-        <tr>
-            <td>{{ $endorsement->full_name }}</td>
-            <td>{{ $endorsement->address }}</td>
-            <td class="p-2 text-end">__________________________</td>
-        </tr>
-        @endforeach
-    </table>
+    <hr class="mt-0">
 
     <strong class="mt-3 mb-0">Garantía</strong>
     <hr class="mt-0">
-    <p>
-        @foreach ($solicitud->warranties as $warranty)
-        @if ($loop->last)
-        {{ $warranty->description }}.
-        @else
-        {{ $warranty->description }},
-        @endif
 
-        @endforeach
-    </p>
-    <div style="page-break-after:always;"></div>
-    <strong class="mt-6 mb-0">Información adicional</strong>
+    <strong class="mt-3 mb-0">Información adicional</strong>
     <hr class="mt-0">
     <p style="text-align: justify;">
         Debera de pagar en la fecha que marque su plan de pagos, ya que de no hacerlo le generara un interes
@@ -243,62 +302,8 @@
     </p>
 
     <strong class="mt-3 mb-0">Resolución</strong>
-    <hr class="mt-0">
     <p>El crédito es autorizado bajo las siguientes caracteristicas y condiciones:</p>
-    <table style="width: 100%;">
-        <tr>
-            <td colspan="2"><strong>Solicitado</strong></td>
-            <td colspan="2"><strong>Autorizado</strong></td>
-        </tr>
-        <tr>
-            <td>Monto:</td>
-            <td>{{ $solicitud->mount }}</td>
-            <td>Capital</td>
-            <td>$______________</td>
-        </tr>
-        <tr>
-            <td>Plazo:</td>
-            <td>{{ $solicitud->period }} Meses</td>
-            <td>Interés</td>
-            <td>_______________</td>
-        </tr>
-        <tr>
-            <td>Tasa ordinaria:</td>
-            <td>2.00%</td>
-            <td>IVA</td>
-            <td>$______________</td>
-        </tr>
-        <tr>
-            <td>Tasa moratoria</td>
-            <td>3.00%</td>
-            <td>Aportacion</td>
-            <td>$______________</td>
-        </tr>
-        <tr>
-            <td>Pagos:</td>
-            <td>Mensuales</td>
-            <td>Total</td>
-            <td>$______________</td>
-        </tr>
-    </table>
-
-    <p class="text-center mt-5">
-        <strong>Nombre y firma de los comités de crédito</strong>
-    </p>
-
-    <table style="width: 100%;">
-        @for ($i = 0; $i < 5; $i++) <tr>
-            <td>
-                <p class="mt-5">____________________________________</p>
-            </td>
-            <td class="text-end">
-                <p class="mt-5">____________________________________</p>
-            </td>
-            </tr>
-            @endfor
-
-
-    </table>
+    <hr class="mt-0">
 </body>
 
 </html>

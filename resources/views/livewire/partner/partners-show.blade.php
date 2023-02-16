@@ -23,7 +23,7 @@
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
                 <li class="breadcrumb-item"><a href="{{ route('partners.index') }}">Socios</a></li>
-                <li class="breadcrumb-item active" aria-current="page">{{ $partner->names }}</li>
+                <li class="breadcrumb-item active" aria-current="page">{{ $partner->full_name }}</li>
             </ol>
         </nav>
     </div>
@@ -39,7 +39,7 @@
                         <div class="col-xl-12 col-md-12 col-sm-12 col-12">
                             <div class="d-flex justify-content-between">
                                 <div>
-                                    <h4>Detalles del préstamo</h4>
+                                    <h4>Detalles del socio</h4>
                                 </div>
                                 <div class="mt-3 me-3">
 
@@ -294,6 +294,52 @@
                 </div>
             </div>
         </div>
+
+        @php
+        $loan = $partner->active;
+        @endphp
+        @if ($loan)
+
+        <div id="tableCustomBasic" class="col-lg-12 col-12 layout-spacing">
+            <div class="statbox widget box box-shadow">
+                <div class="widget-header">
+                    <div class="row">
+                        <div class="col-xl-12 col-md-12 col-sm-12 col-12">
+                            <h4>Préstamo activo</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="widget-content widget-content-area">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p class="m-0">Otorgado el <u>{{ $loan->date_made->locale('es')->isoFormat('D \d\e MMMM \d\e\l Y') }}</u></p>
+                            <p class="m-0">Capital: <strong>${{ number_format($loan->amount, 2) }}</strong>
+                                ({{ $loan->amount_letter }} PESOS MX)
+                            </p>
+                            <p class="m-0">
+                                Total capital abonado: <strong>${{ number_format($loan->payments->sum('principal_amount'), 2) }}</strong>
+                            </p>
+                            <p class="m-0">
+                                Total interés pagado: <strong>${{ number_format($loan->payments->sum('interest_amount'), 2) }}</strong>
+                            </p>
+                            @if ($loan->ultimo_pago)
+                            @php
+                            $ultimo = $loan->ultimo_pago
+                            @endphp
+                            <p>Último pago <u>{{ $ultimo->made_date->locale('es')->isoFormat('D \d\e MMMM \d\e\l Y') }}</u>,
+                                capital pagado: {{ $ultimo->principal_amount }}, interés: {{ $ultimo->interest_amount }}</p>
+                            @endif
+                            <p></p>
+                        </div>
+                        <div class="col-md-6">
+                            <a href="{{ route('payments.create', $loan) }}" class="btn btn-success">Realizar pago</a>
+                            <a href="{{ route('loans.show', $loan) }}" class="btn btn-primary">Ver préstamo</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @endif
 
         <div id="tableCustomBasic" class="col-lg-12 col-12 layout-spacing">
             <div class="statbox widget box box-shadow">

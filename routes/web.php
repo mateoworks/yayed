@@ -22,6 +22,7 @@ use App\Http\Livewire\Partner\PartnersShow;
 use App\Http\Livewire\Payments\PaymentForm;
 use App\Http\Livewire\Payments\PaymentList;
 use App\Http\Livewire\Payments\PaymentShow;
+use App\Http\Livewire\Report\ExportTable;
 use App\Http\Livewire\Report\ReportSimple;
 use App\Http\Livewire\Solicitud\SolicitudEdit;
 use App\Http\Livewire\Solicitud\SolicitudForm;
@@ -103,7 +104,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('loans/amortizacion/excel/{amortizacion}', [ExportController::class, 'amortizacionExportExcel'])
         ->name('loans.amortizacion.excel');
 
-    Route::get('reporte/simple', ReportSimple::class)->name('report.simple');
+    Route::get('reporte/mensual', ReportSimple::class)->name('report.simple');
+    Route::get('reporte/exportar', ExportTable::class)->name('report.export');
 
     Route::view('prueba/pdf', 'pdf-template.contrato-prestamo');
 });

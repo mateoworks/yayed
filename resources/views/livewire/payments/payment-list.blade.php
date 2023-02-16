@@ -30,9 +30,11 @@
                             </div>
                         </div>
                         <div class="col d-flex justify-content-end">
-                            <a class="btn btn-success mt-2 me-4" href="#">
-                                <i class="d-inline fa-regular fa-hand-holding-dollar"></i>
-                                <span class="btn-text-inner">Realizar pago</span>
+                            <a wire:click="exportExcel" class="btn btn-success mt-2 me-4">
+                                <div wire:loading wire:target="exportExcel">
+                                    <div class="spinner-border text-white me-2 align-self-center loader-sm "></div>
+                                </div>
+                                <i class="fa-light fa-file-excel"></i>
                             </a>
                         </div>
                     </div>
@@ -76,11 +78,8 @@
                                             <a href="" class="bs-tooltip btn btn-info" data-toggle="tooltip" data-placement="top" title="Editar">
                                                 <i class="fa-light fa-pen-to-square"></i>
                                             </a>
-                                            <button type="button" class="bs-tooltip btn btn-danger" data-toggle="tooltip" data-placement="top" title="Eliminar">
+                                            <button type="button" wire:click="$emit('deletePayment', {{ $payment }})" class="bs-tooltip btn btn-danger" data-toggle="tooltip" data-placement="top" title="Eliminar">
                                                 <i class="fa-regular fa-trash-can"></i>
-                                            </button>
-                                            <button type="button" class="bs-tooltip btn btn-secondary" data-toggle="tooltip" data-placement="top" title="Reporte">
-                                                <i class="fa-light fa-file-lines"></i>
                                             </button>
                                         </div>
                                     </td>
@@ -109,15 +108,15 @@
 <script type="text/javascript">
     document.addEventListener('DOMContentLoaded', function() {
 
-        @this.on('deleteLoan', loan => {
+        @this.on('deletePayment', payment => {
             Swal.fire({
                 title: '¿Estas seguro de eliminar?',
-                html: "Se eliminará los datos del préstamos, pagos y garantías",
+                html: "Se eliminarán los datos de este pago",
                 icon: 'warning',
                 showCancelButton: true,
             }).then((result) => {
                 if (result.value) {
-                    @this.call('destroyLoan', loan)
+                    @this.call('destroyPayment', payment)
                 }
             });
         });

@@ -30,9 +30,12 @@
                             </div>
                         </div>
                         <div class="col d-flex justify-content-end">
-                            <a class="btn btn-success mt-2 me-4" href="">
+                            <button type="button" wire:click="exportExcel" class="btn btn-success mt-2 me-4 bs-tooltip" data-toggle="tooltip" data-placement="top" title="Exportar a excel">
+                                <div wire:loading wire:target="exportExcel">
+                                    <div class="spinner-border text-white me-2 align-self-center loader-sm"></div>
+                                </div>
                                 <i class="fa-light fa-file-excel"></i>
-                            </a>
+                            </button>
                         </div>
                     </div>
                     <div class="row">
@@ -117,6 +120,9 @@
                                             <a href="{{ route('solicitud.edit', $solicitud) }}" class="bs-tooltip btn btn-info" data-toggle="tooltip" data-placement="top" title="Editar">
                                                 <i class="fa-light fa-pen-to-square"></i>
                                             </a>
+                                            <a class="bs-tooltip btn btn-danger" wire:click="$emit('deleteSolicitud', {{ $solicitud }})" data-toggle="tooltip" data-placement="top" title="Eliminar">
+                                                <i class="fa-regular fa-trash-can"></i>
+                                            </a>
 
                                         </div>
 
@@ -141,15 +147,15 @@
 <script type="text/javascript">
     document.addEventListener('DOMContentLoaded', function() {
 
-        @this.on('deleteLoan', loan => {
+        @this.on('deleteSolicitud', solicitud => {
             Swal.fire({
                 title: '¿Estas seguro de eliminar?',
-                html: "Se eliminará los datos del préstamos, pagos y garantías",
+                html: "Se eliminará esta solicitud y el préstamo que esta asociado, avales y garantías",
                 icon: 'warning',
                 showCancelButton: true,
             }).then((result) => {
                 if (result.value) {
-                    @this.call('destroyLoan', loan)
+                    @this.call('destroySolicitud', solicitud)
                 }
             });
         });

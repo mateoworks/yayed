@@ -2,11 +2,14 @@
 
 namespace App\Http\Livewire\Loan;
 
+use App\Exports\LoansExport;
 use App\Models\Loan;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Maatwebsite\Excel\Facades\Excel;
 
 class LoansList extends Component
 {
@@ -33,5 +36,12 @@ class LoansList extends Component
     {
         $loan->delete();
         $this->dispatchBrowserEvent('message', ['message' => 'Se eliminó el préstamo']);
+    }
+    public function exportExcel()
+    {
+        return Excel::download(
+            new LoansExport(),
+            Carbon::now()->format('Y_m_d') . '-prestamos.xlsx'
+        );
     }
 }

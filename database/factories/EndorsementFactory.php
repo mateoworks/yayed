@@ -21,6 +21,7 @@ class EndorsementFactory extends Factory
             'names' => $this->faker->name,
             'surnames' => $this->faker->lastName,
             'phone' => $this->faker->phoneNumber,
+            'address' => $this->faker->address,
         ];
     }
 }

@@ -13,19 +13,17 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('solicituds', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->integer('folio');
-            $table->date('date_solicitud');
-            $table->date('date_payment');
-            $table->date('timestamp')->nullable();
-            $table->double('period');
-            $table->double('mount');
-            $table->mediumText('concept')->nullable();
-            $table->string('condition')->default('en proceso');
+        Schema::create('contributions', function (Blueprint $table) {
+            $table->id();
+            $table->date('date_made');
+            $table->double('amount')->default(0);
             $table->foreignUuid('partner_id')
                 ->references('id')
                 ->on('partners')
+                ->onDelete('cascade');
+            $table->foreignUuid('loan_id')
+                ->references('id')
+                ->on('loans')
                 ->onDelete('cascade');
             $table->timestamps();
         });
@@ -38,6 +36,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('solicituds');
+        Schema::dropIfExists('contributions');
     }
 };

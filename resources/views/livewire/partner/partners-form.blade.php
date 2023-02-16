@@ -289,9 +289,6 @@
 
 
 
-
-
-
                         <div class="col-md-4">
                             <label class="my-1 d-flex align-items-center" for="partner.curp">
                                 <i class="fa-regular fa-id-card-clip"></i> CURP</label>

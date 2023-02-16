@@ -22,8 +22,8 @@ return new class extends Migration
             $table->double('social_contribution')->nullable();
             $table->string('period')->nullable();
             $table->string('concept')->nullable();
-            $table->double('principal_amount')->default(0);
-            $table->double('interest_amount');
+            $table->double('principal_amount')->default(0)->nullable();
+            $table->double('interest_amount')->default(0)->nullable();
             $table->string('other')->nullable();
             $table->double('other_amount')->nullable();
             $table->mediumText('observations')->nullable();

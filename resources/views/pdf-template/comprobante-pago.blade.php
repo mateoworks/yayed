@@ -20,10 +20,15 @@
             border: 1px solid #ddd;
         }
 
+        .striped th {
+            background-color: #14549C;
+            color: white;
+        }
+
         .striped th,
         .striped td {
             text-align: left;
-            padding: 16px;
+            padding: 8px;
         }
 
         .striped tr {
@@ -80,7 +85,7 @@
 
                 <h5>Comprobante de pago</h5>
                 <h6 style="color: red;">{{ $payment->numero }}</h6>
-                <p>Fecha de emisión: {{ \Carbon\Carbon::now() }}</p>
+                <p>Fecha de emisión: {{ \Carbon\Carbon::now()->format('d/m/y H:m:s') }}</p>
             </td>
         </tr>
     </table>
@@ -97,7 +102,7 @@
                 <strong>Detalles del préstamo</strong>
                 <p class="m-0">$ {{ number_format($loan->amount, 2) }}</p>
                 <p class="m-0">Otorgado: {{ $loan->date_made->format('Y-m-d') }}</p>
-                <p class="m-0">Interés: {{ $loan->interest }}%</p>
+
             </td>
         </tr>
     </table>
@@ -106,11 +111,11 @@
     <table>
         <tr>
             <td>Fecha programada:</td>
-            <td>{{ $payment->scheduled_date->format('Y-m-d') }}</td>
+            <td>{{ $payment->scheduled_date->format('d/m/Y') }}</td>
         </tr>
         <tr>
             <td>Fecha realizada:</td>
-            <td>{{ $payment->made_date->format('Y-m-d') }}</td>
+            <td>{{ $payment->made_date->format('d/m/Y') }}</td>
         </tr>
         <tr>
             <td>Contribución social:</td>
@@ -151,15 +156,15 @@
         </tr>
         @endif
         <tr>
-            <td></td>
-            <td class="text-end">
-                <h4>Total</h4>
+            <td class="text-center" colspan="2">
+                <p><strong>Total</strong></p>
+
             </td>
             @php
             $total = $payment->principal_amount + $payment->interest_amount + $payment->other_amount;
             @endphp
             <td class="text-end">
-                <h4>${{ number_format($total, 2) }}</h4>
+                <p><strong>${{ number_format($total, 2) }}</strong></p>
             </td>
         </tr>
     </table>

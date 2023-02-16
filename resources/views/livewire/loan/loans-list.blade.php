@@ -30,7 +30,11 @@
                             </div>
                         </div>
                         <div class="col d-flex justify-content-end">
-                            <a class="btn btn-success mt-2 me-4" href="{{ route('loans.export.excel') }}">
+
+                            <a wire:click="exportExcel" class="btn btn-success mt-2 me-4">
+                                <div wire:loading wire:target="exportExcel">
+                                    <div class="spinner-border text-white me-2 align-self-center loader-sm "></div>
+                                </div>
                                 <i class="fa-light fa-file-excel"></i>
                             </a>
                         </div>
@@ -111,7 +115,7 @@
                                     <td class="text-center">
                                         <div class="btn-group" role="group" aria-label="Basic example">
                                             @if ($loan->status == 'activo' || $loan->status == 'suspendido')
-                                            <a href="{{ route('payments.create', $loan) }}" class="bs-tooltip btn btn-payment" data-toggle="tooltip" data-placement="top" title="Realizar pago">
+                                            <a href="{{ route('payments.create', $loan) }}" class="bs-tooltip btn btn-success" data-toggle="tooltip" data-placement="top" title="Realizar pago">
                                                 <i class="fa-light fa-envelope-open-dollar"></i>
                                             </a>
                                             @endif
@@ -123,9 +127,6 @@
                                             </a>
                                             <a wire:click="$emit('deleteLoan', {{ $loan }})" class="bs-tooltip btn btn-danger" data-toggle="tooltip" data-placement="top" title="Eliminar">
                                                 <i class="fa-regular fa-trash-can"></i>
-                                            </a>
-                                            <a class="bs-tooltip btn btn-secondary" data-toggle="tooltip" data-placement="top" title="Reporte">
-                                                <i class="fa-light fa-file-lines"></i>
                                             </a>
                                         </div>
 

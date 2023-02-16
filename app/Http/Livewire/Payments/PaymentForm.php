@@ -13,14 +13,16 @@ class PaymentForm extends Component
     public Payment $payment;
     public $last_payment;
     public $numMonth;
-    public $status = false;
+    public $status = 0;
+    public $pendienteCap;
+    public $diasPendientes;
     protected function rules()
     {
         return [
             'payment.scheduled_date' => ['required', 'date'],
             'payment.made_date' => ['required', 'date'],
             'payment.type' => ['nullable'],
-            'payment.social_contribution' => ['nullable'],
+            'payment.social_contribution' => ['nullable', 'numeric', 'max:' . $this->loan->partner->social_contribution],
             'payment.period' => ['nullable'],
             'payment.concept' => ['nullable'],
             'payment.interest_amount' => ['nullable', 'numeric'],
@@ -34,19 +36,37 @@ class PaymentForm extends Component
     public function mount(Payment $payment)
     {
         $this->last_payment = Payment::where('loan_id', $this->loan->id)->latest('made_date')->first() ?? null;
+
         if (!$payment->exists) {
             $this->payment = new Payment();
             if ($this->last_payment != null) {
+                $this->diasPendientes = Carbon::now()->diffInDays($this->last_payment->made_date);
+
+                if ($this->diasPendientes > 90) {
+                    $this->loan->interest = 3;
+                }
+
                 $this->payment->scheduled_date = $this->last_payment->made_date->addMonth();
                 $this->numMonth = $this->last_payment->made_date->diffInMonths(Carbon::now());
                 $capitalPagado = $this->loan->payments->sum('principal_amount');
                 $pendienteCapital = $this->loan->amount - $capitalPagado;
                 $interesMensual = ($pendienteCapital * $this->loan->interest) / 100;
                 $this->payment->interest_amount = $interesMensual;
+                $this->pendienteCap = $pendienteCapital;
+
+                $this->payment->period = $this->loan->payments->count() + 1;
             } else {
+                $this->diasPendientes = Carbon::now()->diffInDays($this->loan->date_made);
+
+                if ($this->diasPendientes > 90) {
+                    $this->loan->interest = 3;
+                }
+
                 $this->payment->scheduled_date = $this->loan->date_made->addMonth();
                 $this->numMonth = $this->loan->date_made->diffInMonths(Carbon::now());
                 $this->payment->interest_amount = $this->loan->amount * $this->loan->interest / 100;
+                $this->payment->period = 1;
+                $this->pendienteCap = $this->loan->amount;
             }
 
             $this->payment->made_date = Carbon::now()->format('Y-m-d');
@@ -56,17 +76,33 @@ class PaymentForm extends Component
         }
 
         if ($this->loan->status == 'liquidado') {
-            $status = true;
+            $status = 1;
+        }
+    }
+
+    public function activar()
+    {
+        if ($this->payment->principal_amount >= $this->pendienteCap) {
+            $this->status = 1;
         }
     }
 
     public function save()
     {
+
         $this->validate();
+
         $this->payment->loan_id = $this->loan->id;
+        $this->payment->user_id = auth()->user()->id;
         $this->payment->save();
+
+        if ($this->payment->social_contribution > 0) {
+            $partner = $this->loan->partner;
+            $partner->social_contribution -= $this->payment->social_contribution;
+            $partner->save();
+        }
         //Redirigir para imprimir el ticket
-        return redirect()->route('loans.show', $this->loan);
+        return redirect()->route('payments.show', $this->payment);
     }
 
     public function render()

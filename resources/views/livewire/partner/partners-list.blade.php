@@ -139,7 +139,7 @@
         @this.on('triggerDelete', id => {
             Swal.fire({
                 title: '¿Estas seguro de eliminar?',
-                html: "Se perderán los datos",
+                html: "Se eliminará todo registro de este socio, documentos, préstamos, pagos, solicitudes.",
                 icon: 'warning',
                 showCancelButton: true,
             }).then((result) => {
@@ -147,6 +147,17 @@
                     @this.call('destroy', id)
                 }
             });
+        });
+    });
+
+    window.addEventListener('message', event => {
+        Snackbar.show({
+            showAction: false,
+            text: event.detail.message,
+            pos: 'top-center',
+            actionTextColor: '#fff',
+            backgroundColor: '#' + event.detail.backgroundColor,
+
         });
     });
 </script>

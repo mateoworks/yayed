@@ -19,7 +19,7 @@
             <div class="widget widget-chart-one">
                 <div class="widget-heading">
 
-                    <h5 class="">Préstamos realizados</h5>
+                    <h5 class="">Intereses acumulados desde {{ $periodoInteres }}</h5>
                     <div class="task-action">
                         <div class="dropdown">
                             <a class="dropdown-toggle" href="#" role="button" id="renvenue" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -30,9 +30,9 @@
                                 </svg>
                             </a>
                             <div class="dropdown-menu left" aria-labelledby="renvenue" style="will-change: transform;">
-                                <a class="dropdown-item" href="javascript:void(0);">Última semana</a>
-                                <a class="dropdown-item" href="javascript:void(0);">Último mes</a>
-                                <a class="dropdown-item" href="javascript:void(0);">Último año</a>
+                                <a class="dropdown-item" wire:click="porPeriodo('trimestral')">Último trimestre</a>
+                                <a class="dropdown-item" wire:click="porPeriodo('semestral')">Último semestre</a>
+                                <a class="dropdown-item" wire:click="porPeriodo('anual')">Último año</a>
                             </div>
                         </div>
                     </div>
@@ -225,6 +225,9 @@
 
             let porMesValores = @json($data['value']);
             let porMesLabel = @json($data['lavel']);
+            let porMesInteres = @json($data['porMes']);
+
+            let totalInteres = @json($totalInteres)
 
 
             if (ParsedObject.settings.layout.darkMode) {
@@ -278,7 +281,7 @@
                         }]
                     },
                     subtitle: {
-                        text: '$10,840',
+                        text: '$' + totalInteres,
                         align: 'left',
                         margin: 0,
                         offsetX: 100,
@@ -289,18 +292,7 @@
                             color: '#00ab55'
                         }
                     },
-                    title: {
-                        text: 'Total de prestamos',
-                        align: 'left',
-                        margin: 0,
-                        offsetX: -10,
-                        offsetY: 20,
-                        floating: false,
-                        style: {
-                            fontSize: '18px',
-                            color: '#bfc9d4'
-                        },
-                    },
+
                     stroke: {
                         show: true,
                         curve: 'smooth',
@@ -308,9 +300,14 @@
                         lineCap: 'square'
                     },
                     series: [{
-                        name: 'Monto $',
-                        data: porMesValores,
-                    }],
+                            name: 'Interés acumulado $',
+                            data: porMesValores,
+                        },
+                        {
+                            name: 'Interés por mes $',
+                            data: porMesInteres,
+                        }
+                    ],
                     labels: porMesLabel,
                     xaxis: {
                         axisBorder: {
@@ -569,7 +566,7 @@
                         }]
                     },
                     subtitle: {
-                        text: '$10,840',
+                        text: '$' + totalInteres,
                         align: 'left',
                         margin: 0,
                         offsetX: 100,
@@ -580,18 +577,6 @@
                             color: '#4361ee'
                         }
                     },
-                    title: {
-                        text: 'Total prestamos',
-                        align: 'left',
-                        margin: 0,
-                        offsetX: -10,
-                        offsetY: 20,
-                        floating: false,
-                        style: {
-                            fontSize: '18px',
-                            color: '#0e1726'
-                        },
-                    },
                     stroke: {
                         show: true,
                         curve: 'smooth',
@@ -599,9 +584,12 @@
                         lineCap: 'square'
                     },
                     series: [{
-                        name: 'Monto $',
+                        name: 'Interés acumulado $',
                         data: porMesValores,
-                    }, ],
+                    }, {
+                        name: 'Interés por mes $',
+                        data: porMesInteres,
+                    }],
                     labels: porMesLabel,
                     xaxis: {
                         axisBorder: {
