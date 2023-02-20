@@ -85,4 +85,13 @@
         </a>
     </li>
 
+    <li class="menu {{ (request()->is('movimientos*')) ? 'active' : '' }}">
+        <a href="{{ route('movements.index') }}" aria-expanded="false" class="dropdown-toggle">
+            <div class="">
+                <i class="d-inline fa-light fa-arrows-retweet"></i>
+                <span class="d-inline">Movimientos</span>
+            </div>
+        </a>
+    </li>
+
 </ul>

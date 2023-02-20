@@ -4,9 +4,11 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
+use App\Models\CategoryMovement;
 use App\Models\Document;
 use App\Models\Endorsement;
 use App\Models\Loan;
+use App\Models\Movement;
 use App\Models\Partner;
 use App\Models\Payment;
 use App\Models\Solicitud;
@@ -31,9 +33,12 @@ class DatabaseSeeder extends Seeder
         });
         Loan::factory(30)->create();
         Payment::factory(150)->create();
+        CategoryMovement::factory(10)->create();
+        Movement::factory(40)->create();
         // \App\Models\User::factory()->create([
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
+
     }
 }

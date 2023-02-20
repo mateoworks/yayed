@@ -32,7 +32,15 @@
                             <div class="d-flex justify-content-between">
                                 <div>
                                     <h4>Reporte por mes</h4>
-
+                                </div>
+                                <div class="m-3">
+                                    <button class="btn btn-danger" wire:click="exportPDF">
+                                        <div wire:loading wire:target="exportPDF">
+                                            <div class="spinner-border text-white me-2 align-self-center loader-sm"></div>
+                                        </div>
+                                        <i class="fa-light fa-file-pdf"></i>
+                                        PDF
+                                    </button>
                                 </div>
                             </div>
 
@@ -143,7 +151,7 @@
                                         @endphp
                                         @foreach ($interesPorMes as $interes)
                                         <tr>
-                                            <td>{{ $capital->mes != null ? ucfirst($months[$capital->mes]) : '' }} {{ $interes->anio }}</td>
+                                            <td>{{ $interes->mes != null ? ucfirst($months[$interes->mes]) : '' }} {{ $interes->anio }}</td>
                                             <td class="text-end">${{ number_format($interes->interes, 2) }}</td>
                                             @php
                                             $totalInteres += $interes->interes;

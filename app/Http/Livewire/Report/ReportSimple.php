@@ -5,6 +5,8 @@ namespace App\Http\Livewire\Report;
 use App\Models\Contribution;
 use App\Models\Loan;
 use App\Models\Payment;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
@@ -32,6 +34,25 @@ class ReportSimple extends Component
     public function render()
     {
         return view('livewire.report.report-simple');
+    }
+
+    public function exportPDF()
+    {
+        $this->generar();
+        $data = [
+            'months' => $this->months,
+            'dateStart' => Carbon::parse($this->dateStart),
+            'dateEnd' => Carbon::parse($this->dateEnd),
+            'prestamosPorMes' => $this->prestamosPorMes,
+            'interesPorMes' => $this->interesPorMes,
+            'aportacionPorMes' => $this->aportacionPorMes,
+            'capitalPorMes' => $this->capitalPorMes
+        ];
+        $pdf = Pdf::loadView('pdf-template.reporte-mensual', $data)->setPaper('letter');
+
+        return response()->streamDownload(function () use ($pdf) {
+            echo  $pdf->stream();
+        }, Carbon::now()->format('Y_m_d') . '-reporte-mensual.pdf');
     }
 
     public function generar()

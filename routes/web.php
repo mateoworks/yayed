@@ -16,6 +16,8 @@ use App\Http\Livewire\Loan\LoansForm;
 use App\Http\Livewire\Loan\LoansList;
 use App\Http\Livewire\Loan\LoansPartnerForm;
 use App\Http\Livewire\Loan\LoansShow;
+use App\Http\Livewire\Movement\MovementsForm;
+use App\Http\Livewire\Movement\MovementsList;
 use App\Http\Livewire\Partner\PartnersForm;
 use App\Http\Livewire\Partner\PartnersList;
 use App\Http\Livewire\Partner\PartnersShow;
@@ -57,6 +59,10 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('profile', Profile::class)->name('profile');
     Route::get('profile/edit', ProfileEdit::class)->name('profile.edit');
+
+    Route::get('movimientos', MovementsList::class)->name('movements.index');
+    Route::get('movimientos/create', MovementsForm::class)->name('movements.create');
+    Route::get('movimientos/edit/{movement}', MovementsForm::class)->name('movements.edit');
 
     Route::get('users', UsersList::class)->name('users.index');
     Route::get('users/view/{user}', UsersShow::class)->name('users.show');
