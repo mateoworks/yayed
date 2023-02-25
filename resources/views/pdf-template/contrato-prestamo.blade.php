@@ -50,10 +50,11 @@
                 <p class="m-0">
                     C. Independencia S/N, San Baltazar Loxicha
                 </p>
+                <p class="m-0"><strong>{{ $periodoComisariado }}</strong></p>
             </td>
             <td class="text-end">
                 <h5>Contrato de préstamo</h5>
-                <samll>Fecha de emisión: {{ \Carbon\Carbon::now() }}</small>
+                <samll>Fecha de emisión: {{ $loan->date_made->format('d/m/Y') }}</small>
             </td>
         </tr>
     </table>

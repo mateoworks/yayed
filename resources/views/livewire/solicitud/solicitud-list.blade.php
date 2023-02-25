@@ -60,6 +60,7 @@
                         <table class="table table-hover table-striped table-bordered">
                             <thead>
                                 <tr>
+                                    <th>N°</th>
                                     <th scope="col">Socio</th>
                                     <th scope="col">Monto</th>
                                     <th scope="col">Fecha solicitada</th>
@@ -72,12 +73,13 @@
 
                                 @foreach ($solicitudes as $solicitud)
                                 <tr>
+                                    <td>{{ $solicitud->numero }}</td>
                                     <td>
                                         <a href="{{ route('partners.show', $solicitud->partner) }}">
                                             <div class="media">
                                                 <div class="avatar me-2">
                                                     @if ($solicitud->partner->image)
-                                                    <img alt="avatar" src="{{ Storage::disk('public')->url($partner->image) }}" class="rounded-circle" />
+                                                    <img alt="avatar" src="{{ Storage::disk('public')->url($solicitud->partner->image) }}" class="rounded-circle" />
                                                     @else
                                                     <span class="avatar-title rounded-circle bg-primary">{{ $solicitud->partner->names[0] ?? '' }}{{ $solicitud->partner->surname_father[0] }}</span>
                                                     @endif

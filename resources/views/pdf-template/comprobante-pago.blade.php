@@ -80,12 +80,13 @@
                 <p class="m-0">
                     C. Independencia S/N, San Baltazar Loxicha
                 </p>
+                <p class="m-0"><strong>{{ $periodoComisariado }}</strong></p>
             </td>
             <td class="text-end">
 
                 <h5>Comprobante de pago</h5>
                 <h6 style="color: red;">{{ $payment->numero }}</h6>
-                <p>Fecha de emisión: {{ \Carbon\Carbon::now()->format('d/m/y H:m:s') }}</p>
+                <p>Fecha de emisión: {{ \Carbon\Carbon::now()->format('d/m/Y') }}</p>
             </td>
         </tr>
     </table>
@@ -101,7 +102,7 @@
             <td class="text-end">
                 <strong>Detalles del préstamo</strong>
                 <p class="m-0">$ {{ number_format($loan->amount, 2) }}</p>
-                <p class="m-0">Otorgado: {{ $loan->date_made->format('Y-m-d') }}</p>
+                <p class="m-0">Otorgado: {{ $loan->date_made->format('Y/m/d') }}</p>
 
             </td>
         </tr>

@@ -18,7 +18,7 @@ class SolicitudFactory extends Factory
     public function definition()
     {
         return [
-            'folio' => $this->faker->randomNumber,
+            'folio' => $this->faker->unique()->randomNumber,
             'date_solicitud' => $this->faker->dateTimeBetween('-1 year', 'now'),
             'date_payment' => $this->faker->dateTimeBetween('-1 year', 'now'),
             'period' => $this->faker->randomDigit,

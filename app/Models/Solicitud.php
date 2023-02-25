@@ -17,12 +17,9 @@ class Solicitud extends Model
     ];
     public $incrementing = false;
 
-    public static function boot()
+    public function getNumeroAttribute()
     {
-        parent::boot();
-        static::creating(function ($model) {
-            $model->folio = Solicitud::max('folio') + 1;
-        });
+        return str_pad($this->folio, 5, 0, STR_PAD_LEFT);
     }
 
     public function partner()

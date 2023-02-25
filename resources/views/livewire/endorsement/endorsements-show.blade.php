@@ -36,7 +36,7 @@
                                 </div>
                                 <div class="mt-3 me-3">
 
-                                    <a href="" class="btn btn-secondary ms-2 bs-tooltip" data-toggle="tooltip" data-placement="top" title="Editar">
+                                    <a href="{{ route('endorsements.edit', $endorsement) }}" class="btn btn-secondary ms-2 bs-tooltip" data-toggle="tooltip" data-placement="top" title="Editar">
                                         <i class="fa-light fa-pen-to-square"></i>
                                     </a>
 
@@ -126,7 +126,7 @@
                     <div class="card">
                         <div class="card-body">
                             <h3>Préstamos avalados</h3>
-                            {{dd($loans) }}
+
                             <table class="table table-striped">
                                 <thead>
                                     <th>Fecha de la solicitud</th>

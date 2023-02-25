@@ -230,39 +230,41 @@
                         @endforeach
 
                         <h6>Garantías agregadas</h6>
-                        <table class="table">
-                            @forelse ($solicitud->warranties as $warranty)
-                            <tr>
-                                <td>{{ $warranty->type }}</td>
-                                <td>
-                                    @if ($warranty->url_document)
-                                    @php
-                                    $ext = pathinfo(Storage::disk('public')->url($warranty->url_document), PATHINFO_EXTENSION)
-                                    @endphp
+                        <div class="table-responsive">
+                            <table class="table">
+                                @forelse ($solicitud->warranties as $warranty)
+                                <tr>
+                                    <td>{{ $warranty->type }}</td>
+                                    <td>
+                                        @if ($warranty->url_document)
+                                        @php
+                                        $ext = pathinfo(Storage::disk('public')->url($warranty->url_document), PATHINFO_EXTENSION)
+                                        @endphp
 
-                                    @if ($ext == 'jpg' || $ext == 'png' || $ext == 'bmp')
-                                    <img src="{{ Storage::disk('public')->url($warranty->url_document) }}" height="70" alt="...">
-                                    @elseif($ext == 'pdf')
-                                    <img src="/img/pdf.png" height="70" alt="...">
-                                    @else
-                                    <img src="/img/no_preview.png" class="card-img-top" alt="...">
-                                    @endif
+                                        @if ($ext == 'jpg' || $ext == 'png' || $ext == 'bmp')
+                                        <img src="{{ Storage::disk('public')->url($warranty->url_document) }}" height="70" alt="...">
+                                        @elseif($ext == 'pdf')
+                                        <img src="/img/pdf.png" height="70" alt="...">
+                                        @else
+                                        <img src="/img/no_preview.png" class="card-img-top" alt="...">
+                                        @endif
 
-                                    @endif
-                                </td>
-                                <td>
-                                    {{ $warranty->description }}
-                                </td>
-                                <td>
-                                    <button type="button" wire:click="$emit('warrantyDelete', {{ $warranty }})" class="btn btn-danger btn-sm">Eliminar</button>
-                                </td>
-                            </tr>
-                            @empty
-                            <tr>
-                                <td>No hay garanatías registradas</td>
-                            </tr>
-                            @endforelse
-                        </table>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        <p>{{ $warranty->description }}</p>
+                                    </td>
+                                    <td>
+                                        <button type="button" wire:click="$emit('warrantyDelete', {{ $warranty }})" class="btn btn-danger btn-sm">Eliminar</button>
+                                    </td>
+                                </tr>
+                                @empty
+                                <tr>
+                                    <td>No hay garanatías registradas</td>
+                                </tr>
+                                @endforelse
+                            </table>
+                        </div>
 
                         <div>
                             <button class="btn btn-primary">Actualizar préstamo</button>
@@ -317,6 +319,18 @@
                             <div class="col-sm-7">
                                 <input type="text" wire:model="endorsement.phone" class="form-control @error('endorsement.phone') is-invalid @enderror" id="endorsement.phone">
                                 @error('endorsement.phone')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="form-group row mb-1">
+                            <label for="endorsement.key_ine" class="col-sm-3 col-form-label">Clave INE:</label>
+                            <div class="col-sm-7">
+                                <input type="text" wire:model="endorsement.key_ine" class="form-control @error('endorsement.key_ine') is-invalid @enderror" id="endorsement.key_ine">
+                                @error('endorsement.key_ine')
                                 <div class="invalid-feedback">
                                     {{ $message }}
                                 </div>

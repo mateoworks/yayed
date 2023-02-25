@@ -5,8 +5,10 @@ namespace Database\Seeders;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 use App\Models\CategoryMovement;
+use App\Models\Colonia;
 use App\Models\Document;
 use App\Models\Endorsement;
+use App\Models\Job;
 use App\Models\Loan;
 use App\Models\Movement;
 use App\Models\Partner;
@@ -25,6 +27,8 @@ class DatabaseSeeder extends Seeder
     {
         \App\Models\User::factory()->create(['email' => 'gladis@yayed.com', 'id' => '1']);
         \App\Models\User::factory(10)->create();
+        Job::factory(10)->create();
+        Colonia::factory(5)->create();
         Partner::factory(20)->create();
         Document::factory(30)->create();
         Endorsement::factory(10)->create();

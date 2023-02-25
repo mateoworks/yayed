@@ -77,13 +77,14 @@
                 <p class="m-0">
                     C. Independencia S/N, San Baltazar Loxicha
                 </p>
+                <p class="m-0"><strong>{{ $periodoComisariado }}</strong></p>
             </td>
             <td class="text-end">
                 <h4>Solicitud de crédito</h4>
                 <table>
                     <tr>
                         <td>Folio de solicitud: </td>
-                        <td class="text-end border-bottom-td"><strong> {{ $solicitud->folio }}</strong></td>
+                        <td class="text-end border-bottom-td"><strong> {{ $solicitud->numero }}</strong></td>
                     </tr>
                     <tr>
                         <td>Fecha de solicitud: </td>
@@ -195,6 +196,7 @@
         </tr>
 
     </table>
+    @if ($solicitud->endorsements()->exists())
     <strong class="mt-3 mb-0">Avales</strong>
     <hr class="m-0">
     <table style="width: 100%;" class="mb-1 mt-0">
@@ -208,11 +210,12 @@
         <tr>
             <td>{{ $endorsement->full_name }}</td>
             <td>{{ $endorsement->address }}</td>
-            <td class="p-2 text-end">__________________________</td>
         </tr>
         @endforeach
     </table>
+    @endif
 
+    @if ($solicitud->warranties()->exists())
     <strong class="mt-3 mb-0">Garantía</strong>
     <hr class="mt-0">
     <p>
@@ -225,6 +228,8 @@
 
         @endforeach
     </p>
+    @endif
+
     <div style="page-break-after:always;"></div>
     <strong class="mt-6 mb-0">Información adicional</strong>
     <hr class="mt-0">

@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Partner;
 
 use App\Models\Document;
+use App\Models\Job;
 use App\Models\Partner;
 use Livewire\Component;
 use Illuminate\Support\Facades\Session;
@@ -54,7 +55,7 @@ class PartnersForm extends Component
                 Rule::unique('partners', 'key_ine')->ignore($this->partner),
             ],
             'partner.birthday' => ['nullable', 'date'],
-            'partner.job' => ['required'],
+            'partner.job_id' => ['required'],
             'partner.email' => ['nullable'],
             'image' => ['nullable', 'image', 'max:2024'],
             'type.*' => [
@@ -104,7 +105,15 @@ class PartnersForm extends Component
 
     public function render()
     {
-        return view('livewire.partner.partners-form');
+        return view('livewire.partner.partners-form', [
+            'jobs' => Job::all(),
+        ]);
+    }
+
+    public function deleteImg()
+    {
+        $this->partner->image = null;
+        $this->partner->save();
     }
 
     public function save()
@@ -113,8 +122,13 @@ class PartnersForm extends Component
         if ($this->image) {
             $this->partner->image = $this->image->store('/image_partner', 'public');
         }
+        $job = Job::find($this->partner->job_id);
+        if (!$job) {
+            $job = Job::create(['name' => $this->partner->job_id]);
+            $this->partner->job_id = $job->id;
+        }
         $this->partner->save();
-        if (!empty($this->type)) {
+        if (!empty($this->type) && !empty($this->file)) {
             foreach ($this->type as $key => $value) {
                 $document = new Document;
                 $document->url = $this->file[$key]->store('/document', 'public');

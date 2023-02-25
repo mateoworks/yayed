@@ -112,6 +112,14 @@
                                         <table>
                                             <tr>
                                                 <td>
+                                                    <p><strong>Folio</strong></p>
+                                                </td>
+                                                <td>
+                                                    <h5>{{ $partner->number }}</h5>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
                                                     <p>Nombre(s): </p>
                                                 </td>
                                                 <td>
@@ -418,7 +426,7 @@
                                     </div>
                                     <p>Solicitud realizada el {{ $loan->solicitud->date_solicitud->format('d/m/Y') }}, folio:
                                         <span>
-                                            <a href="{{ route('partners.solicitud.show', $loan->solicitud) }}" class="btn btn-danger">{{ $loan->solicitud->folio }}</a>
+                                            <a href="{{ route('partners.solicitud.show', $loan->solicitud) }}" class="btn btn-danger">{{ $loan->solicitud->numero }}</a>
                                         </span>
                                     </p>
                                     <div class="comment">
@@ -490,7 +498,7 @@
                             <tbody>
                                 @forelse ($partner->solicituds as $solicitud)
                                 <tr>
-                                    <td>{{ $solicitud->folio }}</td>
+                                    <td>{{ $solicitud->numero }}</td>
                                     <td>{{ $solicitud->date_solicitud->format('d/m/Y') }}</td>
                                     <td>{{ $solicitud->period }}</td>
                                     <td class="text-end">${{ number_format($solicitud->mount, 2) }}</td>

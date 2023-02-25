@@ -38,6 +38,7 @@ class SolicitudForm extends Component
             'solicitud.period' => ['required'],
             'solicitud.mount' => ['required', 'numeric'],
             'solicitud.concept' => ['nullable'],
+            'solicitud.folio' => ['required', 'numeric', 'unique:solicituds,folio'],
             'endorsement.names' => [
                 Rule::requiredIf($this->saveNewAval)
             ],
@@ -48,6 +49,9 @@ class SolicitudForm extends Component
                 Rule::requiredIf($this->saveNewAval)
             ],
             'endorsement.address' => [
+                Rule::requiredIf($this->saveNewAval)
+            ],
+            'endorsement.key_ine' => [
                 Rule::requiredIf($this->saveNewAval)
             ],
         ];
@@ -73,7 +77,14 @@ class SolicitudForm extends Component
         $this->endorsements = Endorsement::orderBy('names')->get();
         $this->solicitud = $solicitud;
         $this->solicitud->date_solicitud = Carbon::now();
+        $this->solicitud->folio = $this->numberSolicitud();
         $this->endorsement = $endorsement;
+    }
+
+    public function numberSolicitud()
+    {
+        $max = Solicitud::max('folio');
+        return $max + 1;
     }
 
     public function updateDate()
@@ -144,6 +155,7 @@ class SolicitudForm extends Component
             'endorsement.names' => ['required'],
             'endorsement.surnames' => ['required'],
             'endorsement.phone' => ['nullable'],
+            'endorsement.key_ine' => ['nullable'],
         ]);
         $this->endorsement->save();
         $this->saveNewAval = false;

@@ -38,6 +38,11 @@ class Loan extends Model
         return $this->hasMany(Payment::class)->orderBy('scheduled_date', 'desc');
     }
 
+    public function getNumeroAttribute()
+    {
+        return str_pad($this->number, 5, 0, STR_PAD_LEFT);
+    }
+
     public function getUltimoPagoAttribute()
     {
         $ultimo = false;

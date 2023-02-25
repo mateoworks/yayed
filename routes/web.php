@@ -4,9 +4,13 @@ use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\Helpers\AutocompleteController;
 use App\Http\Controllers\Helpers\ExportController;
 use App\Http\Controllers\Helpers\SearchController;
+use App\Http\Livewire\Config\ConfigForm;
 use App\Http\Livewire\Dashboard;
+use App\Http\Livewire\Endorsement\EndorsementsForm;
 use App\Http\Livewire\Endorsement\EndorsementsList;
 use App\Http\Livewire\Endorsement\EndorsementsShow;
+use App\Http\Livewire\Job\JobsForm;
+use App\Http\Livewire\Job\JobsList;
 use App\Http\Livewire\Loan\LoanAmortizacion;
 use App\Http\Livewire\Loan\LoanPaymentPlan;
 use App\Http\Livewire\Loan\LoansContract;
@@ -98,6 +102,13 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('endorsements', EndorsementsList::class)->name('endorsements.index');
     Route::get('endorsements/show/{endorsement}', EndorsementsShow::class)->name('endorsements.show');
+    Route::get('endorsements/create', EndorsementsForm::class)->name('endorsements.create');
+    Route::get('endorsements/edit/{endorsement}', EndorsementsForm::class)->name('endorsements.edit');
+
+    Route::get('utilidades/jobs', JobsList::class)->name('job.index');
+    Route::get('utilidades/jobs/create', JobsForm::class)->name('job.create');
+    Route::get('utilidades/jobs/edit/{job}', JobsForm::class)->name('job.edit');
+    Route::get('utilidades/config', ConfigForm::class)->name('config');
 
     Route::get('warranties/download/{warranty}', [DocumentController::class, 'downloadWarranty'])
         ->name('warranties.download');
@@ -109,6 +120,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('loans/export/excel', [ExportController::class, 'loansExportExcel'])->name('loans.export.excel');
     Route::get('loans/amortizacion/excel/{amortizacion}', [ExportController::class, 'amortizacionExportExcel'])
         ->name('loans.amortizacion.excel');
+
+
 
     Route::get('reporte/mensual', ReportSimple::class)->name('report.simple');
     Route::get('reporte/exportar', ExportTable::class)->name('report.export');

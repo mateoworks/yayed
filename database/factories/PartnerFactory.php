@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Colonia;
+use App\Models\Job;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -28,7 +30,6 @@ class PartnerFactory extends Factory
             'address_number' => $this->faker->randomDigit,
             'barrio' => $this->faker->city,
             'cp' => $this->faker->countryCode,
-            'suburb' => $this->faker->city,
             'municipio' => 'San Baltazar Loxicha',
             'estado' => 'Oaxaca',
             'dwelling' => $this->faker->randomElement(['Alquilada', 'Invadida']),
@@ -37,7 +38,8 @@ class PartnerFactory extends Factory
             'curp' => $this->faker->iban,
             'key_ine' => $this->faker->iban,
             'birthday' => $this->faker->date(),
-            'job' => $this->faker->jobTitle,
+            'job_id' => Job::all()->random(),
+            'colonia_id' => Colonia::all()->random(),
         ];
     }
 }

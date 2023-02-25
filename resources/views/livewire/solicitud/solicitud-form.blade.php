@@ -56,7 +56,17 @@
                     <!-- Begin form -->
                     <form wire:submit.prevent="save" class="row g-3" novalidate>
 
-                        <div class="col-md-4">
+                        <div class="col-md-3">
+                            <label for="solicitud.folio" class="form-label">Folio solicitud</label>
+                            <input type="number" wire:model="solicitud.folio" class="form-control @error('solicitud.folio') is-invalid @enderror" id="solicitud.folio" required>
+                            @error('solicitud.folio')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                            @enderror
+                        </div>
+
+                        <div class="col-md-3">
                             <label for="solicitud.date_solicitud" class="form-label">Fecha de la solicitud</label>
                             <input type="date" wire:model="solicitud.date_solicitud" class="form-control @error('solicitud.date_solicitud') is-invalid @enderror date" id="solicitud.date_solicitud" required>
                             @error('solicitud.date_solicitud')
@@ -66,7 +76,7 @@
                             @enderror
                         </div>
 
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <label for="solicitud.period" class="form-label">Periodo (número de meses)</label>
                             <input type="number" wire:model="solicitud.period" wire:change="updateDate" class="form-control @error('solicitud.period') is-invalid @enderror" id="solicitud.period" required>
                             @error('solicitud.period')
@@ -76,7 +86,7 @@
                             @enderror
                         </div>
 
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <label for="solicitud.date_payment" class="form-label">Fecha de pago</label>
                             <input type="date" wire:model="solicitud.date_payment" class="form-control @error('solicitud.date_payment') is-invalid @enderror date" id="solicitud.date_payment" required>
                             @error('solicitud.date_payment')
@@ -263,8 +273,20 @@
                         </div>
                     </div>
 
+                    <div class="form-group row mb-1">
+                        <label for="endorsement.key_ine" class="col-sm-3 col-form-label">Clave INE:</label>
+                        <div class="col-sm-7">
+                            <input type="text" wire:model="endorsement.key_ine" class="form-control @error('endorsement.key_ine') is-invalid @enderror" id="endorsement.key_ine">
+                            @error('endorsement.key_ine')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                            @enderror
+                        </div>
+                    </div>
+
                     <div class="modal-footer">
-                        <button class="btn" wire:click="hideModal"><i class="flaticon-cancel-12"></i> Discard</button>
+                        <button class="btn" wire:click="hideModal"><i class="flaticon-cancel-12"></i> Cancelar</button>
                         <button class="btn btn-primary" wire:submit="saveEndorsement" type="submit">Guardar</button>
                     </div>
                 </form>

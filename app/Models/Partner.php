@@ -23,6 +23,16 @@ class Partner extends Model
         return $this->names . ' ' . $this->surname_father . ' ' . $this->surname_mother;
     }
 
+    public function trabajo()
+    {
+        return $this->belongsTo(Job::class, 'job_id');
+    }
+
+    public function getJobAttribute()
+    {
+        return $this->trabajo->name;
+    }
+
     public function getAgeAttribute()
     {
         return Carbon::parse($this->birthday)->age;

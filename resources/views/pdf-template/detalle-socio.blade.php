@@ -97,12 +97,13 @@
                 <p class="m-0">
                     C. Independencia S/N, San Baltazar Loxicha
                 </p>
+                <p class="m-0"><strong>{{ $periodoComisariado }}</strong></p>
             </td>
             <td class="text-end">
 
                 <h5>Reporte de socio</h5>
                 <h6 style="color: red;">{{ $partner->number }}</h6>
-                <p>Fecha de emisión: {{ \Carbon\Carbon::now()->format('d/m/y H:m:s') }}</p>
+                <p>Fecha de emisión: {{ \Carbon\Carbon::now()->format('d/m/Y') }}</p>
             </td>
         </tr>
     </table>
@@ -378,7 +379,7 @@
         </thead>
         @forelse ($partner->solicituds as $solicitud)
         <tr>
-            <td>{{ $loop->iteration }}</td>
+            <td>{{ $solicitud->numero }}</td>
             <td>{{ $solicitud->date_solicitud->format('d/m/Y') }}</td>
             <td>{{ $solicitud->period }}</td>
             <td class="text-end">${{ number_format($solicitud->mount, 2) }}</td>

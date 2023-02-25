@@ -165,7 +165,7 @@
                     <div class="nav-logo">
                         <div class="nav-item theme-logo">
                             <a href="{{ route('dashboard') }}">
-                                <img src="/src/assets/img/logo.png" alt="logo">
+                                <img src="{{$logo}}" alt="logo">
                             </a>
                         </div>
                         <div class="nav-item theme-text">

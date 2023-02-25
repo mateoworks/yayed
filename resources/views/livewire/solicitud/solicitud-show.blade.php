@@ -1,4 +1,4 @@
-@section('title', 'Solicitud ' . $solicitud->folio)
+@section('title', 'Solicitud ' . $solicitud->numero)
 
 @push('styles')
 <link href="/src/assets/css/light/scrollspyNav.css" rel="stylesheet" type="text/css" />
@@ -21,7 +21,7 @@
                 <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
                 <li class="breadcrumb-item"><a href="{{ route('partners.index') }}">Socios</a></li>
                 <li class="breadcrumb-item"><a href="{{ route('partners.show', $solicitud->partner) }}">{{ $solicitud->partner->full_name }}</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Solicitud {{ $solicitud->folio }}</li>
+                <li class="breadcrumb-item active" aria-current="page">Solicitud {{ $solicitud->numero }}</li>
             </ol>
         </nav>
     </div>
@@ -36,7 +36,7 @@
                     <div class="row">
                         <div class="col-xl-12 col-md-12 col-sm-12 col-12">
                             <div class="d-flex justify-content-between">
-                                <h4>Datos de la solicitud {{ $solicitud->folio }}</h4>
+                                <h4>Datos de la solicitud {{ $solicitud->numero }}</h4>
                                 <div class="mt-3 me-3">
                                     @if ($solicitud->condition == 'en proceso')
                                     <span class="fs-3 badge badge-light-primary">En proceso</span>
@@ -70,7 +70,7 @@
                                         <p>Folio(s): </p>
                                     </td>
                                     <td>
-                                        <p><strong>{{ $solicitud->folio }}</strong></p>
+                                        <p><strong>{{ $solicitud->numero }}</strong></p>
                                     </td>
                                 </tr>
                                 <tr>
@@ -148,8 +148,12 @@
                             @elseif ($solicitud->condition == 'autorizado')
                             <p>La solicitud fue actualizada, por lo tanto puede realizar el préstamo</p>
                             <a href="{{ route('loans.solicitud', $solicitud) }}" class="btn btn-primary">Realizar préstamo</a>
+                            @elseif($solicitud->condition == 'denegado')
+                            <p>Esta solicitud no fue autorizado, puede volver hacer una nueva solicitud, suerte para la próxima</p>
                             @elseif ($solicitud->condition = 'en proceso')
                             <button class="btn btn-success" wire:click="autorizar">Autorizar solicitud</button>
+                            <button class="btn btn-warning" wire:click="denegar">Denegar solicitud</button>
+
                             @endif
 
                         </div>

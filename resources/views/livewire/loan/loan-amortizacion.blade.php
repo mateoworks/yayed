@@ -42,9 +42,9 @@
                 <div class="widget-content widget-content-area">
                     <div class="row">
                         <div class="col">
-                            <p>El total del capital es de {{ $loan->amount }}</p>
-                            <h6>Fecha otorgada: {{ $loan->date_made->format('Y-m-d') }}</h6>
-                            <h6>Fecha otorgada: {{ $loan->date_payment->format('Y-m-d') }}</h6>
+                            <h6>El total del capital es de ${{ number_format($loan->amount, 2) }}</h6>
+                            <h6>Fecha otorgada: {{ $loan->date_made->format('d/m/Y') }}</h6>
+                            <h6>Fecha de pago: {{ $loan->date_payment->format('d/m/Y') }}</h6>
                             <a href="{{ route('loans.show', $loan) }}" class="btn btn-info">Más datos del préstamo</a>
                             <hr>
                             <p>Para realizar el calculo, ingrese el número de periodos si es que el calculado es diferente</p>

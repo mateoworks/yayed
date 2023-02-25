@@ -5,7 +5,10 @@ namespace App\Http\Livewire\Loan;
 use App\Models\Loan;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
+use Dompdf\FontMetrics;
+use Dompdf\Options;
 use Livewire\Component;
+
 
 class LoansDetail extends Component
 {
@@ -23,7 +26,6 @@ class LoansDetail extends Component
             'solicitud' => $this->loan->solicitud,
         ];
         $pdf = Pdf::loadView('pdf-template.detalle-prestamo', $data)->setPaper('letter');
-
         return response()->streamDownload(function () use ($pdf) {
             echo  $pdf->stream();
         }, Carbon::now()->format('Y_m_d') . '-detalle_' . $this->loan->number . '.pdf');

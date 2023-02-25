@@ -21,7 +21,7 @@ class LoanFactory extends Factory
         $solicitud = Solicitud::all()->random();
         return [
             'id' => $this->faker->uuid,
-            'number' => uniqid(),
+            'number' => $this->faker->unique()->randomNumber(3),
             'amount' => $this->faker->numberBetween(1000, 50000),
             'amount_letter' => 'Mil pesos',
             'date_made' => $this->faker->dateTimeBetween('-1 year', 'now'),

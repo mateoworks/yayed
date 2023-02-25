@@ -30,6 +30,7 @@
                             </div>
                         </div>
                         <div class="col d-flex justify-content-end">
+                            <a href="{{ route('endorsements.create') }}" class="btn btn-primary m-3">Nuevo</a>
                             <a class="btn btn-success mt-2 me-4" href="">
                                 <i class="fa-light fa-file-excel"></i>
                             </a>
@@ -77,7 +78,7 @@
                                             <a href="{{ route('endorsements.show', $endorsement) }}" class="bs-tooltip btn btn-primary" data-toggle="tooltip" data-placement="top" title="Ver">
                                                 <i class="fa-light fa-eye"></i>
                                             </a>
-                                            <a href="" class="bs-tooltip btn btn-info" data-toggle="tooltip" data-placement="top" title="Editar">
+                                            <a href="{{ route('endorsements.edit', $endorsement) }}" class="bs-tooltip btn btn-info" data-toggle="tooltip" data-placement="top" title="Editar">
                                                 <i class="fa-light fa-pen-to-square"></i>
                                             </a>
                                             <a wire:click="$emit('deleteEndorsment', {{ $endorsement }})" class="bs-tooltip btn btn-danger" data-toggle="tooltip" data-placement="top" title="Eliminar">

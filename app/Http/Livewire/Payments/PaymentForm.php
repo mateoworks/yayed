@@ -2,6 +2,8 @@
 
 namespace App\Http\Livewire\Payments;
 
+use Illuminate\Support\Arr;
+use App\Helpers\Amortizacion;
 use App\Models\Loan;
 use App\Models\Payment;
 use Carbon\Carbon;
@@ -16,6 +18,10 @@ class PaymentForm extends Component
     public $status = 0;
     public $pendienteCap;
     public $diasPendientes;
+
+    public $interest;
+
+    public $amortizacion = [];
     protected function rules()
     {
         return [
@@ -29,12 +35,13 @@ class PaymentForm extends Component
             'payment.principal_amount' => ['nullable', 'numeric'],
             'payment.other_amount' => ['nullable', 'numeric'],
             'payment.observations' => ['nullable'],
-            'payment.other' => ['nullable'],
+            'payment.other' => ['nullable']
         ];
     }
 
     public function mount(Payment $payment)
     {
+
         $this->last_payment = Payment::where('loan_id', $this->loan->id)->latest('made_date')->first() ?? null;
 
         if (!$payment->exists) {
@@ -69,7 +76,7 @@ class PaymentForm extends Component
                 $this->pendienteCap = $this->loan->amount;
             }
 
-            $this->payment->made_date = Carbon::now()->format('Y-m-d');
+            $this->payment->made_date = $this->payment->scheduled_date;
             $this->payment->other = null;
         } else {
             $this->payment = $payment;
@@ -78,6 +85,11 @@ class PaymentForm extends Component
         if ($this->loan->status == 'liquidado') {
             $status = 1;
         }
+
+        $amor = new Amortizacion($this->loan);
+        $this->amortizacion = $amor->amortizacion;
+        $this->interest = $this->loan->interest;
+        $this->pagoCapital();
     }
 
     public function activar()
@@ -105,8 +117,30 @@ class PaymentForm extends Component
         return redirect()->route('payments.show', $this->payment);
     }
 
+    public function pagoCapital()
+    {
+        if (array_key_exists($this->payment->period - 1, $this->amortizacion)) {
+            $capitalAmortizacion = $this->amortizacion[$this->payment->period - 1];
+            $capital = round($capitalAmortizacion->amortizacion, 2);
+        } else {
+            $capital = 0;
+        }
+        $this->payment->principal_amount = $capital;
+    }
+
+    public function updatedInterest()
+    {
+        $this->loan->interest = $this->interest;
+        $this->payment->interest_amount = $this->loan->amount * $this->loan->interest / 100;
+        $amor = new Amortizacion($this->loan);
+        $this->amortizacion = $amor->amortizacion;
+        $this->pagoCapital();
+    }
+
     public function render()
     {
+        $amor = new Amortizacion($this->loan);
+        $this->amortizacion = $amor->amortizacion;
         return view('livewire.payments.payment-form', [
             'loan' => $this->loan,
         ]);

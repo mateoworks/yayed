@@ -59,11 +59,24 @@
             padding: .2rem;
             font-weight: 800;
         }
+
+        .watermark {
+            position: absolute;
+            top: 100;
+            left: 250;
+            bottom: 0;
+            right: 0;
+            opacity: 0.5;
+            font-size: 5em;
+            text-align: center;
+            transform: rotate(-45deg);
+            transform-origin: 50% 50%;
+            color: #d9d9d9;
+        }
     </style>
 </head>
 
 <body>
-
     <table style="width:100%">
         <tr>
             <td>
@@ -76,16 +89,22 @@
                 <p class="m-0">
                     C. Independencia S/N, San Baltazar Loxicha
                 </p>
+                <p class="m-0"><strong>{{ $periodoComisariado }}</strong></p>
             </td>
             <td class="text-end">
 
                 <h5>Reporte de préstamo</h5>
-                <h6 style="color: red;">{{ $loan->number }}</h6>
-                <p>Fecha de emisión: {{ \Carbon\Carbon::now() }}</p>
+                <h6 style="color: red;">{{ $loan->numero }}</h6>
+                <p>Fecha de emisión: {{ \Carbon\Carbon::now()->format('d/m/Y') }}</p>
             </td>
         </tr>
     </table>
     <hr>
+    @if ($loan->status == 'liquidado')
+    <div class="watermark">Liquidado</div>
+    @endif
+
+
     <table style="width:100%">
         <tr>
             <td>

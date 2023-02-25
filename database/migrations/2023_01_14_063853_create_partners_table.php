@@ -25,7 +25,6 @@ return new class extends Migration
             $table->string('address_number', 30)->nullable();
             $table->string('barrio', 50)->nullable();
             $table->string('cp', 6)->nullable();
-            $table->string('suburb', 100)->nullable();
             $table->string('municipio', 100)->nullable();
             $table->string('estado', 100)->nullable();
             $table->string('dwelling', 60)->nullable();
@@ -35,9 +34,18 @@ return new class extends Migration
             $table->string('key_ine', 50)->unique()->nullable();
             $table->string('image', 100)->nullable();
             $table->date('birthday')->nullable();
-            $table->string('job')->nullable();
             $table->string('email')->nullable();
             $table->double('social_contribution')->default(0)->nullable();
+            $table->unsignedBigInteger('job_id')->nullable();
+            $table->unsignedBigInteger('colonia_id')->nullable();
+            $table->foreign('job_id')
+                ->references('id')
+                ->on('jobs')
+                ->onDelete('set null');
+            $table->foreign('colonia_id')
+                ->references('id')
+                ->on('colonias')
+                ->onDelete('set null');
             $table->timestamps();
         });
     }

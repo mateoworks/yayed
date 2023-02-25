@@ -20,6 +20,11 @@
             border: 1px solid #ddd;
         }
 
+        .striped th {
+            background-color: #14549C;
+            color: white;
+        }
+
         .striped th,
         .striped td {
             text-align: left;
@@ -59,11 +64,12 @@
                 <p class="m-0">
                     C. Independencia S/N, San Baltazar Loxicha
                 </p>
+                <p class="m-0"><strong>{{ $periodoComisariado }}</strong></p>
             </td>
             <td class="text-end">
 
                 <h5>Tabla de amortización</h5>
-                <p>Fecha de emisión: {{ \Carbon\Carbon::now() }}</p>
+                <p>Fecha de emisión: {{ \Carbon\Carbon::now()->format('d/m/Y') }}</p>
             </td>
         </tr>
     </table>
@@ -72,6 +78,7 @@
         <tr>
             <td>
                 <h5>Socio</h5>
+                <p class="m-0"><strong>Num. socio: {{ $loan->partner->number }}</strong></p>
                 <p class="m-0">{{ $loan->partner->full_name }}</p>
                 <p class="m-0">{{ $loan->partner->address }}</p>
                 <p class="m-0">{{ $loan->partner->phone ?? '' }}</p>
@@ -79,9 +86,9 @@
             <td class="text-end">
                 <h5>Detalles del préstamo</h5>
                 <p class="m-0">Cantidad capital: ${{ number_format($loan->amount, 2) }}</p>
-                <p class="m-0">Interés: {{ $loan->interest }}%</p>
-                <p class="m-0">Fecha que se otorgó el préstamo: {{ $loan->date_made->format('Y-m-d') }}</p>
-                <p class="m-0">Fecha programada de pago: {{ $loan->date_payment->format('Y-m-d') }}</p>
+                <p class="m-0">Interés mensual: {{ $loan->interest }}%</p>
+                <p class="m-0">Fecha que se otorgó el préstamo: {{ $loan->date_made->format('d/m/Y') }}</p>
+                <p class="m-0">Fecha programada de pago: {{ $loan->date_payment->format('d/m/Y') }}</p>
             </td>
         </tr>
     </table>
@@ -133,8 +140,8 @@
 
     </table>
     <div class="mt-4">
-        <small>Se recomienda realizar los pagos en las fechas programadas para facilitar el cumpliemiento,
-            cualquier duda puede preguntar las 24hrs. con la gran cajera.
+        <small>Se recomienda realizar los pagos en las fechas programadas para facilitar el cumplimiento
+            del préstamo, cualquier duda puede consultar en la oficina de la caja de ahorro.
         </small>
     </div>
 </body>

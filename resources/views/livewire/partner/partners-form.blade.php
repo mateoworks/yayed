@@ -7,7 +7,11 @@
 <link href="/src/plugins/css/light/loaders/custom-loader.css" rel="stylesheet" type="text/css" />
 <link href="/src/plugins/css/dark/loaders/custom-loader.css" rel="stylesheet" type="text/css" />
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<link href="/src/plugins/src/flatpickr/flatpickr.min.css" rel="stylesheet" type="text/css">
+
+<link rel="stylesheet" href="/src/plugins/src/select2/css/select2.min.css">
+
+
 @endpush
 <div class="middle-content container-xxl p-0">
 
@@ -265,29 +269,22 @@
                             @enderror
                         </div>
 
-                        <div class="col-md-4">
-                            <label for="partner.job" class="form-label">
+                        <div class="col-md-4" wire:ignore>
+                            <label for="partner.job_id" class="form-label">
                                 <i class="fa-light fa-user-helmet-safety"></i></i> Ocupación
                             </label>
-                            <select wire:model="partner.job" class="form-select @error('partner.job') is-invalid @enderror" id="partner.job">
+                            <select wire:model="partner.job_id" class="form-select @error('partner.job') is-invalid @enderror job" id="partner.job_id">
                                 <option selected>Selecciona una ocupación</option>
-                                <option value="Actividades del hogar">Actividades del hogar</option>
-                                <option value="Albañil">Albañil</option>
-                                <option value="Campesino">Campesino</option>
-                                <option value="Comerciante">Comerciante</option>
-                                <option value="Estudiante">Estudiante</option>
+                                @foreach ($jobs as $job)
+                                <option value="{{$job->id}}">{{$job->name}}</option>
+                                @endforeach
                             </select>
-                            @error('partner.job')
+                            @error('partner.job_id')
                             <div class="invalid-feedback">
                                 {{ $message }}
                             </div>
                             @enderror
                         </div>
-
-
-
-
-
 
                         <div class="col-md-4">
                             <label class="my-1 d-flex align-items-center" for="partner.curp">
@@ -449,7 +446,9 @@
 </div>
 
 @push('scripts')
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="/src/plugins/src/flatpickr/flatpickr.js"></script>
+<script src="/js/jquery-3.6.0.min.js"></script>
+<script src="/src/plugins/src/select2/js/select2.min.js"></script>
 <script>
     flatpickr("#partner-birthday", {
         locale: {
@@ -463,6 +462,16 @@
                 longhand: ['Enero', 'Febreo', 'Мarzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
             },
         },
+    });
+
+    $(document).ready(function() {
+        $(".job").select2({
+            placeholder: "Selecciona una categoría",
+            tags: true
+        });
+        $('.job').on('change', function(e) {
+            @this.set('partner.job_id', e.target.value);
+        });
     });
 </script>
 @endpush

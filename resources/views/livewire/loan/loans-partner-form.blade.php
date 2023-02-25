@@ -57,6 +57,18 @@
                     <form wire:submit.prevent="save" class="row g-3" novalidate>
 
                         <div class="form-group row mb-4">
+                            <label for="loan.number" class="col-sm-3 col-form-label">Número de solicitud</label>
+                            <div class="col-sm-6">
+                                <input type="number" wire:model="loan.number" class="form-control @error('loan.number') is-invalid @enderror" id="loan.number">
+                                @error('loan.number')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="form-group row mb-4">
                             <label for="socialContribution" class="col-sm-3 col-form-label">Contribución social</label>
                             <div class="col-sm-6">
                                 <input type="number" wire:model="socialContribution" class="form-control @error('socialContribution') is-invalid @enderror" id="socialContribution">
@@ -327,6 +339,18 @@
                             <div class="col-sm-7">
                                 <input type="text" wire:model="endorsement.address" class="form-control @error('endorsement.address') is-invalid @enderror" id="endorsement.address">
                                 @error('endorsement.address')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="form-group row mb-1">
+                            <label for="endorsement.key_ine" class="col-sm-3 col-form-label">Clave INE:</label>
+                            <div class="col-sm-7">
+                                <input type="text" wire:model="endorsement.key_ine" class="form-control @error('endorsement.key_ine') is-invalid @enderror" id="endorsement.key_ine">
+                                @error('endorsement.key_ine')
                                 <div class="invalid-feedback">
                                     {{ $message }}
                                 </div>

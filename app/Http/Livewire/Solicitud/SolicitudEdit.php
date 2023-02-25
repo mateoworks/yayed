@@ -40,6 +40,7 @@ class SolicitudEdit extends Component
             'solicitud.mount' => ['required', 'numeric'],
             'solicitud.concept' => ['nullable'],
             'solicitud.condition' => ['required'],
+            'solicitud.folio' => ['required', 'numeric', 'unique:solicituds,folio,' . $this->solicitud->id],
             'endorsement.names' => [
                 Rule::requiredIf($this->saveNewAval)
             ],
@@ -50,6 +51,9 @@ class SolicitudEdit extends Component
                 Rule::requiredIf($this->saveNewAval)
             ],
             'endorsement.address' => [
+                Rule::requiredIf($this->saveNewAval)
+            ],
+            'endorsement.key_ine' => [
                 Rule::requiredIf($this->saveNewAval)
             ],
         ];
@@ -145,6 +149,7 @@ class SolicitudEdit extends Component
             'endorsement.names' => ['required'],
             'endorsement.surnames' => ['required'],
             'endorsement.phone' => ['nullable'],
+            'endorsement.key_ine' => ['nullable'],
         ]);
         $this->endorsement->save();
         $this->saveNewAval = false;

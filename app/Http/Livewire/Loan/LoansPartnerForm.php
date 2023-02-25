@@ -48,6 +48,7 @@ class LoansPartnerForm extends Component
             'loan.interest' => ['required', 'numeric'],
             'loan.date_made' => ['required', 'date'],
             'loan.date_payment' => ['required', 'date'],
+            'loan.number' => ['required', 'unique:loans,number'],
             'endorsement.names' => [
                 Rule::requiredIf($this->saveNewAval)
             ],
@@ -58,6 +59,9 @@ class LoansPartnerForm extends Component
                 Rule::requiredIf($this->saveNewAval)
             ],
             'endorsement.address' => [
+                Rule::requiredIf($this->saveNewAval)
+            ],
+            'endorsement.key_ine' => [
                 Rule::requiredIf($this->saveNewAval)
             ],
         ];
@@ -98,17 +102,21 @@ class LoansPartnerForm extends Component
     public function mount(Loan $loan, Endorsement $endorsement)
     {
         $this->partner = $this->solicitud->partner;
-
-
-
         $this->endorsements = Endorsement::orderBy('names')->get();
         $this->loan = $loan;
         $this->loan->interest = 2;
         $this->loan->amount = $this->solicitud->mount;
         $this->loan->date_made = date("Y-m-d");
+        $this->loan->number = $this->number();
         $this->noMeses = $this->solicitud->period;
         $this->loan->date_payment = Carbon::now()->addMonth($this->noMeses);
         $this->endorsement = $endorsement;
+    }
+
+    public function number()
+    {
+        $max = Loan::max('number');
+        return $max + 1;
     }
 
     public function updateDate()
@@ -144,7 +152,6 @@ class LoansPartnerForm extends Component
     {
         $formatter = new NumeroALetras();
         $this->validate();
-        $this->loan->number = uniqid();
         $this->loan->partner_id = $this->partner->id;
         $this->loan->solicitud_id = $this->solicitud->id;
         $this->loan->amount_letter = $formatter->toWords($this->loan->amount);
@@ -189,6 +196,7 @@ class LoansPartnerForm extends Component
             'endorsement.names' => ['required'],
             'endorsement.surnames' => ['required'],
             'endorsement.phone' => ['nullable'],
+            'endorsement.key_ine' => ['nullable'],
         ]);
         $this->endorsement->save();
         $this->saveNewAval = false;

@@ -73,9 +73,24 @@
                         <form wire:submit.prevent="save" class="col-md-7" novalidate>
 
                             <div class="form-group row mb-4">
+                                <label for="interest" class="col-sm-5 col-form-label">Fecha programada de pago</label>
+                                <div class="col-sm-7">
+                                    <select wire:model="interest" class="form-control @error('interest') is-invalid @enderror" id="interest">
+                                        <option value="2">2%</option>
+                                        <option value="3">3%</option>
+                                    </select>
+                                    @error('interest')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="form-group row mb-4">
                                 <label for="payment.scheduled_date" class="col-sm-5 col-form-label">Fecha programada de pago</label>
                                 <div class="col-sm-7">
-                                    <input type="text" wire:model="payment.scheduled_date" class="form-control @error('payment.scheduled_date') is-invalid @enderror dates" id="payment-scheduled_date">
+                                    <input type="date" wire:model="payment.scheduled_date" class="form-control @error('payment.scheduled_date') is-invalid @enderror" id="payment-scheduled_date">
                                     @error('payment.scheduled_date')
                                     <div class="invalid-feedback">
                                         {{ $message }}
@@ -87,7 +102,7 @@
                             <div class="form-group row mb-4">
                                 <label for="payment.made_date" class="col-sm-5 col-form-label">Fecha realizada</label>
                                 <div class="col-sm-7">
-                                    <input type="text" wire:model="payment.made_date" class="form-control @error('payment.made_date') is-invalid @enderror dates" id="payment-made_date">
+                                    <input type="date" wire:model="payment.made_date" class="form-control @error('payment.made_date') is-invalid @enderror" id="payment-made_date">
                                     @error('payment.made_date')
                                     <div class="invalid-feedback">
                                         {{ $message }}
@@ -276,6 +291,7 @@
                                     <strong class="fw-bolder">{{ $loan->date_payment->format('Y-m-d') }}</strong>
                                     <p class="m-0 fw-lighter">Cantidad capital prestado:</p>
                                     <strong class="fw-bolder">${{ number_format($loan->amount, 2) }} {{ $loan->amount_letter }} PESOS MX</strong>
+                                    <p>Aportación social: <strong>{{ $loan->partner->social_contribution }}</strong></p>
                                     <hr>
                                     <p class="m-0 fw-lighter">Pagos realizados:</p>
                                     <strong class="fw-bolder">{{ $loan->payments->count() }}</strong>
@@ -291,7 +307,7 @@
                                         Pago de interés cada mes: ${{ number_format($interesMensual, 2) }}; por {{ $numMonth }} mes{{ $numMonth > 1 ? 'es' : '' }}
                                         pendientes: ${{ number_format($pendienteInteres, 2) }}
                                     </h5>
-                                    <p>Aportación social: <strong>{{ $loan->partner->social_contribution }}</strong></p>
+
                                 </div>
                             </div>
                         </div>
@@ -302,6 +318,75 @@
             </div>
         </div>
     </div>
+
+    <div class="row layout-top-spacing">
+
+        <div id="tableCustomBasic" class="col-lg-12 col-12 layout-spacing">
+            <div class="statbox widget box box-shadow">
+                <div class="widget-header">
+                    <div class="row">
+                        <div class="col-xl-12 col-md-12 col-sm-12 col-12">
+                            <h4>Tabla de amortización
+
+                            </h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="widget-content widget-content-area">
+                    <div class="row">
+                        <div class="col-lx-12">
+                            <table class="table table-bordered table-striped">
+                                <thead>
+                                    <th>Periodos</th>
+                                    <th>Fecha programada</th>
+                                    <th>Saldo inicial</th>
+                                    <th>Interés</th>
+                                    <th>Amortización</th>
+                                    <th>Saldo a pagar</th>
+                                    <th>Saldo final</th>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td>${{ number_format($loan->amount, 2) }}</td>
+                                    </tr>
+                                    @foreach ($amortizacion as $amor)
+                                    <tr @if ($payment->period == $loop->iteration)
+                                        class="table-danger"
+                                        @endif
+                                        >
+                                        <td>{{ $loop->iteration }}</td>
+                                        <td>{{ $amor->fecha->addMonth()->format('d/m/Y') }}</td>
+                                        <td>${{ number_format($amor->saldoInicial, 2) }}</td>
+                                        <td>${{ number_format($amor->interes, 2) }}</td>
+                                        <td>${{ number_format($amor->amortizacion, 2) }}</td>
+                                        <td>${{ number_format($amor->saldoPagar, 2) }}</td>
+                                        <td>${{ number_format($amor->saldoFinal, 2) }}</td>
+                                    </tr>
+                                    @endforeach
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td>Sumas</td>
+                                        <td>${{ number_format(collect($amortizacion)->pluck('interes')->sum(), 2) }}</td>
+                                        <td>${{ number_format(collect($amortizacion)->pluck('amortizacion')->sum(), 2) }}</td>
+                                        <td>${{ number_format(collect($amortizacion)->pluck('saldoPagar')->sum(), 2) }}</td>
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 <!-- CONTENT AREA -->
 </div>

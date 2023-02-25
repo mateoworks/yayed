@@ -25,6 +25,12 @@ class SolicitudShow extends Component
         $this->solicitud->condition = 'autorizado';
         $this->solicitud->save();
     }
+
+    public function denegar()
+    {
+        $this->solicitud->condition = 'denegado';
+        $this->solicitud->save();
+    }
     /* Quit endorsement, but not delete */
     public function quitEndorsement(Endorsement $endorsement)
     {

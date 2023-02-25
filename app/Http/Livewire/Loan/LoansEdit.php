@@ -53,6 +53,9 @@ class LoansEdit extends Component
             'endorsement.phone' => [
                 Rule::requiredIf($this->saveNewAval)
             ],
+            'endorsement.key_ine' => [
+                Rule::requiredIf($this->saveNewAval)
+            ],
         ];
         foreach ($this->inputs as $key => $value) {
             $rules = array_merge($rules, [
@@ -160,6 +163,7 @@ class LoansEdit extends Component
             'endorsement.names' => ['required'],
             'endorsement.surnames' => ['required'],
             'endorsement.phone' => ['nullable'],
+            'endorsement.key_ine' => ['nullable'],
         ]);
         $this->endorsement->save();
         $this->saveNewAval = false;

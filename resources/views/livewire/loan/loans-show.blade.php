@@ -1,4 +1,4 @@
-@section('title', 'Prestamo: ' . $loan->id)
+@section('title', 'Prestamo: ' . $loan->numero)
 
 @push('styles')
 <link href="/src/assets/css/light/scrollspyNav.css" rel="stylesheet" type="text/css" />
@@ -16,7 +16,7 @@
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
                 <li class="breadcrumb-item"><a href="{{ route('loans.index') }}">Prestamos</a></li>
-                <li class="breadcrumb-item active" aria-current="page">{{ $loan->id }}</li>
+                <li class="breadcrumb-item active" aria-current="page">{{ $loan->numero }}</li>
             </ol>
         </nav>
     </div>
@@ -53,17 +53,34 @@
                                     <a href="{{ route('loans.amortizacion', $loan) }}" class="btn btn-warning ms-1 bs-tooltip" data-toggle="tooltip" data-placement="top" title="Tabla de amortización">
                                         <i class="fa-light fa-calendar-check"></i>
                                     </a>
-
+                                    <div class="btn-group">
+                                        <a wire:click="pagare" class="btn btn-primary ms-1 bs-tooltip" data-toggle="tooltip" data-placement="top" title="Pagaré">
+                                            <div wire:loading wire:target="pagare">
+                                                <div class="spinner-border text-white me-2 align-self-center loader-sm"></div>
+                                            </div>
+                                            <i class="fa-sharp fa-regular fa-money-check-dollar"></i>
+                                            Pagaré
+                                        </a>
+                                        @if ($loan->solicitud->endorsements()->exists())
+                                        <a wire:click="constanciaAval" class="btn btn-danger bs-tooltip" data-toggle="tooltip" data-placement="top" title="Pagaré">
+                                            <div wire:loading wire:target="constanciaAval">
+                                                <div class="spinner-border text-white me-2 align-self-center loader-sm"></div>
+                                            </div>
+                                            <i class="fa-sharp fa-regular fa-money-check-dollar"></i>
+                                            Constancia aval
+                                        </a>
+                                        @endif
+                                    </div>
 
                                     <div class="btn-group  mb-2 me-4" role="group">
                                         <button id="btndefault" type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Generar <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down">
                                                 <polyline points="6 9 12 15 18 9"></polyline>
                                             </svg></button>
                                         <div class="dropdown-menu" aria-labelledby="btndefault">
-                                            <a href="{{ route('loans.contract', $loan) }}" class="dropdown-item">
+                                            <!-- <a href="{{ route('loans.contract', $loan) }}" class="dropdown-item">
                                                 <i class="flaticon-home-fill-1 mr-1"></i>
                                                 Contrato de préstamo
-                                            </a>
+                                            </a> -->
                                             <a href="{{ route('loans.detail', $loan) }}" class="dropdown-item">
                                                 <i class="flaticon-home-fill-1 mr-1"></i>
                                                 Reporte de préstamo
@@ -91,7 +108,7 @@
                                         <div class="media">
                                             <div class="avatar me-2">
                                                 @if ($loan->partner->image)
-                                                <img alt="avatar" src="{{ Storage::disk('public')->url($partner->image) }}" class="rounded-circle" />
+                                                <img alt="avatar" src="{{ Storage::disk('public')->url($loan->partner->image) }}" class="rounded-circle" />
                                                 @else
                                                 <span class="avatar-title rounded-circle bg-primary">{{ $loan->partner->names[0] ?? '' }}{{ $loan->partner->surname_father[0] }}</span>
                                                 @endif
@@ -113,7 +130,7 @@
                                     <table class="">
                                         <tr>
                                             <td>Folio:</td>
-                                            <td><span class=" badge badge-danger">{{ $loan->number }}</span></td>
+                                            <td><span class=" badge badge-danger">{{ $loan->numero }}</span></td>
                                         </tr>
                                         <tr>
                                             <td>Cantidad capital:</td>

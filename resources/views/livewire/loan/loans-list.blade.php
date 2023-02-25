@@ -78,7 +78,7 @@
                                             <div class="media">
                                                 <div class="avatar me-2">
                                                     @if ($loan->partner->image)
-                                                    <img alt="avatar" src="{{ Storage::disk('public')->url($partner->image) }}" class="rounded-circle" />
+                                                    <img alt="avatar" src="{{ Storage::disk('public')->url($loan->partner->image) }}" class="rounded-circle" />
                                                     @else
                                                     <span class="avatar-title rounded-circle bg-primary">{{ $loan->partner->names[0] ?? '' }}{{ $loan->partner->surname_father[0] }}</span>
                                                     @endif

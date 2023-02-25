@@ -51,7 +51,7 @@
                                                 </div>
                                                 <div class="media-body">
                                                     <a href="{{ route('partners.show', $partner) }}">
-                                                        <h4 class="media-heading mb-0">{{ $partner->full_name }}</h4>
+                                                        <h4 class="media-heading mb-0"><strong class="display-6">{{ $partner->number }} </strong> {{ $partner->full_name }}</h4>
                                                     </a>
                                                     <p class="media-text">{{ $partner->phone }}</p>
 
