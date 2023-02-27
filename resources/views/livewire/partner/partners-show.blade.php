@@ -13,6 +13,36 @@
         max-width: 100% !important;
         width: 100% !important;
     }
+
+    .pago1 {
+        background-color: #006400 !important;
+        color: white !important;
+    }
+
+    .pago2 {
+        background-color: #008000 !important;
+        color: white !important;
+    }
+
+    .pago3 {
+        background-color: #00FF00 !important;
+        color: black !important;
+    }
+
+    .pago4 {
+        background-color: #FFFF00 !important;
+        color: black !important;
+    }
+
+    .pago5 {
+        background-color: #FFA500 !important;
+        color: white !important;
+    }
+
+    .pago6 {
+        background-color: #FF0000 !important;
+        color: white !important;
+    }
 </style>
 @endpush
 <div class="middle-content container-xxl p-0">
@@ -410,7 +440,7 @@
                                 <div class="timeline-item-wrapper">
                                     <div class="timeline-item-description">
                                         <span class="align-self-center">
-                                            <a href="{{ route('loans.show', $loan) }}">{{ $loan->number }}</a>
+                                            <a href="{{ route('loans.show', $loan) }}">{{ $loan->numero }}</a>
                                             realizado el
                                             <span>{{ $loan->date_made->locale('es')->isoFormat('D \d\e MMMM \d\e\l Y') }}</span>
                                             <strong class="fw-3">- capital: ${{ number_format($loan->amount, 2) }}</strong>
@@ -436,6 +466,7 @@
                                                 <th>NP</th>
                                                 <th>Fecha realizada</th>
                                                 <th>Fecha programada</th>
+                                                <th>No. días</th>
                                                 <th>Cantidad capital</th>
                                                 <th>Cantidad interés</th>
                                                 <th>Importe</th>
@@ -443,10 +474,13 @@
                                             </thead>
                                             <tbody>
                                                 @foreach ($loan->payments as $payment)
-                                                <tr>
+                                                @php
+
+                                                @endphp <tr>
                                                     <td>{{ $loop->iteration }}</td>
                                                     <td>{{ $payment->scheduled_date->format('d/m/Y') }}</td>
                                                     <td>{{ $payment->made_date->format('d/m/Y') }}</td>
+                                                    <td class="{{ $payment->class_color }}">{{ $payment->no_days }}</td>
                                                     <td class="text-end">${{ number_format($payment->principal_amount, 2) }}</td>
                                                     <td class="text-end">${{ number_format($payment->interest_amount, 2) }}</td>
                                                     <td class="text-end">${{ number_format($payment->principal_amount + $payment->interest_amount, 2) }}</td>

@@ -23,13 +23,17 @@ class SolicitudShow extends Component
     public function autorizar()
     {
         $this->solicitud->condition = 'autorizado';
+        $this->solicitud->aut_den = now();
         $this->solicitud->save();
+        $this->dispatchBrowserEvent('message', ['message' => 'Se autorizó  la solicitud']);
     }
 
     public function denegar()
     {
         $this->solicitud->condition = 'denegado';
+        $this->solicitud->aut_den = now();
         $this->solicitud->save();
+        $this->dispatchBrowserEvent('message', ['message' => 'Se denegó la solicitud']);
     }
     /* Quit endorsement, but not delete */
     public function quitEndorsement(Endorsement $endorsement)

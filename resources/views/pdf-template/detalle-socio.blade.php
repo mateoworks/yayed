@@ -30,6 +30,11 @@
             color: white;
         }
 
+        .header-payment th {
+            background-color: #14549C;
+            color: white;
+        }
+
         .striped th,
         .striped td {
             text-align: left;
@@ -79,6 +84,40 @@
             border-left: black 1px solid;
             border-bottom: black 1px solid;
             border-right: black 1px solid;
+        }
+
+        .table-payments {
+            border: gray solid 1px;
+        }
+
+        .pago1 {
+            background-color: #006400 !important;
+            color: white !important;
+        }
+
+        .pago2 {
+            background-color: #008000 !important;
+            color: white !important;
+        }
+
+        .pago3 {
+            background-color: #00FF00 !important;
+            color: black !important;
+        }
+
+        .pago4 {
+            background-color: #FFFF00 !important;
+            color: black !important;
+        }
+
+        .pago5 {
+            background-color: #FFA500 !important;
+            color: white !important;
+        }
+
+        .pago6 {
+            background-color: #FF0000 !important;
+            color: white !important;
         }
     </style>
 </head>
@@ -293,7 +332,7 @@
     <h5>Préstamos realizados</h5>
     @forelse ($partner->loans as $loan)
     <p>
-        Número de préstamo: <strong style="color: red;">{{ $loan->number }}</strong> realizado el
+        Número de préstamo: <strong style="color: red;">{{ $loan->numero }}</strong> realizado el
         <u>{{ $loan->date_made->locale('es')->isoFormat('D \d\e MMMM \d\e\l Y') }}</u>
         - capital: <strong>${{ number_format($loan->amount, 2) }}</strong>
         @if ($loan->status == 'activo')
@@ -304,7 +343,7 @@
         <span class="liquidado">Liquidado</span>
         @endif
     </p>
-    <p class="m-0"><strong>Avales de este préstamo</strong></p>
+    <p class="m-0 text-center"><strong>Avales de este préstamo</strong></p>
     <table style="width: 100%;">
         @forelse ($loan->solicitud->endorsements as $endorsement)
         <tr>
@@ -318,15 +357,19 @@
         </tr>
         @endforelse
     </table>
-    <h6 class="text-center">Pagos realizados</h6>
-    <table style="width: 100%;" class="striped">
+    <p class="text-center"><strong>Pagos realizados</strong></p>
+    <table style="width: 100%;" class="table-payments" border="1px">
         <thead>
-            <th>N°</th>
-            <th>Fecha programada</th>
-            <th>Fecha realizada</th>
-            <th>Pago capital</th>
-            <th>Pago interés</th>
-            <th>Importe</th>
+            <tr class="header-payment">
+                <th>Periodo</th>
+                <th>N°</th>
+                <th>Fecha programada</th>
+                <th>Fecha realizada</th>
+                <th>No. dias</th>
+                <th>Pago capital</th>
+                <th>Pago interés</th>
+                <th>Importe</th>
+            </tr>
         </thead>
         @php
         $capital = 0;
@@ -336,9 +379,11 @@
 
         <tbody>
             <tr>
-                <td>{{ $loop->iteration }}</td>
+                <td>{{ $payment->period }}</td>
+                <td>{{ $payment->numero }}</td>
                 <td>{{ $payment->scheduled_date->format('d/m/Y') }}</td>
                 <td>{{ $payment->made_date->format('d/m/Y') }}</td>
+                <td class="{{ $payment->class_color }}">{{ $payment->no_days }}</td>
                 <td class="text-end">${{ number_format($payment->principal_amount, 2) }}</td>
                 <td class="text-end">${{ number_format($payment->interest_amount, 2) }}</td>
                 <td class="text-end">${{ number_format($payment->interest_amount + $payment->principal_amount, 2) }}</td>
@@ -350,16 +395,24 @@
         </tbody>
         @empty
         <tr>
-            <td colspan="4">
+            <td colspan="8">
                 <p class="text-center">No hay pagos realizados</p>
             </td>
         </tr>
         @endforelse
         <tr class="foot-payment">
-            <td colspan="3">Totales</td>
-            <td class="text-end">${{ number_format($capital, 2) }}</td>
-            <td class="text-end">${{ number_format($interes, 2) }}</td>
-            <td class="text-end">${{ number_format($capital + $interes, 2) }}</td>
+            <td colspan="5">
+                <p class="text-center"><strong>Totales</strong></p>
+            </td>
+            <td class="text-end">
+                <p><strong>${{ number_format($capital, 2) }}</strong></p>
+            </td>
+            <td class="text-end">
+                <p><strong>${{ number_format($interes, 2) }}</strong></p>
+            </td>
+            <td class="text-end">
+                <p><strong>${{ number_format($capital + $interes, 2) }}</strong></p>
+            </td>
         </tr>
     </table>
     <hr>

@@ -28,9 +28,19 @@ class Partner extends Model
         return $this->belongsTo(Job::class, 'job_id');
     }
 
+    public function colonia()
+    {
+        return $this->belongsTo(Colonia::class, 'colonia_id');
+    }
+
     public function getJobAttribute()
     {
         return $this->trabajo->name;
+    }
+
+    public function getSuburbAttribute()
+    {
+        return $this->colonia->name;
     }
 
     public function getAgeAttribute()

@@ -61,9 +61,24 @@
                             <div class="row">
                                 <div class="col">
                                     <h6>Datos del socio</h6>
-                                    <p class="m-0">{{ $payment->loan->partner->full_name }}</p>
-                                    <p class="m-0">{{ $payment->loan->partner->address }}</p>
-                                    <p class="m-0">{{ $payment->loan->partner->phone }}</p>
+
+                                    <a href="{{ route('partners.show', $payment->loan->partner) }}">
+                                        <div class="media">
+                                            <div class="avatar me-2">
+                                                @if ($payment->loan->partner->image)
+                                                <img alt="avatar" src="{{ Storage::disk('public')->url($payment->loan->partner->image) }}" class="rounded-circle" />
+                                                @else
+                                                <span class="avatar-title rounded-circle bg-primary">{{ $payment->loan->partner->names[0] ?? '' }}{{ $payment->loan->partner->surname_father[0] }}</span>
+                                                @endif
+                                            </div>
+                                            <div class="media-body align-self-center">
+                                                <h6 class="mb-0">{{ $payment->loan->partner->full_name }}</h6>
+                                                <span><i class="fa-regular fa-phone"></i> {{ $payment->loan->partner->phone }}</span>
+                                                <p>{{ $payment->loan->partner->address }}</p>
+                                                <p>Contribución social: <strong>${{ $payment->loan->partner->social_contribution }}</strong></p>
+                                            </div>
+                                        </div>
+                                    </a>
                                 </div>
                                 <div class="col">
                                     <h6>Datos del préstamo</h6>
@@ -74,6 +89,8 @@
                                     @if($payment->loan->ultimo_pago)
                                     <p class="m-0">Fecha de último pago: {{ $payment->loan->ultimo_pago->made_date->format('d/m/Y') }}</p>
                                     @endif
+                                    <a href="{{ route('loans.show', $payment->loan) }}" class="btn btn-primary">Ver préstamo</a>
+                                    <a href="{{ route('payments.create', $payment->loan) }}" class="btn btn-secondary">Realizar otro pago de este préstamo</a>
                                 </div>
                             </div>
                         </div>
@@ -83,23 +100,33 @@
                     <table>
                         <tr>
                             <td>Fecha programada:</td>
-                            <td>{{ $payment->scheduled_date->format('d/m/Y') }}</td>
+                            <td>
+                                <p><strong>{{ $payment->scheduled_date->format('d/m/Y') }}</strong></p>
+                            </td>
                         </tr>
                         <tr>
                             <td>Fecha realizada:</td>
-                            <td>{{ $payment->made_date->format('d/m/Y') }}</td>
+                            <td>
+                                <p><strong>{{ $payment->made_date->format('d/m/Y') }}</strong></p>
+                            </td>
                         </tr>
                         <tr>
                             <td>Contribución social:</td>
-                            <td>{{ $payment->social_contribution }}</td>
+                            <td>
+                                <p><strong>{{ $payment->social_contribution }}</strong></p>
+                            </td>
                         </tr>
                         <tr>
                             <td>Periodo:</td>
-                            <td>{{ $payment->period }}</td>
+                            <td>
+                                <p><strong>{{ $payment->period }}</strong></p>
+                            </td>
                         </tr>
                         <tr>
                             <td>Concepto:</td>
-                            <td>{{ $payment->concept }}</td>
+                            <td>
+                                <p><strong>{{ $payment->concept }}</strong></p>
+                            </td>
                         </tr>
                     </table>
                     <table class="table">
@@ -111,18 +138,18 @@
                         <tr>
                             <td>1</td>
                             <td>Pago de capital</td>
-                            <td>$ {{ number_format($payment->principal_amount, 2) }}</td>
+                            <td class="text-end">$ {{ number_format($payment->principal_amount, 2) }}</td>
                         </tr>
                         <tr>
                             <td>2</td>
                             <td>Pago de interés</td>
-                            <td>$ {{ number_format($payment->interest_amount, 2) }}</td>
+                            <td class="text-end">$ {{ number_format($payment->interest_amount, 2) }}</td>
                         </tr>
                         @if ($payment->other)
                         <tr>
                             <td>3</td>
                             <td>{{ $payment->other }}</td>
-                            <td>$ {{ number_format(other_amount, 2) }}</td>
+                            <td class="text-end">$ {{ number_format(other_amount, 2) }}</td>
                         </tr>
                         @endif
                         <tr>
@@ -133,7 +160,7 @@
                             @php
                             $total = $payment->principal_amount + $payment->interest_amount + $payment->other_amount;
                             @endphp
-                            <td>
+                            <td class="text-end">
                                 <h4>${{ number_format($total, 2) }}</h4>
                             </td>
                         </tr>

@@ -4,6 +4,8 @@ use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\Helpers\AutocompleteController;
 use App\Http\Controllers\Helpers\ExportController;
 use App\Http\Controllers\Helpers\SearchController;
+use App\Http\Livewire\Colonia\ColoniasForm;
+use App\Http\Livewire\Colonia\ColoniasList;
 use App\Http\Livewire\Config\ConfigForm;
 use App\Http\Livewire\Dashboard;
 use App\Http\Livewire\Endorsement\EndorsementsForm;
@@ -108,6 +110,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('utilidades/jobs', JobsList::class)->name('job.index');
     Route::get('utilidades/jobs/create', JobsForm::class)->name('job.create');
     Route::get('utilidades/jobs/edit/{job}', JobsForm::class)->name('job.edit');
+    Route::get('utilidades/colonias', ColoniasList::class)->name('colonia.index');
+    Route::get('utilidades/colonias/create', ColoniasForm::class)->name('colonia.create');
+    Route::get('utilidades/colonias/edit/{colonia}', ColoniasForm::class)->name('colonia.edit');
     Route::get('utilidades/config', ConfigForm::class)->name('config');
 
     Route::get('warranties/download/{warranty}', [DocumentController::class, 'downloadWarranty'])

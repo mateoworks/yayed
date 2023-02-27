@@ -25,13 +25,8 @@
             color: white;
         }
 
-        .striped th,
         .striped td {
-            text-align: left;
-            padding-left: 12px;
-            padding-right: 12px;
-            padding-top: 6px;
-            padding-bottom: 6px;
+            border: lightgray solid 1px;
         }
 
         .striped tr {
@@ -237,6 +232,61 @@
             </td>
         </tr>
     </table>
+
+    @if(isset($payments))
+    <hr>
+    <p class="text-center"><strong>Pagos realizados en el periodo</strong></p>
+    <table class="striped" style="width: 100%;">
+        <thead>
+            <tr>
+                <th>Fecha programada</th>
+                <th>Fecha realizada</th>
+                <th>Socio</th>
+                <th>Cantidad capital pagado</th>
+                <th>Cantidad interés pagado</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach ($payments as $p)
+            <tr>
+                <td>{{ $p->scheduled_date->format('d/m/Y') }}</td>
+                <td>{{ $p->made_date->format('d/m/Y') }}</td>
+                <td>{{ $p->loan->partner->full_name }}</td>
+                <td class="text-end">${{ number_format($p->principal_amount, 2) }}</td>
+                <td class="text-end">${{ number_format($p->interest_amount, 2) }}</td>
+                <td class="text-end">${{ number_format($p->interest_amount + $p->principal_amount, 2) }}</td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
+    @endif
+    @if (isset($loans))
+    <hr>
+    <p class="text-center"><strong>Préstamos realizados en el periodo</strong></p>
+    <table class="striped" style="width: 100%;">
+        <thead>
+            <tr>
+                <th>Socio</th>
+                <th>Fecha realizada</th>
+                <th>Fecha programada de pago</th>
+                <th>Periodos</th>
+                <th>Monto préstado</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach ($loans as $p)
+            <tr>
+                <td>{{ $p->partner->full_name }}</td>
+                <td>{{ $p->date_made->format('d/m/Y') }}</td>
+                <td>{{ $p->date_payment->format('d/m/Y') }}</td>
+                <td>{{ $p->date_made->diffInMonths($p->date_payment) }}</td>
+                <td class="text-end">${{ number_format($p->amount, 2) }}</td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
+    @endif
 </body>
 
 </html>

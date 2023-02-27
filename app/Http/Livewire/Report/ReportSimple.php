@@ -10,18 +10,25 @@ use Carbon\Carbon;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class ReportSimple extends Component
 {
+    use WithPagination;
+    protected $paginationTheme = 'bootstrap';
+
     public $dateStart;
     public $dateEnd;
     public $months = [1 => 'enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
 
-    public $pagos = [];
+    public $payments = [];
+    public $loans = [];
     public $interesPorMes = [];
     public $capitalPorMes = [];
     public $prestamosPorMes = [];
     public $aportacionPorMes = [];
+
+    public $anexos;
 
     protected function rules()
     {
@@ -33,7 +40,14 @@ class ReportSimple extends Component
 
     public function render()
     {
-        return view('livewire.report.report-simple');
+        return view('livewire.report.report-simple', [
+            'pagosPrueba' => Payment::whereBetween('made_date', [$this->dateStart, $this->dateEnd])
+                ->latest('made_date')
+                ->paginate(),
+            'prestamos' => Loan::whereBetween('date_made', [$this->dateStart, $this->dateEnd])
+                ->latest('date_made')
+                ->paginate(),
+        ]);
     }
 
     public function exportPDF()
@@ -48,6 +62,14 @@ class ReportSimple extends Component
             'aportacionPorMes' => $this->aportacionPorMes,
             'capitalPorMes' => $this->capitalPorMes
         ];
+        $tables = [];
+        if ($this->anexos) {
+            $tables = [
+                'payments' => $this->payments,
+                'loans' => $this->loans,
+            ];
+        }
+        $data = array_merge($data, $tables);
         $pdf = Pdf::loadView('pdf-template.reporte-mensual', $data)->setPaper('letter');
 
         return response()->streamDownload(function () use ($pdf) {
@@ -65,8 +87,11 @@ class ReportSimple extends Component
         $this->prestamosPorMes = array();
         $this->aportacionPorMes = array();
 
-        $this->pagos = Payment::whereBetween('made_date', [$this->dateStart, $this->dateEnd])
+        $this->payments = Payment::whereBetween('made_date', [$this->dateStart, $this->dateEnd])
             ->latest('made_date')
+            ->get();
+        $this->loans = Loan::whereBetween('date_made', [$this->dateStart, $this->dateEnd])
+            ->latest('date_made')
             ->get();
 
         $this->interesPorMes = Payment::whereBetween('made_date', [$this->dateStart, $this->dateEnd])

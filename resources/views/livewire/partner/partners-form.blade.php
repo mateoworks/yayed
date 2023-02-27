@@ -141,19 +141,17 @@
                             @enderror
                         </div>
 
-                        <div class="col-md-4">
-                            <label for="partner.suburb" class="form-label">
+                        <div class="col-md-4" wire:ignore>
+                            <label for="partner.colonia_id" class="form-label">
                                 <i class="fa-regular fa-map-location-dot"></i> Colonia
                             </label>
-                            <select wire:model="partner.suburb" class="form-select @error('partner.suburb') is-invalid @enderror" id="partner.suburb">
-                                <option selected>Selecciona una colonia</option>
-                                <option value="Barrio Alto">Barrio Alto</option>
-                                <option value="Barrio Centro">Barrio Centro</option>
-                                <option value="Ranchería El Ocote">Ranchería El Ocote</option>
-                                <option value="Localidad Unión del Sur">Localidad Unión del Sur</option>
-                                <option value="Campo Nuevo Monte Albán">Campo Nuevo Monte Albán</option>
+                            <select wire:model="partner.colonia_id" class="form-select @error('partner.colonia_id') is-invalid @enderror colonia" id="partner.colonia_id">
+                                <option selected disabled>Selecciona una colonia</option>
+                                @foreach ($colonias as $colonia)
+                                <option value="{{$colonia->id}}">{{ $colonia->name }}</option>
+                                @endforeach
                             </select>
-                            @error('partner.suburb')
+                            @error('partner.colonia_id')
                             <div class="invalid-feedback">
                                 {{ $message }}
                             </div>
@@ -471,6 +469,14 @@
         });
         $('.job').on('change', function(e) {
             @this.set('partner.job_id', e.target.value);
+        });
+
+        $(".colonia").select2({
+            placeholder: "Selecciona una categoría",
+            tags: true
+        });
+        $('.colonia').on('change', function(e) {
+            @this.set('partner.colonia_id', e.target.value);
         });
     });
 </script>

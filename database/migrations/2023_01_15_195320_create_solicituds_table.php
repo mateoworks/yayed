@@ -18,7 +18,7 @@ return new class extends Migration
             $table->integer('folio');
             $table->date('date_solicitud');
             $table->date('date_payment');
-            $table->date('timestamp')->nullable();
+            $table->dateTime('aut_den')->nullable();
             $table->double('period');
             $table->double('mount');
             $table->mediumText('concept')->nullable();

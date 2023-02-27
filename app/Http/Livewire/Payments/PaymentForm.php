@@ -15,11 +15,13 @@ class PaymentForm extends Component
     public Payment $payment;
     public $last_payment;
     public $numMonth;
-    public $status = 0;
+    public $status;
     public $pendienteCap;
     public $diasPendientes;
 
     public $interest;
+
+    public $pagado = 0;
 
     public $amortizacion = [];
     protected function rules()
@@ -35,7 +37,8 @@ class PaymentForm extends Component
             'payment.principal_amount' => ['nullable', 'numeric'],
             'payment.other_amount' => ['nullable', 'numeric'],
             'payment.observations' => ['nullable'],
-            'payment.other' => ['nullable']
+            'payment.other' => ['nullable'],
+            'pagado' => ['nullable'],
         ];
     }
 
@@ -47,13 +50,13 @@ class PaymentForm extends Component
         if (!$payment->exists) {
             $this->payment = new Payment();
             if ($this->last_payment != null) {
-                $this->diasPendientes = Carbon::now()->diffInDays($this->last_payment->made_date);
+                $this->diasPendientes = Carbon::now()->diffInDays($this->last_payment->made_date, false);
 
                 if ($this->diasPendientes > 90) {
                     $this->loan->interest = 3;
                 }
 
-                $this->payment->scheduled_date = $this->last_payment->made_date->addMonth();
+                $this->payment->scheduled_date = $this->last_payment->scheduled_date->addMonth();
                 $this->numMonth = $this->last_payment->made_date->diffInMonths(Carbon::now());
                 $capitalPagado = $this->loan->payments->sum('principal_amount');
                 $pendienteCapital = $this->loan->amount - $capitalPagado;
@@ -90,6 +93,7 @@ class PaymentForm extends Component
         $this->amortizacion = $amor->amortizacion;
         $this->interest = $this->loan->interest;
         $this->pagoCapital();
+        $this->liquidado();
     }
 
     public function activar()
@@ -107,6 +111,10 @@ class PaymentForm extends Component
         $this->payment->loan_id = $this->loan->id;
         $this->payment->user_id = auth()->user()->id;
         $this->payment->save();
+        if ($this->status) {
+            $this->loan->status = 'liquidado';
+            $this->loan->save();
+        }
 
         if ($this->payment->social_contribution > 0) {
             $partner = $this->loan->partner;
@@ -126,6 +134,15 @@ class PaymentForm extends Component
             $capital = 0;
         }
         $this->payment->principal_amount = $capital;
+    }
+
+    public function liquidado()
+    {
+        if ($this->payment->principal_amount >= $this->loan->amount) {
+            $this->status = 1;
+        } else {
+            $this->status = 0;
+        }
     }
 
     public function updatedInterest()

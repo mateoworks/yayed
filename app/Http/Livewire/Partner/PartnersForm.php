@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Partner;
 
+use App\Models\Colonia;
 use App\Models\Document;
 use App\Models\Job;
 use App\Models\Partner;
@@ -43,7 +44,7 @@ class PartnersForm extends Component
             'partner.phone' => ['nullable', 'max:20'],
             'partner.gender' => ['required'],
             'partner.address' => ['required', 'max:200'],
-            'partner.suburb' => ['required', 'max:100'],
+            'partner.colonia_id' => ['required', 'max:100'],
             'partner.curp' => [
                 'nullable',
                 'max:18',
@@ -107,6 +108,7 @@ class PartnersForm extends Component
     {
         return view('livewire.partner.partners-form', [
             'jobs' => Job::all(),
+            'colonias' => Colonia::all(),
         ]);
     }
 
@@ -126,6 +128,11 @@ class PartnersForm extends Component
         if (!$job) {
             $job = Job::create(['name' => $this->partner->job_id]);
             $this->partner->job_id = $job->id;
+        }
+        $colonia = Colonia::find($this->partner->colonia_id);
+        if (!$colonia) {
+            $colonia = Colonia::create(['name' => $this->partner->colonia_id]);
+            $this->partner->colonia_id = $colonia->id;
         }
         $this->partner->save();
         if (!empty($this->type) && !empty($this->file)) {

@@ -211,7 +211,6 @@
                             </div>
                             @endif
 
-
                             <div class="form-group row mb-4">
                                 <label for="payment.observations" class="col-sm-5 col-form-label">Observaciones</label>
                                 <div class="col-sm-7">
@@ -223,10 +222,47 @@
                                     @enderror
                                 </div>
                             </div>
+
                             <div class="form-group row mb-4">
                                 <div class="switch form-switch-custom switch-inline form-switch-success">
                                     <input class="switch-input" wire:model="status" type="checkbox" role="switch" id="form-custom-switch-success">
                                     <label class="switch-label" for="form-custom-switch-success">Liquidado</label>
+                                </div>
+                            </div>
+
+                            <div class="form-group row mb-4">
+                                <label for="pagado" class="col-sm-5 col-form-label">
+                                    <p>Total a pagar:</p>
+                                </label>
+                                @php
+                                $totalAPagar =
+                                $payment->interest_amount +
+                                $payment->principal_amount +
+                                $payment->other_amount;
+                                @endphp
+                                <div class="col-sm-7">
+                                    <p class="display-6">${{ number_format($totalAPagar , 2) }}</p>
+                                </div>
+                            </div>
+
+                            <div class="form-group row mb-4">
+                                <label for="pagado" class="col-sm-5 col-form-label">Pagó con:</label>
+                                <div class="col-sm-7">
+                                    <input type="text" wire:model="pagado" class="form-control @error('pagado') is-invalid @enderror" id="pagado">
+                                    @error('pagado')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="form-group row mb-4">
+                                <label for="pagado" class="col-sm-5 col-form-label">
+                                    <p>Cambio:</p>
+                                </label>
+                                <div class="col-sm-7">
+                                    <p class="display-6">${{ number_format($pagado - $totalAPagar, 2) }}</p>
                                 </div>
                             </div>
 
@@ -269,7 +305,7 @@
                                             </td>
                                         </tr>
                                     </table>
-                                    <a href="" class="btn btn-danger btn-rounded">Ver detalles del pago</a>
+                                    <a href="{{ route('payments.show', $last_payment) }}" class="btn btn-danger btn-rounded">Ver detalles del pago</a>
                                     @else
                                     <h5 class="card-text">
                                         No se han realizado pagos :)
@@ -335,7 +371,7 @@
                 <div class="widget-content widget-content-area">
                     <div class="row">
                         <div class="col-lx-12">
-                            <table class="table table-bordered table-striped">
+                            <table class="table table-bordered">
                                 <thead>
                                     <th>Periodos</th>
                                     <th>Fecha programada</th>
@@ -356,10 +392,7 @@
                                         <td>${{ number_format($loan->amount, 2) }}</td>
                                     </tr>
                                     @foreach ($amortizacion as $amor)
-                                    <tr @if ($payment->period == $loop->iteration)
-                                        class="table-danger"
-                                        @endif
-                                        >
+                                    <tr class="{{ $payment->period == $loop->iteration ? 'table-danger' : '' }}">
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ $amor->fecha->addMonth()->format('d/m/Y') }}</td>
                                         <td>${{ number_format($amor->saldoInicial, 2) }}</td>

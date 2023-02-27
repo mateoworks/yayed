@@ -3,6 +3,7 @@
 namespace App\Http\Livewire;
 
 use App\Models\Loan;
+use App\Models\Partner;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
@@ -82,6 +83,18 @@ class Dashboard extends Component
         }
         $this->totalInteres = $sumatorio;
     }
+
+    public function cantidadEnPrestamo()
+    {
+        $prestamosActivos = Loan::where('status', 'activo')->get();
+        $prestado = 0;
+        $pagado = 0;
+        foreach ($prestamosActivos as $loan) {
+            $prestado += $loan->amount;
+            $pagado += $loan->payments->sum('principal_amount');
+        }
+        return $prestado - $pagado;
+    }
     public function render()
     {
         $pendientesPago = DB::select("
@@ -103,6 +116,9 @@ class Dashboard extends Component
         return view('livewire.dashboard', [
             'loans' => Loan::where('status', 'activo')->latest()->take(5)->get(),
             'pagosPendintes' => $pendientesPago,
+            'no_partners' => Partner::count(),
+            'no_prestamos' => Loan::where('status', 'activo')->count(),
+            'en_prestamo' => $this->cantidadEnPrestamo(),
         ]);
     }
 }

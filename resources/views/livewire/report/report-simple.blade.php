@@ -6,7 +6,8 @@
 <link rel="stylesheet" href="/src/plugins/src/sweetalerts2/sweetalerts2.css">
 <link rel="stylesheet" type="text/css" href="/src/assets/css/light/elements/alert.css">
 <link rel="stylesheet" type="text/css" href="/src/assets/css/dark/elements/alert.css">
-
+<link rel="stylesheet" type="text/css" href="/src/assets/css/light/forms/switches.css">
+<link rel="stylesheet" type="text/css" href="/src/assets/css/dark/forms/switches.css">
 @endpush
 <div class="middle-content container-xxl p-0">
 
@@ -68,6 +69,12 @@
                                 {{ $message }}
                             </div>
                             @enderror
+                        </div>
+                        <div class="col-md-2">
+                            <div class="switch form-switch-custom switch-inline form-switch-success">
+                                <input class="switch-input" wire:model="anexos" type="checkbox" role="switch" id="form-custom-switch-success">
+                                <label class="switch-label" for="form-custom-switch-success">Anexos</label>
+                            </div>
                         </div>
                         <div class="col-md-2">
                             <button type="button" wire:click="generar" class="btn btn-primary">Generar</button>
@@ -283,23 +290,73 @@
                             <div class="widget-content widget-content-area">
                                 <table class="table table-striped">
                                     <thead>
-                                        <th>Fecha realizada</th>
-                                        <th>Socio</th>
-                                        <th>Cantidad capital pagado</th>
-                                        <th>Cantidad interés pagado</th>
+                                        <tr>
+                                            <th>Fecha programada</th>
+                                            <th>Fecha realizada</th>
+                                            <th>Socio</th>
+                                            <th>Cantidad capital pagado</th>
+                                            <th>Cantidad interés pagado</th>
+                                            <th>Total</th>
+                                        </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($pagos as $p)
+                                        @foreach ($pagosPrueba as $p)
                                         <tr>
+                                            <td>{{ $p->scheduled_date->format('d/m/Y') }}</td>
                                             <td>{{ $p->made_date->format('d/m/Y') }}</td>
                                             <td>{{ $p->loan->partner->full_name }}</td>
                                             <td class="text-end">${{ number_format($p->principal_amount, 2) }}</td>
                                             <td class="text-end">${{ number_format($p->interest_amount, 2) }}</td>
+                                            <td class="text-end">${{ number_format($p->interest_amount + $p->principal_amount, 2) }}</td>
                                         </tr>
                                         @endforeach
                                     </tbody>
                                 </table>
+                                <!-- Pagination navigation links -->
+                                {{ $pagosPrueba->links() }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
+        <div id="tableCustomBasic" class="col-lg-12 col-12 layout-spacing">
+            <div class="statbox widget box box-shadow">
+                <div class="widget-header">
+                    <div class="row">
+                        <div class="col-xl-12 col-md-12 col-sm-12 col-12">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h4> Préstamos realizados en el periodo</h4>
+
+                                </div>
+                            </div>
+                            <div class="widget-content widget-content-area">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Socio</th>
+                                            <th>Fecha realizada</th>
+                                            <th>Fecha programada de pago</th>
+                                            <th>Periodos</th>
+                                            <th>Monto préstado</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($prestamos as $p)
+                                        <tr>
+                                            <td>{{ $p->partner->full_name }}</td>
+                                            <td>{{ $p->date_made->format('d/m/Y') }}</td>
+                                            <td>{{ $p->date_payment->format('d/m/Y') }}</td>
+                                            <td>{{ $p->date_made->diffInMonths($p->date_payment) }}</td>
+                                            <td class="text-end">${{ number_format($p->amount, 2) }}</td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                                <!-- Pagination navigation links -->
+                                {{ $prestamos->links() }}
                             </div>
                         </div>
                     </div>

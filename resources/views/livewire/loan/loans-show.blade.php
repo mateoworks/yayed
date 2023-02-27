@@ -7,6 +7,37 @@
 <link rel="stylesheet" type="text/css" href="/src/assets/css/light/elements/alert.css">
 <link rel="stylesheet" type="text/css" href="/src/assets/css/dark/elements/alert.css">
 
+<style>
+    .pago1 {
+        background-color: #006400 !important;
+        color: white !important;
+    }
+
+    .pago2 {
+        background-color: #008000 !important;
+        color: white !important;
+    }
+
+    .pago3 {
+        background-color: #00FF00 !important;
+        color: black !important;
+    }
+
+    .pago4 {
+        background-color: #FFFF00 !important;
+        color: black !important;
+    }
+
+    .pago5 {
+        background-color: #FFA500 !important;
+        color: white !important;
+    }
+
+    .pago6 {
+        background-color: #FF0000 !important;
+        color: white !important;
+    }
+</style>
 @endpush
 <div class="middle-content container-xxl p-0">
 
@@ -102,7 +133,7 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="row">
-                                <div class="col-md-4">
+                                <div class="col-md-5">
                                     <h4>Socio</h4>
                                     <a href="{{ route('partners.show', $loan->partner) }}">
                                         <div class="media">
@@ -121,11 +152,9 @@
                                             </div>
                                         </div>
                                     </a>
-                                    <a href="{{ route('partners.solicitud.show', $loan->solicitud) }}" class="btn btn-primary">
-                                        Ver solicitud
-                                    </a>
+
                                 </div>
-                                <div class="col-md-8">
+                                <div class="col-md-5">
                                     <h4>Préstamo</h4>
                                     <table class="">
                                         <tr>
@@ -156,6 +185,11 @@
                                         </tr>
 
                                     </table>
+                                </div>
+                                <div class="col-md-2">
+                                    <a href="{{ route('partners.solicitud.show', $loan->solicitud) }}" class="btn btn-primary">
+                                        Ver solicitud
+                                    </a>
                                 </div>
                             </div>
                             <hr>
@@ -230,12 +264,16 @@
                             <h3>Pagos realizados</h3>
                             <table class="table table-striped">
                                 <thead>
-                                    <th>N°</th>
-                                    <th>Fecha programada</th>
-                                    <th>Fecha realizada</th>
-                                    <th>Pago de capital</th>
-                                    <th>Pago de interés</th>
-                                    <th></th>
+                                    <tr>
+                                        <th>Periodo</th>
+                                        <th>N°</th>
+                                        <th>Fecha programada</th>
+                                        <th>Fecha realizada</th>
+                                        <th>No. días</th>
+                                        <th>Pago de capital</th>
+                                        <th>Pago de interés</th>
+                                        <th></th>
+                                    </tr>
                                 </thead>
                                 <tbody>
                                     @php
@@ -244,9 +282,11 @@
                                     @endphp
                                     @forelse ($loan->payments as $payment)
                                     <tr>
-                                        <td>{{ $loop->iteration }}</td>
+                                        <td>{{ $payment->period }}</td>
+                                        <td>{{ $payment->numero }}</td>
                                         <td>{{ $payment->scheduled_date->format('d/m/Y') }}</td>
                                         <td>{{ $payment->made_date->format('d/m/Y') }}</td>
+                                        <td class="{{$payment->class_color}}">{{ $payment->no_days }}</td>
                                         <td class="text-end">$ {{ number_format($payment->principal_amount, 2) }}</td>
                                         <td class="text-end">$ {{ number_format($payment->interest_amount, 2) }}</td>
                                         <td>
@@ -264,13 +304,14 @@
                                     </tr>
                                     @empty
                                     <tr>
-                                        <td colspan="5">No hay pagos registrados</td>
+                                        <td colspan="8">No hay pagos registrados</td>
                                     </tr>
                                     @endforelse
                                     <tr>
-                                        <td colspan="3" class="text-center"><strong>Totales</strong></td>
+                                        <td colspan="5" class="text-center"><strong>Totales</strong></td>
                                         <td class="text-end"><strong>${{ number_format($capital, 2) }}</strong></td>
                                         <td class="text-end"><strong>${{ number_format($interes, 2) }}</strong></td>
+                                        <td></td>
                                     </tr>
                                 </tbody>
                             </table>

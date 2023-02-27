@@ -110,6 +110,9 @@
             <li class="{{ (request()->is('utilidades/jobs*')) ? 'active' : '' }}">
                 <a href="{{ route('job.index') }}"> Ocupaciones</a>
             </li>
+            <li class="{{ (request()->is('utilidades/colonias*')) ? 'active' : '' }}">
+                <a href="{{ route('colonia.index') }}"> Colonias</a>
+            </li>
             <li class="{{ (request()->is('utilidades/config*')) ? 'active' : '' }}">
                 <a href="{{ route('config') }}"> Configurar</a>
             </li>

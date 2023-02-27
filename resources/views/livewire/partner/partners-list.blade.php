@@ -114,6 +114,10 @@
                                                 <i class="fa-regular fa-trash-can"></i>
                                             </a>
 
+                                            <a href="{{ route('partners.solicitud.create', $partner) }}" class="bs-tooltip btn btn-warning" data-toggle="tooltip" data-placement="top" title="Realizar solicitud">
+                                                <i class="fa-light fa-file-export"></i>
+                                            </a>
+
                                         </div>
                                     </td>
                                 </tr>

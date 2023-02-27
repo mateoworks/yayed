@@ -55,27 +55,62 @@
             </div>
         </div>
 
-        <div class="col-xl-4 col-lg-6 col-md-6 col-sm-12 col-12 layout-spacing">
-
-            <div class="widget widget-wallet-one">
-
-                <div class="wallet-info text-center mb-3">
-
-                    <p class="wallet-title mb-3">Balance total</p>
-
-                    <p class="total-amount mb-3">$ 26,177.88</p>
-
-                    <a href="#" class="wallet-text"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trending-up me-2">
-                            <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
-                            <polyline points="17 6 23 6 23 12"></polyline>
-                        </svg> Incremento del 6%</a>
-
+        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12 layout-spacing">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-auto">
+                            <i class="fa-light fa-user-cowboy display-1"></i>
+                        </div>
+                        <div class="col">
+                            <h5 class="card-title">Socios</h5>
+                            <h2 class="card-title">{{ $no_partners }}</h2>
+                            <p class="text-end">
+                                <a href="" class="btn btn-primary btn-sm">
+                                    Ver
+                                </a>
+                            </p>
+                        </div>
+                    </div>
                 </div>
+            </div>
+        </div>
 
-                <hr>
+        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12 layout-spacing">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-auto">
+                            <i class="fa-light fa-hand-holding-dollar display-1"></i>
+                        </div>
+                        <div class="col">
+                            <h5 class="card-title">Préstamos activos</h5>
+                            <h2 class="card-title">{{ $no_prestamos }}</h2>
+                            <p class="text-end">
+                                <a href="" class="btn btn-primary btn-sm">
+                                    Ver
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-                <button class="btn btn-secondary w-100 mt-3">Ver movimientos históricos</button>
-
+        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12 layout-spacing">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-auto">
+                            <i class="fa-light fa-hands-holding-dollar display-1"></i>
+                        </div>
+                        <div class="col">
+                            <h5 class="card-title">Cantidad en préstamo</h5>
+                            <h2 class="card-title">{{ number_format($en_prestamo, 2) }}</h2>
+                            <small>Cantidad neta</small>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 

@@ -40,4 +40,26 @@ class Payment extends Model
     {
         return str_pad($this->number, 6, 0, STR_PAD_LEFT);
     }
+
+    public function getNoDaysAttribute()
+    {
+        return $this->scheduled_date->diffInDays($this->made_date, false);
+    }
+    public function getClassColorAttribute()
+    {
+        $days = $this->scheduled_date->diffInDays($this->made_date, false);
+        if ($days <= 4) {
+            return 'pago1';
+        } else if ($days >= 5 && $days <= 8) {
+            return 'pago2';
+        } else if ($days >= 9 && $days <= 12) {
+            return 'pago3';
+        } else if ($days >= 13 && $days <= 16) {
+            return 'pago4';
+        } else if ($days >= 17 && $days <= 20) {
+            return 'pago5';
+        } else {
+            return 'pago6';
+        }
+    }
 }

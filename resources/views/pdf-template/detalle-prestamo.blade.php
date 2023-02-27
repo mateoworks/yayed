@@ -73,6 +73,40 @@
             transform-origin: 50% 50%;
             color: #d9d9d9;
         }
+
+        .pago1 {
+            background-color: #006400 !important;
+            color: white !important;
+        }
+
+        .pago2 {
+            background-color: #008000 !important;
+            color: white !important;
+        }
+
+        .pago3 {
+            background-color: #00FF00 !important;
+            color: black !important;
+        }
+
+        .pago4 {
+            background-color: #FFFF00 !important;
+            color: black !important;
+        }
+
+        .pago5 {
+            background-color: #FFA500 !important;
+            color: white !important;
+        }
+
+        .pago6 {
+            background-color: #FF0000 !important;
+            color: white !important;
+        }
+
+        .table-totales td {
+            border-bottom: black dotted 1px;
+        }
     </style>
 </head>
 
@@ -136,9 +170,11 @@
     <table class="striped">
         <thead>
             <tr>
-                <th>No</th>
+                <th>Periodo</th>
+                <th>N°</th>
                 <th>Fecha programada</th>
-                <th class="text-end">Fecha realizada</th>
+                <th>Fecha realizada</th>
+                <th class="text-center">No. días</th>
                 <th class="text-end">Cantidad capital</th>
                 <th class="text-end">Cantidad interés</th>
             </tr>
@@ -151,9 +187,11 @@
             @endphp
             @foreach ($loan->payments as $payment)
             <tr>
-                <td>{{ $loop->iteration }}</td>
+                <td>{{ $payment->period }}</td>
+                <td>{{ $payment->numero }}</td>
                 <td>{{ $payment->scheduled_date->format('d/m/Y') }}</td>
-                <td class="text-end">{{ $payment->made_date->format('Y-m-d') }}</td>
+                <td>{{ $payment->made_date->format('Y-m-d') }}</td>
+                <td class="text-center {{ $payment->class_color }}">{{ $payment->no_days }}</td>
                 <td class="text-end">$ {{ number_format($payment->principal_amount, 2) }}</td>
                 <td class="text-end">$ {{ number_format($payment->interest_amount, 2) }}</td>
             </tr>
@@ -164,7 +202,7 @@
             @endphp
             @endforeach
             <tr>
-                <td colspan="3">
+                <td colspan="5">
                     <p class="text-center">
                         <strong>Totales</strong>
                     </p>
@@ -175,24 +213,41 @@
         </tbody>
     </table>
 
-    <table style="width:100%" class="mt-3">
+    <table style="float: right;" class="mt-3 table-totales">
         <tr>
-            <td class="text-end">Capital pagado:</td>
-            <td width="100" class="text-end">$ {{ number_format($loan->payments->sum('principal_amount'), 2) }}</td>
+            <td class="text-end">
+                <p class="m-0">Capital pagado :</p>
+            </td>
+            <td width="100" class="text-end">
+                <p class="m-0"><strong>${{ number_format($loan->payments->sum('principal_amount'), 2) }}</strong></p>
+            </td>
         </tr>
         <tr>
-            <td class="text-end">Pendiente capital :</td>
-            <td width="100" class="text-end">$ {{ number_format($loan->amount - $capital_pagado, 2) }}</td>
+            <td class="text-end">
+                <p class="m-0">Pendiente capital :</p>
+            </td>
+            <td width="100" class="text-end">
+                <p class="m-0"><strong>${{ number_format($loan->amount - $capital_pagado, 2) }}</strong></p>
+            </td>
         </tr>
         <tr>
-            <td class="text-end">Total interés pagado :</td>
-            <td width="100" class="text-end">$ {{ number_format($loan->payments->sum('interest_amount'), 2) }}</td>
+            <td class="text-end">
+                <p class="m-0">Total interés pagado :</p>
+            </td>
+            <td width="100" class="text-end">
+                <p class="m-0"><strong>${{ number_format($loan->payments->sum('interest_amount'), 2) }}</strong></p>
+            </td>
         </tr>
         <tr>
-            <td class="text-end">Pagos por otros conceptos :</td>
-            <td width="100" class="text-end">$ {{ number_format($loan->payments->sum('other_amount'), 2) }}</td>
+            <td class="text-end">
+                <p class="m-0">Pagos por otros conceptos :</p>
+            </td>
+            <td width="100" class="text-end">
+                <p class="m-0"><strong>${{ number_format($loan->payments->sum('other_amount'), 2) }}</strong></p>
+            </td>
         </tr>
     </table>
+    <hr style="clear: both;">
 
     @else
     <h6>No hay pagos realizados</h6>
