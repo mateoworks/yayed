@@ -66,7 +66,7 @@
                             <h5 class="card-title">Socios</h5>
                             <h2 class="card-title">{{ $no_partners }}</h2>
                             <p class="text-end">
-                                <a href="" class="btn btn-primary btn-sm">
+                                <a href="{{ route('partners.index') }}" class="btn btn-primary btn-sm">
                                     Ver
                                 </a>
                             </p>
@@ -86,8 +86,9 @@
                         <div class="col">
                             <h5 class="card-title">Préstamos activos</h5>
                             <h2 class="card-title">{{ $no_prestamos }}</h2>
+                            <p class="m-0">${{ number_format($cantidad_prestamo, 2) }}</p>
                             <p class="text-end">
-                                <a href="" class="btn btn-primary btn-sm">
+                                <a href="{{ route('loans.index') }}" class="btn btn-primary btn-sm">
                                     Ver
                                 </a>
                             </p>
@@ -224,7 +225,7 @@
                                         <div class="td-content">{{ $ultimo->ultimo_pago }}</div>
                                     </td>
                                     <td>
-                                        <div class="td-content"><a href="javascript:void(0);" class="text-danger"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-danger feather feather-chevrons-right">
+                                        <div class="td-content"><a href="{{ route('loans.show', $ultimo->id) }}" class="text-danger"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-danger feather feather-chevrons-right">
                                                     <polyline points="13 17 18 12 13 7"></polyline>
                                                     <polyline points="6 17 11 12 6 7"></polyline>
                                                 </svg> Ver</a></div>

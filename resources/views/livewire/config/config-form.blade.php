@@ -3,6 +3,8 @@
 <link href="/src/assets/css/light/scrollspyNav.css" rel="stylesheet" type="text/css" />
 <link href="/src/assets/css/dark/scrollspyNav.css" rel="stylesheet" type="text/css" />
 <link rel="stylesheet" href="/src/plugins/src/sweetalerts2/sweetalerts2.css">
+<link rel="stylesheet" type="text/css" href="/src/assets/css/light/forms/switches.css">
+<link rel="stylesheet" type="text/css" href="/src/assets/css/dark/forms/switches.css">
 @endpush
 <div class="middle-content container-xxl p-0">
 
@@ -64,6 +66,21 @@
                                 @endif
                                 <input type="file" wire:model="logotipo" class="form-control @error('logotipo') is-invalid @enderror" id="logotipo">
                                 @error('logotipo')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="form-group row mb-3">
+                            <label for="logotipo" class="col-sm-2 col-form-label"></label>
+                            <div class="col-sm-6">
+                                <div class="switch form-switch-custom switch-inline form-switch-success">
+                                    <input class="switch-input" wire:model="activarSolicitud" type="checkbox" role="switch" id="form-custom-switch-success">
+                                    <label class="switch-label" for="form-custom-switch-success">Activiar solicitud a todos los socios</label>
+                                </div>
+                                @error('activarSolicitud')
                                 <div class="invalid-feedback">
                                     {{ $message }}
                                 </div>

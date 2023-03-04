@@ -64,6 +64,18 @@
                         </div>
 
                         <div class="form-group row mb-4">
+                            <label for="monto" class="col-sm-4 col-form-label">Monto</label>
+                            <div class="col-sm-4">
+                                <input type="number" wire:model.defer="monto" class="form-control @error('monto') is-invalid @enderror" id="monto">
+                                @error('monto')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="form-group row mb-4">
                             <div class="col-sm-3">
                                 <button type="button" wire:click="generar" class="btn btn-secondary">Generar</button>
                             </div>
@@ -89,7 +101,7 @@
                                             <td></td>
                                             <td></td>
                                             <td></td>
-                                            <td>${{ number_format($loan->amount, 2) }}</td>
+                                            <td>${{ number_format($monto, 2) }}</td>
                                         </tr>
                                         @foreach ($amortizacion as $amor)
                                         <tr>

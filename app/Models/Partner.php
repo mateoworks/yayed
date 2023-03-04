@@ -40,7 +40,7 @@ class Partner extends Model
 
     public function getSuburbAttribute()
     {
-        return $this->colonia->name;
+        return $this->colonia->name ?? '';
     }
 
     public function getAgeAttribute()
@@ -76,10 +76,28 @@ class Partner extends Model
     {
         $activo = false;
         foreach ($this->solicituds as $solicitud) {
-            if ($solicitud->condition == 'autorizado') {
+            if ($solicitud->condition == 'autorizado' && !$solicitud->loan()->exists()) {
                 $activo = $solicitud;
             }
         }
         return $activo;
+    }
+
+    public function getSolicitudPendienteAttribute()
+    {
+        $pendiente = false;
+        foreach ($this->solicituds as $solicitud) {
+            if ($solicitud->condition == 'en proceso') {
+                $pendiente = $solicitud;
+            }
+        }
+        return $pendiente;
+    }
+
+    public function getPuedeSolicitarAttribute()
+    {
+        if ($this->active != true) {
+            return true;
+        }
     }
 }

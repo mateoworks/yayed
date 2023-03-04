@@ -138,7 +138,9 @@ class PaymentForm extends Component
 
     public function liquidado()
     {
-        if ($this->payment->principal_amount >= $this->loan->amount) {
+        $pendiente = $this->loan->amount - $this->loan->payments->sum('principal_amount');
+
+        if ($this->payment->principal_amount >= $pendiente) {
             $this->status = 1;
         } else {
             $this->status = 0;
@@ -152,6 +154,15 @@ class PaymentForm extends Component
         $amor = new Amortizacion($this->loan);
         $this->amortizacion = $amor->amortizacion;
         $this->pagoCapital();
+    }
+
+    public function updatedPaymentPrincipalAmount($value)
+    {
+        if ($value >= $this->pendienteCap) {
+            $this->status = 1;
+        } else {
+            $this->status = false;
+        }
     }
 
     public function render()

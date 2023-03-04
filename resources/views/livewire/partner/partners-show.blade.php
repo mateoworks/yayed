@@ -452,12 +452,16 @@
                                         @elseif ($loan->status == 'liquidado')
                                         <span class="badge badge-success mb-2 me-4">Liquidado</span>
                                         @endif
+                                        <a href="{{ route('loans.show', $loan) }}" class="btn btn-info btn-sm">Ver préstamo</a>
 
                                     </div>
                                     <p>Solicitud realizada el {{ $loan->solicitud->date_solicitud->format('d/m/Y') }}, folio:
                                         <span>
                                             <a href="{{ route('partners.solicitud.show', $loan->solicitud) }}" class="btn btn-danger">{{ $loan->solicitud->numero }}</a>
                                         </span>
+                                        <a href="{{ route('partners.solicitud.show', $loan->solicitud) }}" class="btn btn-secondary btn-sm">
+                                            Ver solicitud
+                                        </a>
                                     </p>
                                     <div class="comment">
                                         <h6 class="text-center">Pagos realizados</h6>

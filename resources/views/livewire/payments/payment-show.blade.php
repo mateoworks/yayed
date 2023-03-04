@@ -59,7 +59,7 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="row">
-                                <div class="col">
+                                <div class="col-md-5">
                                     <h6>Datos del socio</h6>
 
                                     <a href="{{ route('partners.show', $payment->loan->partner) }}">
@@ -80,7 +80,7 @@
                                         </div>
                                     </a>
                                 </div>
-                                <div class="col">
+                                <div class="col-md-5">
                                     <h6>Datos del préstamo</h6>
                                     <p class="m-0">Folio: {{ $payment->loan->number }}</p>
                                     <p class="m-0">Capital: ${{number_format($payment->loan->amount, 2) }}</p>
@@ -90,7 +90,21 @@
                                     <p class="m-0">Fecha de último pago: {{ $payment->loan->ultimo_pago->made_date->format('d/m/Y') }}</p>
                                     @endif
                                     <a href="{{ route('loans.show', $payment->loan) }}" class="btn btn-primary">Ver préstamo</a>
-                                    <a href="{{ route('payments.create', $payment->loan) }}" class="btn btn-secondary">Realizar otro pago de este préstamo</a>
+                                    @if ($payment->loan->status != 'liquidado')
+                                    <a href="{{ route('payments.create', $payment->loan) }}" class="btn btn-secondary">
+                                        Realizar otro pago de este préstamo
+                                    </a>
+                                    @endif
+
+                                </div>
+                                <div class="col-md-2">
+                                    @if ($payment->loan->status == 'activo')
+                                    <span class="fs-3 badge badge-light-primary">Activo</span>
+                                    @elseif ($payment->loan->status == 'suspendido')
+                                    <span class="fs-3 badge badge-light-danger">Suspendido</span>
+                                    @elseif ($payment->loan->status == 'liquidado')
+                                    <span class="fs-3 badge badge-light-success">Liquidado</span>
+                                    @endif
                                 </div>
                             </div>
                         </div>

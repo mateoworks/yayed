@@ -44,6 +44,22 @@ class LoansShow extends Component
         }, Carbon::now()->format('Y_m_d') . '-constancia-aval_' . $this->loan->number . '.pdf');
     }
 
+    public function amortizacionPDF()
+    {
+        $amortizacion = new Amortizacion($this->loan);
+        $data = [
+            'loan' => $this->loan,
+            'amortizacion' => $amortizacion->amortizacion,
+            'sumInteres' => $amortizacion->sumInteres,
+            'sumAmortizacion' => $amortizacion->sumAmortizacion,
+        ];
+        $pdf = Pdf::loadView('pdf-template.amortizacion-prestamo', $data)->setPaper('letter');
+
+        return response()->streamDownload(function () use ($pdf) {
+            echo  $pdf->stream();
+        }, Carbon::now()->format('Y_m_d') . '-amortizacion_' . $this->loan->number . '.pdf');
+    }
+
     public function pagare()
     {
         $amortizacion = new Amortizacion($this->loan);

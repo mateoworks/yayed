@@ -119,6 +119,7 @@ class Dashboard extends Component
             'no_partners' => Partner::count(),
             'no_prestamos' => Loan::where('status', 'activo')->count(),
             'en_prestamo' => $this->cantidadEnPrestamo(),
+            'cantidad_prestamo' => Loan::where('status', 'activo')->sum('amount')
         ]);
     }
 }

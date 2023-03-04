@@ -13,6 +13,7 @@ class LoanAmortizacion extends Component
 {
     public Loan $loan;
     public $periodos;
+    public $monto;
     public $amortizacion = [];
     public $sumInteres = 0;
     public $sumAmortizacion = 0;
@@ -20,6 +21,7 @@ class LoanAmortizacion extends Component
     {
         $noPeriodos = $this->loan->date_made->floatDiffInMonths($this->loan->date_payment);
         $this->periodos = round($noPeriodos, 0);
+        $this->monto = $this->loan->amount;
     }
     public function render()
     {
@@ -36,7 +38,7 @@ class LoanAmortizacion extends Component
         $this->validate();
         $this->amortizacion = array();
         $interes = $this->loan->interest / 100;
-        $capital = $this->loan->amount;
+        $capital = $this->monto;
         $pagoFormula = $this->pago($capital, $this->periodos, $interes);
         $mes = $this->loan->date_made;
         $i = 1;
@@ -83,6 +85,7 @@ class LoanAmortizacion extends Component
             'amortizacion' => $this->amortizacion,
             'sumInteres' => $this->sumInteres,
             'sumAmortizacion' => $this->sumAmortizacion,
+            'monto' => $this->monto,
         ];
         $pdf = Pdf::loadView('pdf-template.amortizacion-prestamo', $data)->setPaper('letter');
 

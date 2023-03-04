@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Partner;
 
 use App\Exports\PartnersExport;
+use App\Models\Config;
 use App\Models\Partner;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
@@ -20,6 +21,7 @@ class PartnersList extends Component
 
     public function render()
     {
+        $solicitud = Config::where('key', 'solicitud')->first();
         return view('livewire.partner.partners-list', [
             'partners' => Partner::where('names', 'like', "%$this->search%")
                 ->orWhere('surname_father', 'like', "%$this->search%")
@@ -27,6 +29,7 @@ class PartnersList extends Component
                 ->orWhere('curp', 'like', "%$this->search%")
                 ->latest()
                 ->paginate(),
+            'solicitudActive' => $solicitud->value ?? null,
         ]);
     }
 
@@ -56,7 +59,7 @@ class PartnersList extends Component
         }
         $partner->delete();
         $this->dispatchBrowserEvent('message', [
-            'message' => 'Se eliminó correctamente este pago',
+            'message' => 'Se eliminó correctamente este socio',
             'backgroundColor' => '00ab55'
         ]);
     }

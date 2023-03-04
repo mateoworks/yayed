@@ -10,8 +10,16 @@
     <link href="{{ asset('src/assets/css/light/apps/invoice-preview.css') }}" rel="stylesheet" type="text/css" />
     <style>
         body {
+            margin-top: 160px;
             padding: 2rem;
             font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        }
+
+        header {
+            position: fixed;
+            top: 10px;
+            left: 2rem;
+            right: 2rem;
         }
 
         .striped {
@@ -64,38 +72,41 @@
 </head>
 
 <body>
+    <header>
+        <table style="width:100%">
+            <tr>
+                <td>
+                    <img src="{{ url('src/assets/img/cork-logo.png') }}" height="150" alt="">
+                </td>
+                <td>
+                    <h4 class="m-0">CAJA DE</h4>
+                    <h4 class="m-0">PRÉSTAMOS</h4>
+                    <h4 class="m-0">YA' YED</h4>
+                    <p class="m-0">
+                        C. Independencia S/N, San Baltazar Loxicha
+                    </p>
+                    <p class="m-0"><strong>{{ $periodoComisariado }}</strong></p>
+                </td>
+                <td class="text-end">
+                    <h4>Solicitud de crédito</h4>
+                    <table>
+                        <tr>
+                            <td>Folio de solicitud: </td>
+                            <td class="text-end border-bottom-td"><strong> {{ $solicitud->numero }}</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Fecha de solicitud: </td>
+                            <td class="text-end border-bottom-td">
+                                <strong>{{ $solicitud->date_solicitud->format('d/m/Y') }}</strong>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+        <hr>
+    </header>
 
-    <table style="width:100%">
-        <tr>
-            <td>
-                <img src="{{ url('src/assets/img/cork-logo.png') }}" height="150" alt="">
-            </td>
-            <td>
-                <h4 class="m-0">CAJA DE</h4>
-                <h4 class="m-0">PRÉSTAMOS</h4>
-                <h4 class="m-0">YA' YED</h4>
-                <p class="m-0">
-                    C. Independencia S/N, San Baltazar Loxicha
-                </p>
-                <p class="m-0"><strong>{{ $periodoComisariado }}</strong></p>
-            </td>
-            <td class="text-end">
-                <h4>Solicitud de crédito</h4>
-                <table>
-                    <tr>
-                        <td>Folio de solicitud: </td>
-                        <td class="text-end border-bottom-td"><strong> {{ $solicitud->numero }}</strong></td>
-                    </tr>
-                    <tr>
-                        <td>Fecha de solicitud: </td>
-                        <td class="text-end border-bottom-td">
-                            <strong>{{ $solicitud->date_solicitud->format('d/m/Y') }}</strong>
-                        </td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-    </table>
     <p><strong>Datos generales</strong></p>
     <table style="width:100%">
         <tr class="text-center border-table">
@@ -287,17 +298,17 @@
         </tr>
     </table>
 
-    <p class="text-center mt-5">
+    <p class="text-center mt-3">
         <strong>Nombre y firma de los comités de crédito</strong>
     </p>
 
     <table style="width: 100%;">
         @for ($i = 0; $i < 5; $i++) <tr>
             <td>
-                <p class="mt-5">____________________________________</p>
+                <p class="mt-4">____________________________________</p>
             </td>
             <td class="text-end">
-                <p class="mt-5">____________________________________</p>
+                <p class="mt-4">____________________________________</p>
             </td>
             </tr>
             @endfor

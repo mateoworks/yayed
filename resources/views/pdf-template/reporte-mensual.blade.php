@@ -102,8 +102,8 @@
                 <table style="width: 100%;" class="table-contenido">
                     <thead>
                         <tr>
-                            <td>Mes</td>
-                            <td class="text-end">Monto</td>
+                            <th>Mes</th>
+                            <th class="text-end">Monto</th>
                         </tr>
                     </thead>
                     @php
@@ -112,9 +112,9 @@
                     @foreach ($prestamosPorMes as $capital)
                     <tr>
                         <td>{{ $capital->mes != null ? ucfirst($months[$capital->mes]) : '' }} {{ $capital->anio }}</td>
-                        <td class="text-end">${{ number_format($capital->capital, 2) }}</td>
+                        <td class="text-end">${{ number_format($capital->monto, 2) }}</td>
                         @php
-                        $totalPrestamo += $capital->capital;
+                        $totalPrestamo += $capital->monto;
                         @endphp
                     </tr>
                     @endforeach
@@ -142,9 +142,9 @@
                         @foreach ($interesPorMes as $interes)
                         <tr>
                             <td>{{ $interes->mes != null ? ucfirst($months[$interes->mes]) : '' }} {{ $interes->anio }}</td>
-                            <td class="text-end">${{ number_format($interes->interes, 2) }}</td>
+                            <td class="text-end">${{ number_format($interes->monto, 2) }}</td>
                             @php
-                            $totalInteres += $interes->interes;
+                            $totalInteres += $interes->monto;
                             @endphp
                         </tr>
                         @endforeach
@@ -178,9 +178,9 @@
                         @foreach ($aportacionPorMes as $aportacion)
                         <tr>
                             <td>{{ $aportacion->mes != null ? ucfirst($months[$aportacion->mes]) : '' }} {{ $aportacion->anio }}</td>
-                            <td class="text-end">${{ number_format($aportacion->aportacion, 2) }}</td>
+                            <td class="text-end">${{ number_format($aportacion->monto, 2) }}</td>
                             @php
-                            $totalAportacion += $aportacion->aportacion;
+                            $totalAportacion += $aportacion->monto;
                             @endphp
                         </tr>
                         @endforeach
@@ -211,9 +211,9 @@
                         @foreach ($capitalPorMes as $capital)
                         <tr>
                             <td>{{ $capital->mes != null ? ucfirst($months[$capital->mes]) : '' }} {{ $capital->anio }}</td>
-                            <td class="text-end">${{ number_format($capital->capital, 2) }}</td>
+                            <td class="text-end">${{ number_format($capital->monto, 2) }}</td>
                             @php
-                            $totalCapital += $capital->capital;
+                            $totalCapital += $capital->monto;
                             @endphp
                         </tr>
                         @endforeach

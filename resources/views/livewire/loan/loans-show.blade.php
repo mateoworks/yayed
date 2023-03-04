@@ -92,6 +92,13 @@
                                             <i class="fa-sharp fa-regular fa-money-check-dollar"></i>
                                             Pagaré
                                         </a>
+                                        <a class="btn btn-dark" wire:click="amortizacionPDF">
+                                            <div wire:loading wire:target="amortizacionPDF">
+                                                <div class="spinner-border text-white me-2 align-self-center loader-sm"></div>
+                                            </div>
+                                            <i class="fa-light fa-calendar-check"></i>
+                                            <i class="fa-light fa-file-pdf"></i>
+                                        </a>
                                         @if ($loan->solicitud->endorsements()->exists())
                                         <a wire:click="constanciaAval" class="btn btn-danger bs-tooltip" data-toggle="tooltip" data-placement="top" title="Pagaré">
                                             <div wire:loading wire:target="constanciaAval">

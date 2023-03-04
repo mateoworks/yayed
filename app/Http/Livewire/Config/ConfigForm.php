@@ -12,9 +12,10 @@ class ConfigForm extends Component
     public $periodo;
     public $logotipo;
     public $logoGuardar;
+    public $activarSolicitud;
     public function rules()
     {
-        return ['periodo' => 'required'];
+        return ['periodo' => 'required', 'activarSolicitud' => 'nullable'];
     }
     public function mount()
     {
@@ -30,11 +31,16 @@ class ConfigForm extends Component
     }
     public function save()
     {
-        $periodo = Config::firstOrNew(
-            ['key' =>  'periodo'],
-        );
-        $periodo->value = $this->periodo;
-        $periodo->save();
+        if ($this->periodo != '') {
+            $periodo = Config::firstOrNew(
+                ['key' =>  'periodo'],
+            );
+            $periodo->value = $this->periodo;
+            $periodo->save();
+        }
+        $solicitud = Config::firstOrNew(['key' => 'solicitud']);
+        $solicitud->value = $this->activarSolicitud;
+        $solicitud->save();
 
         $logo = Config::firstOrNew(
             ['key' => 'logo'],

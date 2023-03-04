@@ -95,7 +95,11 @@
                                             <a href="{{ route('loans.solicitud', $partner->solicitud_autorizado) }}" class="bs-tooltip btn btn-secondary" data-toggle="tooltip" data-placement="top" title="Realizar préstamo">
                                                 <i class="fa-regular fa-hand-holding-dollar"></i>
                                             </a>
-                                            @elseif (!$partner->solicitud_autorizado)
+                                            @elseif ($partner->solicitud_pendiente)
+                                            <a href="{{ route('partners.solicitud.show', $partner->solicitud_pendiente) }}" class="bs-tooltip btn btn-dark" data-toggle="tooltip" data-placement="top" title="Ver solicitud pendiente">
+                                                <i class="fa-light fa-file-export"></i>
+                                            </a>
+                                            @elseif ($partner->puede_solicitar)
                                             <a href="{{ route('partners.solicitud.create', $partner) }}" class="bs-tooltip btn btn-warning" data-toggle="tooltip" data-placement="top" title="Realizar solicitud">
                                                 <i class="fa-light fa-file-export"></i>
                                             </a>
@@ -114,9 +118,12 @@
                                                 <i class="fa-regular fa-trash-can"></i>
                                             </a>
 
+                                            @if ($solicitudActive != null && $solicitudActive)
                                             <a href="{{ route('partners.solicitud.create', $partner) }}" class="bs-tooltip btn btn-warning" data-toggle="tooltip" data-placement="top" title="Realizar solicitud">
                                                 <i class="fa-light fa-file-export"></i>
                                             </a>
+                                            @endif
+
 
                                         </div>
                                     </td>

@@ -261,9 +261,11 @@
                                 <label for="pagado" class="col-sm-5 col-form-label">
                                     <p>Cambio:</p>
                                 </label>
+                                @if ($pagado > 0)
                                 <div class="col-sm-7">
                                     <p class="display-6">${{ number_format($pagado - $totalAPagar, 2) }}</p>
                                 </div>
+                                @endif
                             </div>
 
                             <div>

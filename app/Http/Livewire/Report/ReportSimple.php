@@ -2,6 +2,10 @@
 
 namespace App\Http\Livewire\Report;
 
+use App\Exports\Report\CapitalReportExport;
+use App\Exports\Report\InterestReportExport;
+use App\Exports\Report\LoansReportExport;
+use App\Exports\Report\ReportMonth;
 use App\Models\Contribution;
 use App\Models\Loan;
 use App\Models\Payment;
@@ -11,6 +15,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ReportSimple extends Component
 {
@@ -77,11 +82,32 @@ class ReportSimple extends Component
         }, Carbon::now()->format('Y_m_d') . '-reporte-mensual.pdf');
     }
 
+    public function exportExcel()
+    {
+        $this->generar();
+        $inicio = null;
+        $fin = null;
+        if ($this->anexos) {
+            $inicio = $this->dateStart;
+            $fin = $this->dateEnd;
+        }
+        return Excel::download(
+            new ReportMonth(
+                $this->prestamosPorMes,
+                $this->interesPorMes,
+                $this->capitalPorMes,
+                $this->aportacionPorMes,
+                $inicio,
+                $fin
+            ),
+            Carbon::now()->format('Y_m_d') . '-reporte.xlsx'
+        );
+    }
+
     public function generar()
     {
         $this->validate();
 
-        $this->pagos = array();
         $this->interesPorMes = array();
         $this->capitalPorMes = array();
         $this->prestamosPorMes = array();
@@ -95,25 +121,25 @@ class ReportSimple extends Component
             ->get();
 
         $this->interesPorMes = Payment::whereBetween('made_date', [$this->dateStart, $this->dateEnd])
-            ->selectRaw("MONTH(made_date) AS mes, YEAR(made_date) AS anio, SUM(interest_amount) as interes")
+            ->selectRaw("MONTH(made_date) AS mes, YEAR(made_date) AS anio, SUM(interest_amount) as monto")
             ->groupBy(DB::raw("mes, anio"))
             ->orderByRaw("anio, mes")
             ->get();
 
         $this->capitalPorMes = Payment::whereBetween('made_date', [$this->dateStart, $this->dateEnd])
-            ->selectRaw("MONTH(made_date) AS mes, YEAR(made_date) AS anio, SUM(principal_amount) as capital")
+            ->selectRaw("MONTH(made_date) AS mes, YEAR(made_date) AS anio, SUM(principal_amount) as monto")
             ->groupBy(DB::raw("mes, anio"))
             ->orderByRaw("anio, mes")
             ->get();
 
         $this->prestamosPorMes = Loan::whereBetween('date_made', [$this->dateStart, $this->dateEnd])
-            ->selectRaw("MONTH(date_made) AS mes, YEAR(date_made) AS anio, SUM(amount) as capital")
+            ->selectRaw("MONTH(date_made) AS mes, YEAR(date_made) AS anio, SUM(amount) as monto")
             ->groupBy(DB::raw("mes, anio"))
             ->orderByRaw("anio, mes")
             ->get();
 
         $this->aportacionPorMes = Contribution::whereBetween('date_made', [$this->dateStart, $this->dateEnd])
-            ->selectRaw("MONTH(date_made) AS mes, YEAR(date_made) AS anio, SUM(amount) as aportacion")
+            ->selectRaw("MONTH(date_made) AS mes, YEAR(date_made) AS anio, SUM(amount) as monto")
             ->groupBy(DB::raw("mes, anio"))
             ->orderByRaw("anio, mes")
             ->get();

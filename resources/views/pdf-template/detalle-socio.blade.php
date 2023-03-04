@@ -10,8 +10,16 @@
     <link href="{{ asset('src/assets/css/light/apps/invoice-preview.css') }}" rel="stylesheet" type="text/css" />
     <style>
         body {
+            margin-top: 160px;
             padding: 2rem;
             font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        }
+
+        header {
+            position: fixed;
+            top: 10px;
+            left: 2rem;
+            right: 2rem;
         }
 
         .striped {
@@ -124,30 +132,31 @@
 
 <body>
 
-    <table style="width:100%">
-        <tr>
-            <td>
-                <img src="{{ url('src/assets/img/cork-logo.png') }}" height="150" alt="">
-            </td>
-            <td>
-                <h4 class="m-0">CAJA DE</h4>
-                <h4 class="m-0">PRÉSTAMOS</h4>
-                <h4 class="m-0">YA' YED</h4>
-                <p class="m-0">
-                    C. Independencia S/N, San Baltazar Loxicha
-                </p>
-                <p class="m-0"><strong>{{ $periodoComisariado }}</strong></p>
-            </td>
-            <td class="text-end">
+    <header>
+        <table style="width:100%">
+            <tr>
+                <td>
+                    <img src="{{ url('src/assets/img/cork-logo.png') }}" height="150" alt="">
+                </td>
+                <td>
+                    <h4 class="m-0">CAJA DE</h4>
+                    <h4 class="m-0">PRÉSTAMOS</h4>
+                    <h4 class="m-0">YA' YED</h4>
+                    <p class="m-0">
+                        C. Independencia S/N, San Baltazar Loxicha
+                    </p>
+                    <p class="m-0"><strong>{{ $periodoComisariado }}</strong></p>
+                </td>
+                <td class="text-end">
 
-                <h5>Reporte de socio</h5>
-                <h6 style="color: red;">{{ $partner->number }}</h6>
-                <p>Fecha de emisión: {{ \Carbon\Carbon::now()->format('d/m/Y') }}</p>
-            </td>
-        </tr>
-    </table>
-    <hr>
-
+                    <h5>Reporte de socio</h5>
+                    <h6 style="color: red;">{{ $partner->number }}</h6>
+                    <p>Fecha de emisión: {{ \Carbon\Carbon::now()->format('d/m/Y') }}</p>
+                </td>
+            </tr>
+        </table>
+        <hr>
+    </header>
     <table style="width: 100%;">
         <tr>
             <td style="width: 280px;">

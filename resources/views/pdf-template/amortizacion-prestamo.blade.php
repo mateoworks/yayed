@@ -69,7 +69,8 @@
             <td class="text-end">
 
                 <h5>Tabla de amortización</h5>
-                <p>Fecha de emisión: {{ \Carbon\Carbon::now()->format('d/m/Y') }}</p>
+                <p class="m-0">Folio préstamo: <strong>{{ $loan->numero }}</strong></p>
+                <p class="m-0">Fecha de emisión: {{ \Carbon\Carbon::now()->format('d/m/Y') }}</p>
             </td>
         </tr>
     </table>
@@ -125,17 +126,17 @@
             </tr>
             @endforeach
         </tbody>
-        <tfoot>
-            <tr>
-                <td></td>
-                <td></td>
-                <td class="negrita">Sumas</td>
-                <td class="text-end negrita">${{ number_format($sumInteres, 2) }}</td>
-                <td class="text-end negrita">${{ number_format($sumAmortizacion, 2) }}</td>
-                <td class="text-end negrita">${{ number_format($sumInteres + $sumAmortizacion, 2) }}</td>
-                <td></td>
-            </tr>
-        </tfoot>
+
+        <tr>
+            <td></td>
+            <td></td>
+            <td class="negrita">Sumas</td>
+            <td class="text-end negrita">${{ number_format($sumInteres, 2) }}</td>
+            <td class="text-end negrita">${{ number_format($sumAmortizacion, 2) }}</td>
+            <td class="text-end negrita">${{ number_format($sumInteres + $sumAmortizacion, 2) }}</td>
+            <td></td>
+        </tr>
+
 
 
     </table>
