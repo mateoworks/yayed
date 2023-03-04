@@ -78,7 +78,6 @@
                 <p class="m-0">
                     C. Independencia S/N, San Baltazar Loxicha
                 </p>
-                <p class="m-0"><strong>{{ $periodoComisariado }}</strong></p>
             </td>
             <td class="text-end">
 
@@ -88,7 +87,7 @@
         </tr>
     </table>
     <p class="text-center m-0"><strong>Comisariado de Bienes Comunales y Consejo de Vigilancia</strong></p>
-    <p class="text-center m-0"><strong>Periodod 2021-2024</strong></p>
+    <p class="text-center m-0"><strong>{{ $periodoComisariado }}</strong></p>
     <hr>
     <p class="text-center">
         Informe de trabajo de la caja de préstamos Ya'yed del

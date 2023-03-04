@@ -235,6 +235,15 @@
                                     <p>Total a pagar:</p>
                                 </label>
                                 @php
+                                if ($payment->interest_amount == '') {
+                                $payment->interest_amount = 0;
+                                }
+                                if ($payment->principal_amount == '') {
+                                $payment->principal_amount = 0;
+                                }
+                                if ($payment->other_amount == '') {
+                                $payment->other_amount = 0;
+                                }
                                 $totalAPagar =
                                 $payment->interest_amount +
                                 $payment->principal_amount +

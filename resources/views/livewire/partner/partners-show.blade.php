@@ -490,8 +490,11 @@
                                                     <td class="text-end">${{ number_format($payment->principal_amount + $payment->interest_amount, 2) }}</td>
                                                     <td>
                                                         <div class="btn-group" role="group" aria-label="Basic example">
-                                                            <a href="{{ route('payments.show', $payment) }}" class="btn btn-primary">
+                                                            <a href="{{ route('payments.show', $payment) }}" class="btn btn-primary btn-sm">
                                                                 <i class="fa-light fa-eye"></i>
+                                                            </a>
+                                                            <a class="btn btn-danger btn-sm">
+                                                                <i class="fa-regular fa-trash-can"></i>
                                                             </a>
 
                                                         </div>

@@ -34,7 +34,7 @@ class PaymentForm extends Component
             'payment.period' => ['nullable'],
             'payment.concept' => ['nullable'],
             'payment.interest_amount' => ['nullable', 'numeric'],
-            'payment.principal_amount' => ['nullable', 'numeric'],
+            'payment.principal_amount' => ['required', 'numeric'],
             'payment.other_amount' => ['nullable', 'numeric'],
             'payment.observations' => ['nullable'],
             'payment.other' => ['nullable'],
