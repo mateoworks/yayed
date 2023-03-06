@@ -70,6 +70,9 @@
             <li class="{{ (request()->is('reporte/mensual')) ? 'active' : '' }}">
                 <a href="{{ route('report.simple') }}"> Mensuales</a>
             </li>
+            <li class="{{ (request()->is('reporte/semanal')) ? 'active' : '' }}">
+                <a href="{{ route('report.semanal') }}"> Semanales</a>
+            </li>
             <li class="{{ (request()->is('reporte/exportar')) ? 'active' : '' }}">
                 <a href="{{ route('report.export') }}"> Exportar</a>
             </li>
@@ -115,6 +118,10 @@
             </li>
             <li class="{{ (request()->is('utilidades/config*')) ? 'active' : '' }}">
                 <a href="{{ route('config') }}"> Configurar</a>
+            </li>
+
+            <li class="{{ (request()->is('utilidades/backup*')) ? 'active' : '' }}">
+                <a href="{{ route('backup') }}"> Respaldo</a>
             </li>
 
         </ul>

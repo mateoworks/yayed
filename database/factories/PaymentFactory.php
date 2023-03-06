@@ -20,8 +20,8 @@ class PaymentFactory extends Factory
     {
         return [
             'id' => $this->faker->uuid,
-            'scheduled_date' =>  $this->faker->dateTimeBetween('-1 year', 'now'),
-            'made_date' =>  $this->faker->dateTimeBetween('-1 year', 'now'),
+            'scheduled_date' =>  $this->faker->dateTimeBetween('-4 month', 'now'),
+            'made_date' =>  $this->faker->dateTimeBetween('-4 month', 'now'),
             'principal_amount' => $this->faker->numberBetween(100, 10000),
             'interest_amount' => $this->faker->numberBetween(100, 2000),
             'observations' => $this->faker->text,

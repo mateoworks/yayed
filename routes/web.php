@@ -6,6 +6,7 @@ use App\Http\Controllers\Helpers\ExportController;
 use App\Http\Controllers\Helpers\SearchController;
 use App\Http\Livewire\Colonia\ColoniasForm;
 use App\Http\Livewire\Colonia\ColoniasList;
+use App\Http\Livewire\Config\Backup;
 use App\Http\Livewire\Config\ConfigForm;
 use App\Http\Livewire\Dashboard;
 use App\Http\Livewire\Endorsement\EndorsementsForm;
@@ -31,6 +32,7 @@ use App\Http\Livewire\Payments\PaymentForm;
 use App\Http\Livewire\Payments\PaymentList;
 use App\Http\Livewire\Payments\PaymentShow;
 use App\Http\Livewire\Report\ExportTable;
+use App\Http\Livewire\Report\ReportSemanal;
 use App\Http\Livewire\Report\ReportSimple;
 use App\Http\Livewire\Solicitud\SolicitudEdit;
 use App\Http\Livewire\Solicitud\SolicitudForm;
@@ -114,6 +116,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('utilidades/colonias/create', ColoniasForm::class)->name('colonia.create');
     Route::get('utilidades/colonias/edit/{colonia}', ColoniasForm::class)->name('colonia.edit');
     Route::get('utilidades/config', ConfigForm::class)->name('config');
+    Route::get('utilidades/backup', Backup::class)->name('backup');
 
     Route::get('warranties/download/{warranty}', [DocumentController::class, 'downloadWarranty'])
         ->name('warranties.download');
@@ -129,6 +132,7 @@ Route::middleware(['auth'])->group(function () {
 
 
     Route::get('reporte/mensual', ReportSimple::class)->name('report.simple');
+    Route::get('reporte/semanal', ReportSemanal::class)->name('report.semanal');
     Route::get('reporte/exportar', ExportTable::class)->name('report.export');
 
     Route::view('prueba/pdf', 'pdf-template.contrato-prestamo');
