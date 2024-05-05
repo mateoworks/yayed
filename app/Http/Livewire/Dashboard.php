@@ -36,13 +36,13 @@ class Dashboard extends Component
             $estado['monto'][] = $item->monto;
         }
         $this->statusPrestamos = $estado;
-        $this->dataJson = json_encode($this->data);
+        $this->dataJson = json_encode($this->data ?? []);
     }
 
     public function generarDatosInteres()
     {
         $this->cantidad = DB::select("
-        SELECT MONTH(made_date) AS mes, YEAR(made_date) AS anio, sum(interest_amount) AS monto FROM payments 
+        SELECT MONTH(made_date) AS mes, YEAR(made_date) AS anio, sum(interest_amount) AS monto FROM payments
         WHERE made_date >= '{$this->periodoInteres}'
         GROUP BY mes, anio
         ORDER BY anio, mes");
@@ -68,7 +68,7 @@ class Dashboard extends Component
         }
 
         $this->cantidad = DB::select("
-        SELECT MONTH(made_date) AS mes, YEAR(made_date) AS anio, sum(interest_amount) AS monto FROM payments 
+        SELECT MONTH(made_date) AS mes, YEAR(made_date) AS anio, sum(interest_amount) AS monto FROM payments
         WHERE made_date >= '$this->periodoInteres'
         GROUP BY mes, anio
         ORDER BY anio, mes");
@@ -99,27 +99,44 @@ class Dashboard extends Component
     {
         $pendientesPago = DB::select("
         SELECT
-        l.id,
-        CONCAT(par.names, ' ', par.surname_father, ' ', par.surname_mother) AS fullname,
-        par.phone AS phone,
-        l.amount,
-        SUM(p.principal_amount) as capital_pagado,
-        l.status,
-        max(p.scheduled_date) ultimo_pago
-        FROM loans l
-        LEFT JOIN payments p ON p.loan_id = l.id
-        LEFT JOIN partners par ON par.id = l.partner_id
-        WHERE l.status = 'activo' AND DATEDIFF(CURDATE(), p.scheduled_date)  > 35
-        GROUP BY l.id
+            p.id,
+            (
+                SELECT MAX(pg.made_date)
+                FROM payments pg
+                WHERE pg.loan_id = p.id
+            ) as ultimo_pago,
+            p.id,
+            (
+                SELECT SUM(pg.principal_amount)
+                FROM payments pg
+                WHERE pg.loan_id = p.id
+            ) as capital_pagado,
+            CONCAT(c.names, ' ', c.surname_father, ' ', c.surname_mother) AS full_name,
+            c.phone AS phone,
+            p.amount
+        FROM loans p
+        JOIN partners c ON p.partner_id = c.id
+        WHERE (
+            SELECT DATEDIFF(NOW(), MAX(pg.made_date))
+            FROM payments pg
+            WHERE pg.loan_id = p.id
+        ) > 35 AND p.status != 'liquidado'
         ORDER BY ultimo_pago
         ");
+
+        $cantidadAtrazados = 0;
+
+        foreach ($pendientesPago as $prestamo) {
+            $cantidadAtrazados++;
+        }
         return view('livewire.dashboard', [
             'loans' => Loan::where('status', 'activo')->latest()->take(5)->get(),
             'pagosPendintes' => $pendientesPago,
             'no_partners' => Partner::count(),
             'no_prestamos' => Loan::where('status', 'activo')->count(),
             'en_prestamo' => $this->cantidadEnPrestamo(),
-            'cantidad_prestamo' => Loan::where('status', 'activo')->sum('amount')
+            'cantidad_prestamo' => Loan::where('status', 'activo')->sum('amount'),
+            'cantidadAtrazados' => $cantidadAtrazados,
         ]);
     }
 }

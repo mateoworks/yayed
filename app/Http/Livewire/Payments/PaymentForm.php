@@ -50,7 +50,7 @@ class PaymentForm extends Component
         if (!$payment->exists) {
             $this->payment = new Payment();
             if ($this->last_payment != null) {
-                $this->diasPendientes = Carbon::now()->diffInDays($this->last_payment->made_date, false);
+                $this->diasPendientes = Carbon::now()->diffInDays($this->last_payment->made_date);
 
                 if ($this->diasPendientes > 90) {
                     $this->loan->interest = 3;
@@ -150,7 +150,7 @@ class PaymentForm extends Component
     public function updatedInterest()
     {
         $this->loan->interest = $this->interest;
-        $this->payment->interest_amount = $this->loan->amount * $this->loan->interest / 100;
+        $this->payment->interest_amount = $this->pendienteCap * $this->loan->interest / 100;
         $amor = new Amortizacion($this->loan);
         $this->amortizacion = $amor->amortizacion;
         $this->pagoCapital();

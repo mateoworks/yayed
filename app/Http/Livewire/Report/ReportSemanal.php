@@ -13,6 +13,7 @@ class ReportSemanal extends Component
 {
     public $dateStart;
     public $dateEnd;
+    public $tipoConsulta;
     public $resultados = [];
     public $porSemana = [];
     protected function rules()
@@ -20,6 +21,7 @@ class ReportSemanal extends Component
         return [
             'dateStart' => ['required', 'date'],
             'dateEnd' => ['required', 'date'],
+            'tipoConsulta' => ['nullable'],
         ];
     }
     public function exportPDF()
@@ -41,44 +43,92 @@ class ReportSemanal extends Component
     {
         $this->validate();
         $this->resultados = [];
-        $this->resultados = DB::select(
-            "
-            SELECT 
-                l.id, 
+        $tipoConsulta = $this->tipoConsulta;
+        $query = "";
+        switch ($tipoConsulta) {
+            case 'loans':
+                $query = "
+                    SELECT
+                        l.id,
+                        WEEK(date_made) AS semana,
+                        date_made AS fecha,
+                        amount AS monto,
+                        CONCAT(p.names, ' ', p.surname_father, ' ', p.surname_mother) AS nombre,
+                        'loans' AS tabla
+                        FROM loans l
+                        LEFT JOIN partners p ON l.partner_id = p.id
+                        WHERE date_made BETWEEN '$this->dateStart' AND '$this->dateEnd'
+                ";
+                break;
+            case 'solicitudes':
+                $query = "
+                    SELECT
+                        s.id,
+                        WEEK(date_solicitud) AS semana,
+                        date_solicitud AS fecha,
+                        mount AS monto,
+                        CONCAT(p.names, ' ', p.surname_father, ' ', p.surname_mother) AS nombre,
+                        'solicituds' AS tabla
+                        FROM solicituds s
+                        LEFT JOIN partners p ON s.partner_id = p.id
+                        WHERE date_solicitud BETWEEN '$this->dateStart' AND '$this->dateEnd'
+                ";
+                break;
+            case 'payments':
+                $query = "
+                    SELECT
+                        pay.id,
+                        WEEK(made_date) AS semana,
+                        made_date AS fecha,
+                        principal_amount + interest_amount AS monto,
+                        CONCAT(p.names, ' ', p.surname_father, ' ', p.surname_mother) AS nombre,
+                        'payments' AS tabla
+                        FROM payments pay
+                        LEFT JOIN loans l ON l.id = pay.loan_id
+                        LEFT JOIN partners p ON p.id = l.partner_id
+                        WHERE made_date BETWEEN '$this->dateStart' AND '$this->dateEnd'
+                ";
+                break;
+            default:
+                $query = "
+                SELECT
+                l.id,
                 WEEK(date_made) AS semana,
-                date_made AS fecha, 
-                amount AS monto, 
+                date_made AS fecha,
+                amount AS monto,
                 CONCAT(p.names, ' ', p.surname_father, ' ', p.surname_mother) AS nombre,
-                'loans' AS tabla 
+                'loans' AS tabla
                 FROM loans l
                 LEFT JOIN partners p ON l.partner_id = p.id
                 WHERE date_made BETWEEN '$this->dateStart' AND '$this->dateEnd'
             UNION
-            SELECT 
+            SELECT
                 s.id,
                 WEEK(date_solicitud) AS semana,
-                date_solicitud AS fecha, 
-                mount AS monto, 
+                date_solicitud AS fecha,
+                mount AS monto,
                 CONCAT(p.names, ' ', p.surname_father, ' ', p.surname_mother) AS nombre,
-                'solicituds' AS tabla 
+                'solicituds' AS tabla
                 FROM solicituds s
                 LEFT JOIN partners p ON s.partner_id = p.id
                 WHERE date_solicitud BETWEEN '$this->dateStart' AND '$this->dateEnd'
-            UNION 
-            SELECT 
+            UNION
+            SELECT
                 pay.id,
                 WEEK(made_date) AS semana,
-                made_date AS fecha, 
-                principal_amount + interest_amount AS monto, 
+                made_date AS fecha,
+                principal_amount + interest_amount AS monto,
                 CONCAT(p.names, ' ', p.surname_father, ' ', p.surname_mother) AS nombre,
-                'payments' AS tabla 
+                'payments' AS tabla
                 FROM payments pay
-                LEFT JOIN loans l ON l.id = pay.loan_id 
+                LEFT JOIN loans l ON l.id = pay.loan_id
                 LEFT JOIN partners p ON p.id = l.partner_id
                 WHERE made_date BETWEEN '$this->dateStart' AND '$this->dateEnd'
             ORDER BY fecha DESC
-            "
-        );
+                ";
+                break;
+        }
+        $this->resultados = DB::select($query);
 
         $this->porSemana = [];
         foreach ($this->resultados as $date) {

@@ -73,8 +73,23 @@
                             @enderror
                         </div>
 
+                        <div class="col-md-5">
+                            <label for="end" class="form-label">Tipo de movimiento</label>
+                            <select wire:model.defer="tipoConsulta" class="form-select @error('tipoConsulta') is-invalid @enderror" id="tipo">
+                                <option value="loans">Préstamos</option>
+                                <option value="solicitudes">Solicitudes</option>
+                                <option value="payments">Pagos</option>
+                                <option value="">Todo</option>
+                            </select>
+                            @error('tipoConsulta')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                            @enderror
+                        </div>
+
                         <div class="col-md-2">
-                            <button type="submit" class="btn btn-primary">Generar</button>
+                            <button type="submit" class="btn btn-primary mt-4">Generar</button>
                         </div>
                     </form>
 

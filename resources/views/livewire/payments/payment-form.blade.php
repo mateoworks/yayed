@@ -235,6 +235,10 @@
                                     <p>Total a pagar:</p>
                                 </label>
                                 @php
+                                if($payment->social_contribution == '')
+                                {
+                                $payment->social_contribution = 0;
+                                }
                                 if ($payment->interest_amount == '') {
                                 $payment->interest_amount = 0;
                                 }
@@ -247,7 +251,8 @@
                                 $totalAPagar =
                                 $payment->interest_amount +
                                 $payment->principal_amount +
-                                $payment->other_amount;
+                                $payment->other_amount -
+                                $payment->social_contribution;
                                 @endphp
                                 <div class="col-sm-7">
                                     <p class="display-6">${{ number_format($totalAPagar , 2) }}</p>

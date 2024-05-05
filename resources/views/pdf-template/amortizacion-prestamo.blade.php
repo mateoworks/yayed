@@ -44,8 +44,9 @@
             font-weight: bold;
         }
 
-        table tfoot {
-            background-color: lightgreen;
+        .striped tfoot td {
+            background-color: #14549C;
+            color: white;
         }
     </style>
 </head>
@@ -79,7 +80,7 @@
         <tr>
             <td>
                 <h5>Socio</h5>
-                <p class="m-0"><strong>Num. socio: {{ $loan->partner->number }}</strong></p>
+                <p class="m-0"><strong>Num. socio: {{ $loan->partner->numero }}</strong></p>
                 <p class="m-0">{{ $loan->partner->full_name }}</p>
                 <p class="m-0">{{ $loan->partner->address }}</p>
                 <p class="m-0">{{ $loan->partner->phone ?? '' }}</p>
@@ -96,13 +97,14 @@
     <hr>
     <table class="striped">
         <thead>
-            <th>Periodos</th>
+            <th>Periodo</th>
             <th>Fechas</th>
             <th class="text-end">Saldo inicial</th>
             <th class="text-end">Interés</th>
             <th class="text-end">Amortización</th>
             <th class="text-end">Saldo a pagar</th>
             <th class="text-end">Saldo final</th>
+            <th style="width: 90px;"></th>
         </thead>
         <tbody>
             <tr>
@@ -113,6 +115,7 @@
                 <td></td>
                 <td></td>
                 <td class="text-end">${{ number_format($loan->amount, 2) }}</td>
+                <td></td>
             </tr>
             @foreach ($amortizacion as $amor)
             <tr>
@@ -123,21 +126,23 @@
                 <td class="text-end">${{ number_format($amor->amortizacion, 2) }}</td>
                 <td class="text-end">${{ number_format($amor->saldoPagar, 2) }}</td>
                 <td class="text-end">${{ number_format($amor->saldoFinal, 2) }}</td>
+                <td></td>
             </tr>
             @endforeach
         </tbody>
+        <tfoot>
+            <tr>
+                <td></td>
+                <td></td>
+                <td class="negrita">Sumas</td>
+                <td class="text-end negrita">${{ number_format($sumInteres, 2) }}</td>
+                <td class="text-end negrita">${{ number_format($sumAmortizacion, 2) }}</td>
+                <td class="text-end negrita">${{ number_format($sumInteres + $sumAmortizacion, 2) }}</td>
+                <td></td>
+                <td></td>
+            </tr>
 
-        <tr>
-            <td></td>
-            <td></td>
-            <td class="negrita">Sumas</td>
-            <td class="text-end negrita">${{ number_format($sumInteres, 2) }}</td>
-            <td class="text-end negrita">${{ number_format($sumAmortizacion, 2) }}</td>
-            <td class="text-end negrita">${{ number_format($sumInteres + $sumAmortizacion, 2) }}</td>
-            <td></td>
-        </tr>
-
-
+        </tfoot>
 
     </table>
     <div class="mt-4">

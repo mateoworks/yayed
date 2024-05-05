@@ -1,4 +1,4 @@
-@section('title', 'Socio: ' . $partner->names . ' ' . $partner->surname_father . ' ' . $partner->surname_mother)
+@section('title', 'Socio: ' . $partner->full_name)
 
 @push('styles')
 <link href="/src/assets/css/light/scrollspyNav.css" rel="stylesheet" type="text/css" />
@@ -8,6 +8,8 @@
 <link href="/src/assets/css/dark/components/tabs.css" rel="stylesheet" type="text/css" />
 <link href="/src/assets/css/light/components/timeline.css" rel="stylesheet" type="text/css" />
 <link href="/src/assets/css/dark/components/timeline.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="/src/plugins/src/sweetalerts2/sweetalerts2.css">
+
 <style>
     ol .time-line {
         max-width: 100% !important;
@@ -453,6 +455,11 @@
                                         <span class="badge badge-success mb-2 me-4">Liquidado</span>
                                         @endif
                                         <a href="{{ route('loans.show', $loan) }}" class="btn btn-info btn-sm">Ver préstamo</a>
+                                        @if ($loan->status != 'liquidado')
+                                        <a href="{{ route('payments.create', $loan) }}" class="bs-tooltip btn btn-success" data-toggle="tooltip" data-placement="top" title="Realizar pago">
+                                            <i class="fa-light fa-envelope-open-dollar"></i>
+                                        </a>
+                                        @endif
 
                                     </div>
                                     <p>Solicitud realizada el {{ $loan->solicitud->date_solicitud->format('d/m/Y') }}, folio:
@@ -478,9 +485,7 @@
                                             </thead>
                                             <tbody>
                                                 @foreach ($loan->payments as $payment)
-                                                @php
-
-                                                @endphp <tr>
+                                                <tr>
                                                     <td>{{ $loop->iteration }}</td>
                                                     <td>{{ $payment->scheduled_date->format('d/m/Y') }}</td>
                                                     <td>{{ $payment->made_date->format('d/m/Y') }}</td>
@@ -493,7 +498,7 @@
                                                             <a href="{{ route('payments.show', $payment) }}" class="btn btn-primary btn-sm">
                                                                 <i class="fa-light fa-eye"></i>
                                                             </a>
-                                                            <a class="btn btn-danger btn-sm">
+                                                            <a class="btn btn-danger btn-sm" wire:click="$emit('deletePayment', {{ $payment }})">
                                                                 <i class="fa-regular fa-trash-can"></i>
                                                             </a>
 
@@ -565,3 +570,37 @@
     </div>
     <!-- CONTENT AREA -->
 </div>
+
+@push('scripts')
+<script src="/src/plugins/src/sweetalerts2/sweetalerts2.min.js"></script>
+<script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', function() {
+
+        @this.on('deletePayment', payment => {
+            Swal.fire({
+                title: '¿Estas seguro de eliminar?',
+                html: "Se eliminarán los datos de este pago",
+                icon: 'warning',
+                showCancelButton: true,
+            }).then((result) => {
+                if (result.value) {
+                    @this.call('destroyPayment', payment)
+                }
+            });
+        });
+    });
+
+    window.addEventListener('message', event => {
+        Snackbar.show({
+            showAction: false,
+            text: event.detail.message,
+            pos: 'top-center',
+            actionTextColor: '#fff',
+            backgroundColor: '#00ab55',
+
+        });
+    });
+</script>
+
+
+@endpush

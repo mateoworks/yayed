@@ -23,6 +23,7 @@ use App\Http\Livewire\Loan\LoansForm;
 use App\Http\Livewire\Loan\LoansList;
 use App\Http\Livewire\Loan\LoansPartnerForm;
 use App\Http\Livewire\Loan\LoansShow;
+use App\Http\Livewire\Loan\LoansVencido;
 use App\Http\Livewire\Movement\MovementsForm;
 use App\Http\Livewire\Movement\MovementsList;
 use App\Http\Livewire\Partner\PartnersForm;
@@ -98,6 +99,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('loans/contract/{loan}', LoansContract::class)->name('loans.contract');
     Route::get('loans/plan/{loan}', LoanPaymentPlan::class)->name('loans.payment.plan');
     Route::get('loans/amortizacion/{loan}', LoanAmortizacion::class)->name('loans.amortizacion');
+    Route::get('loans/vencidos', LoansVencido::class)->name('loans.vencidos');
 
     Route::get('payments', PaymentList::class)->name('payments.index');
     Route::get('payments/edit/{loan}', PaymentForm::class)->name('payments.edit');

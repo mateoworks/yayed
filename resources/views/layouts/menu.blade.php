@@ -120,9 +120,6 @@
                 <a href="{{ route('config') }}"> Configurar</a>
             </li>
 
-            <li class="{{ (request()->is('utilidades/backup*')) ? 'active' : '' }}">
-                <a href="{{ route('backup') }}"> Respaldo</a>
-            </li>
 
         </ul>
     </li>

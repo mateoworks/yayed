@@ -51,4 +51,18 @@ class Loan extends Model
         }
         return $ultimo;
     }
+
+    public function getAtrazadoAttribute()
+    {
+        if ($this->ultimo_pago) {
+            if ($this->ultimo_pago->made_date->diffInDays() > 35 && $this->status != 'liquidado') {
+                return  true;
+            }
+        } else {
+            if ($this->date_made->diffInDays() > 35) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

@@ -115,6 +115,93 @@
             </div>
         </div>
 
+        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12 layout-spacing">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-auto">
+                            <i class="fa-light fa-circle-exclamation display-1"></i>
+                        </div>
+                        <div class="col">
+                            <h5 class="card-title">Préstamos vencidos</h5>
+                            <h2 class="card-title">{{ $cantidadAtrazados }}</h2>
+                        </div>
+                        <small>Préstamos sin pagos en los últimos 35 días</small>
+                        <p class="text-end">
+                            <a href="{{ route('loans.vencidos') }}" class="btn btn-primary btn-sm">
+                                Ver
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 layout-spacing">
+            <div class="widget widget-table-three">
+
+                <div class="widget-heading">
+                    <h5 class="">Socios pendientes de pago</h5>
+                </div>
+
+                <div class="widget-content">
+                    <div class="table-responsive">
+                        <table class="table table-scroll">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <div class="th-content">Socio</div>
+                                    </th>
+                                    <th>
+                                        <div class="th-content th-heading">Cantidad capital</div>
+                                    </th>
+                                    <th>
+                                        <div class="th-content th-heading">Capital pagado</div>
+                                    </th>
+                                    <th>
+                                        <div class="th-content">Fecha último pago</div>
+                                    </th>
+                                    <th>
+                                        <div class="th-content"></div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($pagosPendintes as $ultimo)
+                                <tr>
+                                    <td>
+                                        <div class="td-content product-name">
+                                            <div class="align-self-center">
+                                                <p class="prd-name">{{ $ultimo->full_name }}</p>
+                                                <p class="prd-category text-primary">{{ $ultimo->phone }}</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="td-content"><span class="pricing">${{ number_format($ultimo->amount, 2) }}</span></div>
+                                    </td>
+                                    <td>
+                                        <div class="td-content"><span class="discount-pricing">${{ number_format($ultimo->capital_pagado, 2) }}</span></div>
+                                    </td>
+                                    <td>
+                                        <div class="td-content">{{ $ultimo->ultimo_pago }}</div>
+                                    </td>
+                                    <td>
+                                        <div class="td-content"><a href="{{ route('loans.show', $ultimo->id) }}" class="text-danger"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-danger feather feather-chevrons-right">
+                                                    <polyline points="13 17 18 12 13 7"></polyline>
+                                                    <polyline points="6 17 11 12 6 7"></polyline>
+                                                </svg> Ver</a></div>
+                                    </td>
+                                </tr>
+                                @endforeach
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="col-xl-8 col-lg-12 col-md-12 col-sm-12 col-12 layout-spacing">
             <div class="widget widget-table-two">
 
@@ -175,70 +262,7 @@
             </div>
         </div>
 
-        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 layout-spacing">
-            <div class="widget widget-table-three">
 
-                <div class="widget-heading">
-                    <h5 class="">Socios pendientes de pago</h5>
-                </div>
-
-                <div class="widget-content">
-                    <div class="table-responsive">
-                        <table class="table table-scroll">
-                            <thead>
-                                <tr>
-                                    <th>
-                                        <div class="th-content">Socio</div>
-                                    </th>
-                                    <th>
-                                        <div class="th-content th-heading">Cantidad capital</div>
-                                    </th>
-                                    <th>
-                                        <div class="th-content th-heading">Capital pagado</div>
-                                    </th>
-                                    <th>
-                                        <div class="th-content">Fecha último pago</div>
-                                    </th>
-                                    <th>
-                                        <div class="th-content"></div>
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($pagosPendintes as $ultimo)
-                                <tr>
-                                    <td>
-                                        <div class="td-content product-name">
-                                            <div class="align-self-center">
-                                                <p class="prd-name">{{ $ultimo->fullname }}</p>
-                                                <p class="prd-category text-primary">{{ $ultimo->phone }}</p>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="td-content"><span class="pricing">${{ number_format($ultimo->amount, 2) }}</span></div>
-                                    </td>
-                                    <td>
-                                        <div class="td-content"><span class="discount-pricing">${{ number_format($ultimo->capital_pagado, 2) }}</span></div>
-                                    </td>
-                                    <td>
-                                        <div class="td-content">{{ $ultimo->ultimo_pago }}</div>
-                                    </td>
-                                    <td>
-                                        <div class="td-content"><a href="{{ route('loans.show', $ultimo->id) }}" class="text-danger"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-danger feather feather-chevrons-right">
-                                                    <polyline points="13 17 18 12 13 7"></polyline>
-                                                    <polyline points="6 17 11 12 6 7"></polyline>
-                                                </svg> Ver</a></div>
-                                    </td>
-                                </tr>
-                                @endforeach
-
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
 
     </div>
 
@@ -256,14 +280,14 @@
             getParseObject = JSON.parse(getcorkThemeObject)
             ParsedObject = getParseObject;
 
-            let porEstadoMonto = @json($statusPrestamos['monto']);
-            let porEstadoLabel = @json($statusPrestamos['status']);
+            let porEstadoMonto = @json($statusPrestamos['monto'] ?? 0);
+            let porEstadoLabel = @json($statusPrestamos['status'] ?? 0);
 
-            let porMesValores = @json($data['value']);
-            let porMesLabel = @json($data['lavel']);
-            let porMesInteres = @json($data['porMes']);
+            let porMesValores = @json($data['value'] ?? 0);
+            let porMesLabel = @json($data['lavel'] ?? 0);
+            let porMesInteres = @json($data['porMes'] ?? 0);
 
-            let totalInteres = @json($totalInteres)
+            let totalInteres = @json($totalInteres ?? 0)
 
 
             if (ParsedObject.settings.layout.darkMode) {

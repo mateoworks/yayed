@@ -55,7 +55,7 @@
                                         </tr>
                                         <tr>
                                             <td>
-                                                <p>Apellidos:</p>
+                                                <p>Apellidos: </p>
                                             </td>
                                             <td>
                                                 <p><strong>{{ $endorsement->surnames }}</strong></p>
@@ -63,7 +63,7 @@
                                         </tr>
                                         <tr>
                                             <td>
-                                                <p>Teléfono:</p>
+                                                <p>Teléfono: </p>
                                             </td>
                                             <td>
                                                 <p><strong>{{ $endorsement->phone }}</strong></p>
@@ -71,10 +71,18 @@
                                         </tr>
                                         <tr>
                                             <td>
-                                                <p>Dirección:</p>
+                                                <p>Dirección: </p>
                                             </td>
                                             <td>
                                                 <p><strong>{{ $endorsement->address }}</strong></p>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <p>Clave INE: </p>
+                                            </td>
+                                            <td>
+                                                <p><strong>{{ $endorsement->key_ine }}</strong></p>
                                             </td>
                                         </tr>
                                     </table>

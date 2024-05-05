@@ -100,4 +100,9 @@ class Partner extends Model
             return true;
         }
     }
+
+    public function getNumeroAttribute()
+    {
+        return str_pad($this->number, 4, 0, STR_PAD_LEFT);
+    }
 }

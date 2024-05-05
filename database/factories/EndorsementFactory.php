@@ -22,6 +22,7 @@ class EndorsementFactory extends Factory
             'surnames' => $this->faker->lastName,
             'phone' => $this->faker->phoneNumber,
             'address' => $this->faker->address,
+            'key_ine' => '23ADSASDASD',
         ];
     }
 }

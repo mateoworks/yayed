@@ -190,8 +190,21 @@
                                             <td>Fecha de pago:</td>
                                             <td>{{ $loan->date_payment->format('d/m/Y') }}</td>
                                         </tr>
-
                                     </table>
+                                    @if ($loan->atrazado)
+                                    <div class="alert alert-arrow-right alert-icon-right alert-light-danger alert-dismissible fade show mb-4" role="alert">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-alert-circle">
+                                            <circle cx="12" cy="12" r="10"></circle>
+                                            <line x1="12" y1="8" x2="12" y2="12"></line>
+                                            <line x1="12" y1="16" x2="12" y2="16"></line>
+                                        </svg>
+                                        @if ($loan->ultimo_pago)
+                                        {{ $loan->ultimo_pago->made_date->diffForHumans() }} fué el ultimo pago
+                                        @else
+                                        Desde {{ $loan->date_made->diffForHumans() }} no se realizan pagos
+                                        @endif
+                                    </div>
+                                    @endif
                                 </div>
                                 <div class="col-md-2">
                                     <a href="{{ route('partners.solicitud.show', $loan->solicitud) }}" class="btn btn-primary">

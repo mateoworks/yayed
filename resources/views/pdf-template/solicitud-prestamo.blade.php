@@ -169,15 +169,6 @@
         </tr>
     </table>
 
-    <strong class="mt-1 mb-0">Monto y finalidad</strong>
-    <hr class="mt-0">
-    <p style="text-align: justify;">
-        Por la presente solicito un préstamo por la cantidad de
-        <strong>${{ number_format($solicitud->mount, 2) }}</strong> a un periodo de
-        <strong>{{ $solicitud->period }} MES{{ $solicitud->period > 1 ? 'ES' : '' }}</strong>
-        a una tasa ordinaria de 2.00% y una tasa moratoria del 3.00% a partir de la fecha de pago.
-        La finalidad del prestamo sera para: <strong>{{ $solicitud->concept }}</strong>
-    </p>
     <strong>Actividad del socio</strong>
     <table style="width:100%">
         <tr class="text-center border-table">
@@ -190,7 +181,33 @@
         </tr>
     </table>
 
-    <p class="text-center mt-4 mb-0">_____________________________</p>
+    <strong class="mt-1 mb-0">Monto y finalidad</strong>
+    <hr class="mt-0">
+    <p style="text-align: justify;">
+        Por la presente solicito un préstamo por la cantidad de
+        <strong>${{ number_format($solicitud->mount, 2) }}</strong> a un periodo de
+        <strong>{{ $solicitud->period }} MES{{ $solicitud->period > 1 ? 'ES' : '' }}</strong>
+        a una tasa ordinaria de 2.00% y una tasa moratoria del 3.00% a partir de la fecha de pago.
+        La finalidad del prestamo sera para: <strong>{{ $solicitud->concept }}</strong>
+    </p>
+
+    <strong class="mt-6 mb-0">Información adicional</strong>
+    <hr class="mt-0">
+    <p style="text-align: justify;">
+        Debera de pagar en la fecha que marque su plan de pagos, ya que de no hacerlo le generara un interes
+        moratorio asi mismo es la mejor recomendación para creditos futuros, ya que usted creara su propio
+        historial crediticio ademas de disfrutar de beneficios adicionales.
+    </p>
+    <p style="text-align: justify;">
+        Si llegara a registrar morosidad mayor a 90 dias, su crédito se dara por vencido anticipadamente y se le
+        exigira su pago total.
+    </p>
+    <p style="text-align: justify;">
+        Si llegara a registrar morosidad sus avalados no podran hacer uso de los servicios asi mismo se les
+        notificara de sus atrazos en caso de que haga caso omiso a los recordatorios.
+    </p>
+    <p style="margin-top: 25px;"></p>
+    <p class="text-center mt-5 mb-0">_____________________________</p>
     <p class="text-center mt-0 mb-3"><strong>{{ $partner->full_name }}</strong></p>
 
     <table style="width:100%">
@@ -203,9 +220,7 @@
                     AVAL como: La persona que garantiza todo o en parte el cumplimiento del
                     compromiso y obligación señalado en el pagare.</p>
             </td>
-
         </tr>
-
     </table>
     @if ($solicitud->endorsements()->exists())
     <strong class="mt-3 mb-0">Avales</strong>
@@ -241,22 +256,7 @@
     </p>
     @endif
 
-    <div style="page-break-after:always;"></div>
-    <strong class="mt-6 mb-0">Información adicional</strong>
-    <hr class="mt-0">
-    <p style="text-align: justify;">
-        Debera de pagar en la fecha que marque su plan de pagos, ya que de no hacerlo le generara un interes
-        moratorio asi mismo es la mejor recomendación para creditos futuros, ya que usted creara su propio
-        historial crediticio ademas de disfrutar de beneficios adicionales.
-    </p>
-    <p style="text-align: justify;">
-        Si llegara a registrar morosidad mayor a 90 dias, su crédito se dara por vencido anticipadamente y se le
-        exigira su pago total.
-    </p>
-    <p style="text-align: justify;">
-        Si llegara a registrar morosidad sus avalados no podran hacer uso de los servicios asi mismo se les
-        notificara de sus atrazos en caso de que haga caso omiso a los recordatorios.
-    </p>
+    <!-- <div style="page-break-after:always;"></div> -->
 
     <strong class="mt-3 mb-0">Resolución</strong>
     <hr class="mt-0">

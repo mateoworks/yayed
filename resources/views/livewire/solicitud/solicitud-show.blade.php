@@ -55,6 +55,13 @@
                                         <i class="fa-light fa-file-pdf"></i>
                                         Generar solicitud
                                     </button>
+                                    <button type="button" wire:click="exportWord" class="btn btn-danger">
+                                        <div wire:loading wire:target="exportWord">
+                                            <div class="spinner-border text-white me-2 align-self-center loader-sm "></div>
+                                        </div>
+                                        <i class="fa-light fa-file-pdf"></i>
+                                        Generar word
+                                    </button>
                                 </div>
                             </div>
                         </div>

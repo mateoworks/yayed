@@ -116,7 +116,7 @@
             @endphp
             <tr>
                 <td>{{ $parseFecha->format('d/m/Y') }}</td>
-                <td>{{ $parseFecha->locale('es')->isoFormat('dddd') }}</td>
+                <!-- <td>{{ $parseFecha->locale('es')->isoFormat('dddd') }}</td> -->
                 <td>
                     @if ($date->tabla == 'payments')
                     <p><strong>Pago realizado (I+C)</strong></p>
@@ -126,6 +126,7 @@
                     <p><strong>Solicitud realizada</strong></p>
                     @endif
                 </td>
+                <td style="width: 40px;"></td>
                 <td>{{ $date->nombre }} </td>
                 <td>${{ number_format($date->monto, 2) }}</td>
             </tr>
