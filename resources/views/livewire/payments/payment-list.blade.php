@@ -51,12 +51,13 @@
                         <table class="table table-hover table-striped table-bordered">
                             <thead>
                                 <tr>
-                                    <th scope="col">Número prestamo</th>
-                                    <th scope="col">Socio</th>
+                                    <th>Número prestamo</th>
+                                    <th>Socio</th>
                                     <th scope="col">Cantidad capital</th>
                                     <th scope="col">Fecha del pago</th>
                                     <th scope="col">Cantidad capital pagado</th>
                                     <th scope="col">Cantidad interés pagado</th>
+                                    <th scope="col">Total</th>
                                     <th class="text-center" scope="col"></th>
                                 </tr>
                                 <tr aria-hidden="true" class="mt-3 d-block table-row-hidden"></tr>
@@ -70,6 +71,7 @@
                                     <td>{{ $payment->scheduled_date->format('Y-m-d') }}</td>
                                     <td>{{ number_format($payment->principal_amount, 2) }}</td>
                                     <td>{{ number_format($payment->interest_amount, 2) }}</td>
+                                    <td>{{ number_format(($payment->interest_amount + $payment->principal_amount), 2) }}</td>
                                     <td>
                                         <div class="btn-group" role="group" aria-label="Basic example">
                                             <a href="{{ route('payments.show', $payment) }}" class="bs-tooltip btn btn-primary" data-toggle="tooltip" data-placement="top" title="Ver">

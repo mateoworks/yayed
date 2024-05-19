@@ -48,6 +48,13 @@
                                         </div>
                                         <i class="fa-light fa-file-pdf"></i>
                                     </a>
+
+                                    <a wire:click="exportTicket" class="btn btn-info bs-tooltip" data-toggle="tooltip" data-placement="top" title="Generar ticket">
+                                        <div wire:loading wire:target="exportTicket">
+                                            <div class="spinner-border text-white me-2 align-self-center loader-sm "></div>
+                                        </div>
+                                        <i class="fa-light fa-ticket"></i>
+                                    </a>
                                 </div>
                             </div>
 

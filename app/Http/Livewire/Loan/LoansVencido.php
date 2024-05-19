@@ -17,7 +17,7 @@ class LoansVencido extends Component
 
     public function mount()
     {
-        $this->noDias = 35;
+        $this->noDias = 30;
         $this->consultarBD();
     }
 
@@ -48,19 +48,10 @@ class LoansVencido extends Component
     {
         $this->validate(['noDias' => 'required']);
         $this->query = "
-        SELECT 
-            p.id, 
-            (
-                SELECT MAX(pg.made_date) 
-                FROM payments pg 
-                WHERE pg.loan_id = p.id
-            ) as ultimo_pago,
-            p.id, 
-            (
-                SELECT SUM(pg.principal_amount) 
-                FROM payments pg 
-                WHERE pg.loan_id = p.id
-            ) as capital_pagado,
+        SELECT
+            p.id,
+            COALESCE(MAX(pg.made_date), p.date_made) AS ultimo_pago,
+            SUM(pg.principal_amount) AS capital_pagado,
             CONCAT(c.names, ' ', c.surname_father, ' ', c.surname_mother) AS full_name,
             c.phone AS phone,
             p.amount,
@@ -69,11 +60,12 @@ class LoansVencido extends Component
             c.number
         FROM loans p
         JOIN partners c ON p.partner_id = c.id
-        WHERE (
-            SELECT DATEDIFF(NOW(), MAX(pg.made_date)) 
-            FROM payments pg 
-            WHERE pg.loan_id = p.id
-        ) > $this->noDias AND p.status != 'liquidado'
+        LEFT JOIN payments pg ON pg.loan_id = p.id
+        WHERE p.status != 'liquidado'
+        GROUP BY p.id, c.names, c.surname_father, c.surname_mother, c.phone, p.amount, p.date_made
+        HAVING (
+            COALESCE(MAX(pg.made_date), p.date_made) < NOW() - INTERVAL $this->noDias DAY
+        )
         ORDER BY ultimo_pago
         ";
         $this->prestamosVencidos = DB::select($this->query);

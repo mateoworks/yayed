@@ -106,9 +106,9 @@
                             <i class="fa-light fa-hands-holding-dollar display-1"></i>
                         </div>
                         <div class="col">
-                            <h5 class="card-title">Cantidad en préstamo</h5>
+                            <h5 class="card-title">Cantidad neta en préstamo</h5>
                             <h2 class="card-title">{{ number_format($en_prestamo, 2) }}</h2>
-                            <small>Cantidad neta</small>
+                            <small>Capital recuperado: {{ number_format($capital_recuperado, 2) }}</small>
                         </div>
                     </div>
                 </div>
@@ -126,7 +126,7 @@
                             <h5 class="card-title">Préstamos vencidos</h5>
                             <h2 class="card-title">{{ $cantidadAtrazados }}</h2>
                         </div>
-                        <small>Préstamos sin pagos en los últimos 35 días</small>
+                        <small>Préstamos sin pagos en los últimos 30 días</small>
                         <p class="text-end">
                             <a href="{{ route('loans.vencidos') }}" class="btn btn-primary btn-sm">
                                 Ver

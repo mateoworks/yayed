@@ -21,6 +21,7 @@ class Dashboard extends Component
     public $totalInteres;
 
     public $periodoInteres;
+    public $capitalRecuperado;
 
     public function mount()
     {
@@ -93,6 +94,7 @@ class Dashboard extends Component
             $prestado += $loan->amount;
             $pagado += $loan->payments->sum('principal_amount');
         }
+        $this->capitalRecuperado = $pagado;
         return $prestado - $pagado;
     }
     public function render()
@@ -100,28 +102,21 @@ class Dashboard extends Component
         $pendientesPago = DB::select("
         SELECT
             p.id,
-            (
-                SELECT MAX(pg.made_date)
-                FROM payments pg
-                WHERE pg.loan_id = p.id
-            ) as ultimo_pago,
-            p.id,
-            (
-                SELECT SUM(pg.principal_amount)
-                FROM payments pg
-                WHERE pg.loan_id = p.id
-            ) as capital_pagado,
+            COALESCE(MAX(pg.made_date), p.date_made) AS ultimo_pago,
+            SUM(pg.principal_amount) AS capital_pagado,
             CONCAT(c.names, ' ', c.surname_father, ' ', c.surname_mother) AS full_name,
             c.phone AS phone,
             p.amount
         FROM loans p
         JOIN partners c ON p.partner_id = c.id
-        WHERE (
-            SELECT DATEDIFF(NOW(), MAX(pg.made_date))
-            FROM payments pg
-            WHERE pg.loan_id = p.id
-        ) > 35 AND p.status != 'liquidado'
-        ORDER BY ultimo_pago
+        LEFT JOIN payments pg ON pg.loan_id = p.id
+        WHERE p.status != 'liquidado'
+        GROUP BY p.id, c.names, c.surname_father, c.surname_mother, c.phone, p.amount, p.date_made
+        HAVING (
+            COALESCE(MAX(pg.made_date), p.date_made) < NOW() - INTERVAL 30 DAY
+        )
+        ORDER BY ultimo_pago DESC
+        LIMIT 20;
         ");
 
         $cantidadAtrazados = 0;
@@ -135,6 +130,7 @@ class Dashboard extends Component
             'no_partners' => Partner::count(),
             'no_prestamos' => Loan::where('status', 'activo')->count(),
             'en_prestamo' => $this->cantidadEnPrestamo(),
+            'capital_recuperado' => $this->capitalRecuperado,
             'cantidad_prestamo' => Loan::where('status', 'activo')->sum('amount'),
             'cantidadAtrazados' => $cantidadAtrazados,
         ]);

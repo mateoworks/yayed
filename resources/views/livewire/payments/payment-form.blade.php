@@ -73,7 +73,7 @@
                         <form wire:submit.prevent="save" class="col-md-7" novalidate>
 
                             <div class="form-group row mb-4">
-                                <label for="interest" class="col-sm-5 col-form-label">Fecha programada de pago</label>
+                                <label for="interest" class="col-sm-5 col-form-label">Interés</label>
                                 <div class="col-sm-7">
                                     <select wire:model="interest" class="form-control @error('interest') is-invalid @enderror" id="interest">
                                         <option value="2">2%</option>

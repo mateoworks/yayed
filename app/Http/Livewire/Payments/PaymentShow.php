@@ -29,4 +29,16 @@ class PaymentShow extends Component
             echo  $pdf->stream();
         }, Carbon::now()->format('Y_m_d') . '-comprobante_' . $this->payment->numero . '.pdf');
     }
+    public function exportTicket()
+    {
+        $data = [
+            'loan' => $this->payment->loan,
+            'payment' => $this->payment,
+        ];
+        $pdf = Pdf::loadView('pdf-template.comprobante-pago-ticket', $data)->setPaper([0, 0, 226.77, 750.00]);
+
+        return response()->streamDownload(function () use ($pdf) {
+            echo  $pdf->stream();
+        }, Carbon::now()->format('Y_m_d') . '-ticket_comprobante_' . $this->payment->numero . '.pdf');
+    }
 }
